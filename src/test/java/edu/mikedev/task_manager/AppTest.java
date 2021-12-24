@@ -35,4 +35,16 @@ public class AppTest
     {
         assertTrue( true );
     }
+    
+    public void testApp2()
+    {
+        int x = 3;
+        if (x > 2 + 1) {
+        	assertTrue(false);
+        } else {
+        	assertTrue(true);
+        }
+    }
+    
+    
 }
