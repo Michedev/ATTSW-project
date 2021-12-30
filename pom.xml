@@ -13,8 +13,70 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.38.1</version>
+				<configuration>
+					<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+					<useColor>true</useColor>
+					<images>
+						<image>
+							<name>task-manager</name>
+							<build>
+								<dockerFile>${project.basedir}/Dockerfile</dockerFile>
+								<ports>
+									<port>38839</port>
+								</ports>
+							</build>
+							<run>
+								<autoRemove>true</autoRemove>
+								<containerNamePattern> task-manager </containerNamePattern>
+								<network>
+									<name>my-network</name>
+									<mode>custom</mode>
+								</network>
+								<ports>
+									<port>38839:38839</port>
+								</ports>
+								<dependsOn>postgres</dependsOn>
+							</run>
+						</image>
+						<image>
+							<name>postgres:14.1-alpine</name>
+							<alias>postgres</alias>
+							<run>
+								<network>
+									<name>my-network</name>
+									<mode>custom</mode>
+								</network>
+								<env>
+									<POSTGRES_USER>user</POSTGRES_USER>
+									<POSTGRES_DB>task_manager</POSTGRES_DB>
+									<POSTGRES_PASSWORD>password</POSTGRES_PASSWORD>
+								</env>
+								<ports>
+									<port>5432:5432</port>
+								</ports>
+								<wait>
+									<tcp>
+										<ports>
+											<port>5432</port>
+										</ports>
+									</tcp>
+								</wait>
+							</run>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -61,56 +123,56 @@
 		<profile>
 			<id>jacoco-coverage</id>
 			<build>
-					<plugins>
-						<plugin>
-							<groupId>org.jacoco</groupId>
-							<artifactId>jacoco-maven-plugin</artifactId>
-							<version>0.8.7</version>
-							<configuration>
-								<excludes>
-									<exclude>**/Main.*</exclude>
-								</excludes>
-							</configuration>
-							<executions>
-								<execution>
-									<goals>
-										<!-- Binded to Initialize -->
-										<goal>prepare-agent</goal>
-										<!-- Binded to verify -->
-										<goal>report</goal>
-									</goals>
-								</execution>
-							</executions>
-						</plugin>
-					</plugins>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.7</version>
+						<configuration>
+							<excludes>
+								<exclude>**/Main.*</exclude>
+							</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<!-- Binded to Initialize -->
+									<goal>prepare-agent</goal>
+									<!-- Binded to verify -->
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 		<profile>
 			<id>mutation-testing</id>
 			<build>
-					<plugins>
-						<plugin>
-							<groupId>org.pitest</groupId>
-							<artifactId>pitest-maven</artifactId>
-							<version>1.7.3</version>
-							<configuration>
-								<targetClasses>
-									<param>edu.mikedev.*</param>
-								</targetClasses>
-								<targetTests>
-									<param>edu.mikedev.*</param>
-								</targetTests>
-							</configuration>
-							<executions>
-								<execution>
-									<phase>test</phase>
-									<goals>
-										<goal>mutationCoverage</goal>
-									</goals>
-								</execution>
-							</executions>
-						</plugin>
-					</plugins>
+				<plugins>
+					<plugin>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-maven</artifactId>
+						<version>1.7.3</version>
+						<configuration>
+							<targetClasses>
+								<param>edu.mikedev.*</param>
+							</targetClasses>
+							<targetTests>
+								<param>edu.mikedev.*</param>
+							</targetTests>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<goals>
+									<goal>mutationCoverage</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 	</profiles>
