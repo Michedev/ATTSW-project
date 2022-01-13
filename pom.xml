@@ -15,6 +15,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<sonar.organization>mikedev-github</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<build>
 		<plugins>
@@ -56,9 +58,9 @@
 									<mode>custom</mode>
 								</network>
 								<env>
-									<POSTGRES_USER>user</POSTGRES_USER>
-									<POSTGRES_DB>task_manager</POSTGRES_DB>
-									<POSTGRES_PASSWORD>password</POSTGRES_PASSWORD>
+									<POSTGRES_USER>sonar</POSTGRES_USER>
+									<POSTGRES_PASSWORD>sonar</POSTGRES_PASSWORD>
+									<POSTGRES_DB>sonar</POSTGRES_DB>
 								</env>
 								<ports>
 									<port>5432:5432</port>
@@ -70,6 +72,34 @@
 										</ports>
 									</tcp>
 								</wait>
+							</run>
+						</image>
+						<image>
+							<name> sonarqube:8.9.6-community </name>
+							<alias>sonarqube-task-manager</alias>
+							<run>
+								<network>
+									<name>my-network</name>
+									<mode>custom</mode>
+								</network>
+								<ports>
+									<port>9000:9000</port>
+								</ports>
+ 								<env>
+								    <SONARQUBE_JDBC_USERNAME>sonar</SONARQUBE_JDBC_USERNAME>
+									<SONARQUBE_JDBC_PASSWORD>sonar</SONARQUBE_JDBC_PASSWORD>
+									<SONARQUBE_JDBC_URL>jdbc:postgresql://postgres-3:5432/sonar</SONARQUBE_JDBC_URL>
+								</env>
+								<dependsOn>postgres</dependsOn>
+								<!-- <wait>
+									<tcp>
+										<host>localhost</host>
+										<ports>
+											<port>9000</port>
+										</ports>
+									</tcp>
+									<time>10000</time>
+								</wait> -->
 							</run>
 						</image>
 					</images>
