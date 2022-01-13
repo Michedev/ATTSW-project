@@ -74,34 +74,6 @@
 								</wait>
 							</run>
 						</image>
-						<image>
-							<name> sonarqube:8.9.6-community </name>
-							<alias>sonarqube-task-manager</alias>
-							<run>
-								<network>
-									<name>my-network</name>
-									<mode>custom</mode>
-								</network>
-								<ports>
-									<port>9000:9000</port>
-								</ports>
- 								<env>
-								    <SONARQUBE_JDBC_USERNAME>sonar</SONARQUBE_JDBC_USERNAME>
-									<SONARQUBE_JDBC_PASSWORD>sonar</SONARQUBE_JDBC_PASSWORD>
-									<SONARQUBE_JDBC_URL>jdbc:postgresql://postgres-3:5432/sonar</SONARQUBE_JDBC_URL>
-								</env>
-								<dependsOn>postgres</dependsOn>
-								<!-- <wait>
-									<tcp>
-										<host>localhost</host>
-										<ports>
-											<port>9000</port>
-										</ports>
-									</tcp>
-									<time>10000</time>
-								</wait> -->
-							</run>
-						</image>
 					</images>
 				</configuration>
 			</plugin>
