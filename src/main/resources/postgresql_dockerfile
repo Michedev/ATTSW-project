@@ -1,0 +1,4 @@
+FROM postgres:14.1-alpine
+
+COPY src/main/resources/build_tables.sql /etc/data/init
+COPY src/test/resources/*.csv /etc/data
