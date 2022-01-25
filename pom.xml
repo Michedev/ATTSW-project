@@ -56,6 +56,7 @@
                        			<dockerFile>${project.basedir}/Postgresql_Dockerfile</dockerFile>     
                             </build>
                             <run>
+                                <containerNamePattern>postgres-task-manager</containerNamePattern>
                                 <network>
                                     <name>my-network</name>
                                     <mode>custom</mode>
