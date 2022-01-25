@@ -9,9 +9,10 @@ public class Task {
 	private String description;
 	private Date deadline;
     private boolean done;
+
+	public Task(){}
        
 	public Task(String title, String description, Date deadline, boolean done) {
-		super();
 		this.title = title;
 		this.description = description;
 		this.deadline = deadline;
