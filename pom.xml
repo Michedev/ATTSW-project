@@ -90,7 +90,7 @@
                     </execution>
                     <execution>
                         <id>docker-start</id>
-                        <phase>pre-integration-test</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>start</goal>
                         </goals>
