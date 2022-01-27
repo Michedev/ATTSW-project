@@ -29,53 +29,18 @@
                     <useColor>true</useColor>
                     <images>
                         <image>
-                            <name>task-manager</name>
+                            <alias>app</alias>
+                            <external>
+                                <type>compose</type>
+                                <basedir>${project.basedir}</basedir>
+                                <composeFile>docker-compose.yml</composeFile>
+                                <ignoreBuild>true</ignoreBuild>
+                            </external>
                             <build>
-                                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
-                                <ports>
-                                    <port>38839</port>
-                                </ports>
+
                             </build>
                             <run>
-                                <autoRemove>true</autoRemove>
-                                <containerNamePattern> task-manager </containerNamePattern>
-                                <network>
-                                    <name>my-network</name>
-                                    <mode>custom</mode>
-                                </network>
-                                <ports>
-                                    <port>38839:38839</port>
-                                </ports>
-                                <dependsOn>postgres</dependsOn>
-                            </run>
-                        </image>
-                        <image>
-                            <name>postgres:14.1-alpine</name>
-                            <alias>postgres</alias>
-                            <build>
-                       			<dockerFile>${project.basedir}/Postgresql_Dockerfile</dockerFile>     
-                            </build>
-                            <run>
-                                <containerNamePattern>postgres-task-manager</containerNamePattern>
-                                <network>
-                                    <name>my-network</name>
-                                    <mode>custom</mode>
-                                </network>
-                                <env>
-                                    <POSTGRES_USER>root</POSTGRES_USER>
-                                    <POSTGRES_PASSWORD>root</POSTGRES_PASSWORD>
-                                </env>
-                                <ports>
-                                    <port>5432:5432</port>
-                                </ports>
-                                 <wait>
-                                    <tcp>
-                                        <ports>
-                                            <port>5432</port>
-                                        </ports>
-                                    </tcp>
-                                    <time>10000</time>
-                                </wait>
+                                <namingStrategy>alias</namingStrategy>
                             </run>
                         </image>
                     </images>
@@ -90,7 +55,7 @@
                     </execution>
                     <execution>
                         <id>docker-start</id>
-                        <phase>test</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>start</goal>
                         </goals>
@@ -103,7 +68,7 @@
                             <goal>remove</goal>
                         </goals>
                     </execution>
-                </executions>
+               </executions>
             </plugin>
         </plugins>
     </build>
