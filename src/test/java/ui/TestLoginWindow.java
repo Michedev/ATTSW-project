@@ -89,6 +89,10 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.button("btnRegister").click();
 
 		frame.requireTitle("Registration page");
+		frame.label("lblUsername").requireEnabled();
+		frame.label("lblPassword").requireEnabled();
+		frame.label("lblEmail").requireEnabled();
+		frame.button("btnRegister").requireEnabled();
 	}
 
 

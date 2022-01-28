@@ -80,6 +80,7 @@ public class LoginWindow extends JFrame {
 		contentPane.add(btnLogin, "cell 3 9");
 
 		btnRegister = new JButton("Register");
+		btnRegister.addActionListener(this::registrationClickBtn);
 		btnRegister.setName("btnRegister");
 		contentPane.add(btnRegister, "cell 4 9");
 	}
@@ -98,7 +99,11 @@ public class LoginWindow extends JFrame {
 			lblErrorMessage.setVisible(true);
 
 		}
+	}
 
+	private void registrationClickBtn(ActionEvent e){
+		setTitle("Registration page");
+		setContentPane(new RegistrationPage(model));
 	}
 
 }
