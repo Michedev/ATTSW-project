@@ -83,6 +83,14 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.label("lblErrorMessage").requireEnabled();
 	}
 
+	@Test
+	@GUITest
+	public void goToRegisterPage(){
+		frame.button("btnRegister").click();
+
+		frame.requireTitle("Registration page");
+	}
+
 
 	@After
 	public void after() {
