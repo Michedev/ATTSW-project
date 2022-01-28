@@ -46,7 +46,16 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		JLabel errorlbl = frame.label(JLabelMatcher.withName("lblErrorMessage")).target();
 		Assert.assertTrue(errorlbl.isEnabled());
 		Assert.assertEquals("Username and/or password are wrong", errorlbl.getText());
+	}
 
+	@Test
+	@GUITest
+	public void testCorrectLogin(){
+		frame.textBox("tfUsername").enterText("myusername");
+		frame.textBox("tfPassword").enterText("mypassword");
+		frame.button("btnLogin").click();
+
+		Assert.assertNotEquals("Login page", frame.target().getTitle());
 	}
 	
 }
