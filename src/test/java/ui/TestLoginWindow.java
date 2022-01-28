@@ -1,18 +1,27 @@
 package ui;
 
+import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.BasicRobot;
+import org.assertj.swing.core.Robot;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 
 import javax.swing.*;
+
+import static java.lang.Thread.sleep;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(GUITestRunner.class)
 public class TestLoginWindow extends AssertJSwingJUnitTestCase {
@@ -22,8 +31,12 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 
 	@Override
 	protected void onSetUp(){
+		Model model = mock(Model.class);
+		when(model.areCredentialCorrect(ArgumentMatchers.matches("myusername"),
+				                        ArgumentMatchers.matches("mypassword"))).thenReturn(true);
+
 		GuiActionRunner.execute(() ->{
-			window = new LoginWindow();
+			window = new LoginWindow(model);
 			return window;
 		});
 		frame = new FrameFixture(robot(), window);
@@ -50,12 +63,17 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testCorrectLogin(){
-		frame.textBox("tfUsername").enterText("myusername");
-		frame.textBox("tfPassword").enterText("mypassword");
+	public void testCorrectLogin() throws InterruptedException {
+		frame.textBox("tfUsername").click().enterText("myusername");
+		frame.textBox("tfPassword").click().enterText("mypassword");
 		frame.button("btnLogin").click();
 
-		Assert.assertNotEquals("Login page", frame.target().getTitle());
+		Assert.assertEquals("Main page", frame.target().getTitle());
 	}
-	
+
+
+	@After
+	public void after() {
+		frame.cleanUp();
+	}
 }

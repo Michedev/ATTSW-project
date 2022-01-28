@@ -17,6 +17,8 @@ import java.awt.Color;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.Action;
 
 public class LoginWindow extends JFrame {
@@ -31,21 +33,6 @@ public class LoginWindow extends JFrame {
 	private JTextField tfUsername;
 	private JTextField tfPassword;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginWindow frame = new LoginWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -66,13 +53,16 @@ public class LoginWindow extends JFrame {
 		
 		tfUsername = new JTextField();
 		tfUsername.setName("tfUsername");
+		tfUsername.setText("");
 		contentPane.add(tfUsername, "cell 3 3 2 1,growx");
 		tfUsername.setColumns(10);
 
 		lblPassword = new JLabel("Password");
+		lblPassword.setText("Password");
 		contentPane.add(lblPassword, "cell 3 5");
 		
 		tfPassword = new JPasswordField();
+		tfPassword.setText("");
 		tfPassword.setName("tfPassword");
 		contentPane.add(tfPassword, "cell 3 6 2 1,growx");
 		tfPassword.setColumns(10);
@@ -81,6 +71,7 @@ public class LoginWindow extends JFrame {
 		lblErrorMessage.setName("lblErrorMessage");
 		lblErrorMessage.setForeground(Color.RED);
 		lblErrorMessage.setEnabled(false);
+		lblErrorMessage.setVisible(false);
 		contentPane.add(lblErrorMessage, "cell 3 7 2 1");
 
 		btnLogin = new JButton("Login");
@@ -94,12 +85,18 @@ public class LoginWindow extends JFrame {
 	}
 
 	private void loginClickBtn(ActionEvent e){
-		boolean isCorrect = model.areCredentialCorrect(lblUsername.getText(), lblPassword.getText());
+		String username = tfUsername.getText();
+		String password = tfPassword.getText();
+		boolean isCorrect = model.areCredentialCorrect(username, password);
+		System.out.println("is correct " + isCorrect);
 		if(isCorrect){
+			setTitle("Main page");
 			this.setContentPane(new MainPage());
 		} else {
 			lblErrorMessage.setText("Username and/or password are wrong");
 			lblErrorMessage.setEnabled(true);
+			lblErrorMessage.setVisible(true);
+
 		}
 
 	}
