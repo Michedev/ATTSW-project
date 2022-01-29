@@ -102,8 +102,10 @@ public class LoginWindow extends JFrame {
 	}
 
 	private void registrationClickBtn(ActionEvent e){
+		getContentPane().removeAll();
 		setTitle("Registration page");
-		setContentPane(new RegistrationPage(model));
+		getContentPane().add(new RegistrationPage(model));
+		pack();
 	}
 
 }

@@ -15,7 +15,7 @@ public class RegistrationPage extends JPanel {
     public RegistrationPage(Model model) {
         this.model = model;
         setLayout(new MigLayout("", "[][][][][]", "[][][][][][][][][][][][][]"));
-        
+
         JLabel lblUsername = new JLabel("Username");
         lblUsername.setName("lblUsername");
         add(lblUsername, "cell 1 1");
@@ -55,9 +55,9 @@ public class RegistrationPage extends JPanel {
         });
         add(btnRegister, "cell 1 12");
         
-                JButton btnCancel = new JButton("Cancel");
-                btnCancel.setName("btnCancel");
-                add(btnCancel, "cell 2 12");
+        JButton btnCancel = new JButton("Cancel");
+        btnCancel.setName("btnCancel");
+        add(btnCancel, "cell 2 12");
 
     }
 }
