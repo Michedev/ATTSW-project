@@ -14,41 +14,50 @@ public class RegistrationPage extends JPanel {
 
     public RegistrationPage(Model model) {
         this.model = model;
-        setLayout(new MigLayout("", "[][][][][grow][]", "[][][][][][][][][][][][]"));
+        setLayout(new MigLayout("", "[][][][][]", "[][][][][][][][][][][][][]"));
         
         JLabel lblUsername = new JLabel("Username");
         lblUsername.setName("lblUsername");
-        add(lblUsername, "cell 4 2");
+        add(lblUsername, "cell 1 1");
         
         tfUsername = new JTextField();
         tfUsername.setName("tfUsername");
-        add(tfUsername, "cell 4 3 2 1,growx");
+        add(tfUsername, "cell 1 3 2 1,growx");
         tfUsername.setColumns(10);
         
         JLabel lblPassword = new JLabel("Password");
         lblPassword.setName("lblPassword");
-        add(lblPassword, "cell 4 5");
+        add(lblPassword, "cell 1 5");
         
         tfPassword = new JPasswordField();
         tfPassword.setName("tfPassword");
-        add(tfPassword, "cell 4 6 2 1,growx");
+        add(tfPassword, "cell 1 6 2 1,growx");
         
         JLabel lblEmail = new JLabel("E-mail");
         lblEmail.setName("lblEmail");
-        add(lblEmail, "cell 4 8");
+        add(lblEmail, "cell 1 8");
         
         tfEmail = new JTextField();
         tfEmail.setName("tfEmail");
-        add(tfEmail, "cell 4 9 2 1,growx");
+        add(tfEmail, "cell 1 9 2 1,growx");
         tfEmail.setColumns(10);
         
-        JButton btnRegister = new JButton("Register");
-        btnRegister.setName("btnRegister");
-        add(btnRegister, "cell 4 11");
+        JLabel lblErrorMessage = new JLabel("Error message");
+        lblErrorMessage.setName("lblErrorMessage");
+        lblErrorMessage.setVisible(false);
+        lblErrorMessage.setForeground(Color.RED);
+        add(lblErrorMessage, "cell 1 10 2 1");
         
-        JButton btnCancel = new JButton("Cancel");
-        btnCancel.setName("btnCancel");
-        add(btnCancel, "cell 5 11");
+        JButton btnRegister = new JButton("Register");
+        btnRegister.setName("btnConfirmRegister");
+        btnRegister.addActionListener(e ->{
+            lblErrorMessage.setVisible(true);
+        });
+        add(btnRegister, "cell 1 12");
+        
+                JButton btnCancel = new JButton("Cancel");
+                btnCancel.setName("btnCancel");
+                add(btnCancel, "cell 2 12");
 
     }
 }
