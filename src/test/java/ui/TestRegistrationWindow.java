@@ -3,6 +3,7 @@ package ui;
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -38,7 +39,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
     public void testEmptyFieldsRegistration(){
         frame.button("btnRegister").click();
 
-        frame.label("lblErrorMessage").requireNotVisible();
+        frame.label(JLabelMatcher.withName("lblErrorMessage")).requireNotVisible();
         frame.button("btnConfirmRegister").click();
 
         frame.requireTitle("Registration page");
