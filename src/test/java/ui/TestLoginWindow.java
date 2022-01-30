@@ -8,6 +8,7 @@ import org.assertj.swing.core.Robot;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JLabelFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.After;
@@ -47,18 +48,19 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testInitialState(){
-		JLabel errorlbl = frame.label(JLabelMatcher.withName("lblErrorMessage")).target();
-		Assert.assertFalse(errorlbl.isEnabled());
-		Assert.assertEquals("Error message", errorlbl.getText());
+		frame.requireTitle("Login page");
+		frame.textBox("tfUsername").requireEditable();
+		frame.textBox("tfPassword").requireEditable();
+		frame.label(JLabelMatcher.withName("lblErrorMessage")).requireNotVisible();
 	}
 
 	@Test
 	@GUITest
 	public void testClickLoginAndThenErrorMessage(){
+		frame.label(JLabelMatcher.withName("lblErrorMessage")).requireNotVisible();  //to find not visible elements they must be found through Matcher class
 		frame.button("btnLogin").click();
-		JLabel errorlbl = frame.label(JLabelMatcher.withName("lblErrorMessage")).target();
-		Assert.assertTrue(errorlbl.isEnabled());
-		Assert.assertEquals("Username and/or password are wrong", errorlbl.getText());
+		frame.label("lblErrorMessage").requireVisible();
+		frame.label("lblErrorMessage").requireText("Username and/or password are wrong");
 	}
 
 	@Test
@@ -67,8 +69,7 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.textBox("tfUsername").click().enterText("myusername");
 		frame.textBox("tfPassword").click().enterText("mypassword");
 		frame.button("btnLogin").click();
-
-		Assert.assertEquals("Main page", frame.target().getTitle());
+		frame.requireTitle("Main page");
 	}
 
 	@Test
@@ -78,7 +79,8 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.textBox("tfPassword").click().enterText("wrongpassword");
 		frame.button("btnLogin").click();
 
-		Assert.assertEquals("Login page", frame.target().getTitle());
+		frame.requireTitle("Login page");
+
 		frame.label("lblUsername").requireText("Username");
 		frame.label("lblErrorMessage").requireEnabled();
 	}
@@ -92,7 +94,7 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.label("lblUsername").requireEnabled();
 		frame.label("lblPassword").requireEnabled();
 		frame.label("lblEmail").requireEnabled();
-		frame.button("btnRegister").requireEnabled();
+		frame.button("btnConfirmRegister").requireEnabled();
 	}
 
 
