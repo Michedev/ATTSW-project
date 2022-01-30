@@ -6,6 +6,7 @@ import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JLabelFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.After;
@@ -32,18 +33,32 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         });
         frame = new FrameFixture(robot(), window);
         frame.show();
+
+        frame.button("btnRegister").click();
     }
 
     @Test
     @GUITest
     public void testEmptyFieldsRegistration(){
-        frame.button("btnRegister").click();
 
-        frame.label(JLabelMatcher.withName("lblErrorMessage")).requireNotVisible();
+        JLabelFixture lblErrorMessageUsername = frame.label(JLabelMatcher.withName("lblErrorMessageUsername"));
+        JLabelFixture lblErrorMessagePassword = frame.label(JLabelMatcher.withName("lblErrorMessagePassword"));
+        JLabelFixture lblErrorMessageEmail = frame.label(JLabelMatcher.withName("lblErrorMessageEmail"));
+        lblErrorMessageUsername.requireNotVisible();
+        lblErrorMessagePassword.requireNotVisible();
+        lblErrorMessageEmail.requireNotVisible();
+
         frame.button("btnConfirmRegister").click();
 
         frame.requireTitle("Registration page");
-        frame.label("lblErrorMessage").requireVisible();
+        lblErrorMessageUsername.requireVisible();
+        lblErrorMessageUsername.requireText("Missing username");
+        lblErrorMessagePassword.requireVisible();
+        lblErrorMessagePassword.requireText("Missing password");
+        lblErrorMessageEmail.requireVisible();
+        lblErrorMessageEmail.requireText("Missing e-mail");
+
+
     }
 
 
