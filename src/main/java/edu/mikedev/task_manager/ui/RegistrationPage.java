@@ -91,6 +91,13 @@ public class RegistrationPage extends JPanel {
         if(tfEmail.getText().isEmpty()){
             lblErrorMessageEmail.setVisible(true);
             lblErrorMessageEmail.setText("Missing e-mail");
+        } else {
+            String regexEmail = "[\\w]+@[\\w]+\\.[\\w]{1,5}";
+            if(!tfEmail.getText().matches(regexEmail)){
+                lblErrorMessageEmail.setVisible(true);
+                lblErrorMessageEmail.setText("The input prompted above is not an e-mail");
+            }
+
         }
     }
 }

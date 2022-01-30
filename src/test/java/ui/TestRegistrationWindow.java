@@ -65,7 +65,18 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         lblErrorMessagePassword.requireText("Missing password");
         lblErrorMessageEmail.requireVisible();
         lblErrorMessageEmail.requireText("Missing e-mail");
+    }
 
+    @Test
+    @GUITest
+    public void testWrongFormattedEmail(){
+        frame.textBox("tfEmail").setText("This is not an email");
+
+        frame.button("btnConfirmRegister").click();
+
+        JLabelFixture lblErrorMessageEmail = frame.label(JLabelMatcher.withName("lblErrorMessageEmail"));
+        lblErrorMessageEmail.requireVisible();
+        lblErrorMessageEmail.requireText("The input prompted above is not an e-mail");
 
     }
 
