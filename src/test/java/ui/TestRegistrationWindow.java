@@ -39,18 +39,26 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
 
     @Test
     @GUITest
-    public void testEmptyFieldsRegistration(){
-
+    public void testInitState(){
         JLabelFixture lblErrorMessageUsername = frame.label(JLabelMatcher.withName("lblErrorMessageUsername"));
         JLabelFixture lblErrorMessagePassword = frame.label(JLabelMatcher.withName("lblErrorMessagePassword"));
         JLabelFixture lblErrorMessageEmail = frame.label(JLabelMatcher.withName("lblErrorMessageEmail"));
         lblErrorMessageUsername.requireNotVisible();
         lblErrorMessagePassword.requireNotVisible();
         lblErrorMessageEmail.requireNotVisible();
+        frame.requireTitle("Registration page");
+
+    }
+
+    @Test
+    @GUITest
+    public void testEmptyFieldsRegistration(){
+        JLabelFixture lblErrorMessageUsername = frame.label(JLabelMatcher.withName("lblErrorMessageUsername"));
+        JLabelFixture lblErrorMessagePassword = frame.label(JLabelMatcher.withName("lblErrorMessagePassword"));
+        JLabelFixture lblErrorMessageEmail = frame.label(JLabelMatcher.withName("lblErrorMessageEmail"));
 
         frame.button("btnConfirmRegister").click();
 
-        frame.requireTitle("Registration page");
         lblErrorMessageUsername.requireVisible();
         lblErrorMessageUsername.requireText("Missing username");
         lblErrorMessagePassword.requireVisible();
