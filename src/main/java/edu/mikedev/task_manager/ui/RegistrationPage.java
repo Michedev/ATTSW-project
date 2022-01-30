@@ -4,10 +4,17 @@ import edu.mikedev.task_manager.Model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+
 import net.miginfocom.swing.MigLayout;
 
 public class RegistrationPage extends JPanel {
     private final Model model;
+    private JLabel lblErrorMessagePassword;
+    private JLabel lblErrorMessageEmail;
+    private JButton btnRegister;
+    private JButton btnCancel;
+    private JLabel lblErrorMessageUsername;
     private JTextField tfUsername;
     private JPasswordField tfPassword;
     private JTextField tfEmail;
@@ -24,8 +31,8 @@ public class RegistrationPage extends JPanel {
         tfUsername.setName("tfUsername");
         add(tfUsername, "cell 1 3 2 1,growx");
         tfUsername.setColumns(10);
-        
-        JLabel lblErrorMessageUsername = new JLabel("Error message");
+
+        lblErrorMessageUsername = new JLabel("Error message");
         lblErrorMessageUsername.setName("lblErrorMessageUsername");
         lblErrorMessageUsername.setVisible(false);
         lblErrorMessageUsername.setForeground(Color.RED);
@@ -38,8 +45,8 @@ public class RegistrationPage extends JPanel {
         tfPassword = new JPasswordField();
         tfPassword.setName("tfPassword");
         add(tfPassword, "cell 1 7 2 1,growx");
-        
-        JLabel lblErrorMessagePassword = new JLabel("Error Message");
+
+        lblErrorMessagePassword = new JLabel("Error Message");
         lblErrorMessagePassword.setVisible(false);
         lblErrorMessagePassword.setForeground(Color.RED);
         lblErrorMessagePassword.setName("lblErrorMessagePassword");
@@ -53,23 +60,37 @@ public class RegistrationPage extends JPanel {
         tfEmail.setName("tfEmail");
         add(tfEmail, "cell 1 11 2 1,growx");
         tfEmail.setColumns(10);
-        
-        JLabel lblErrorMessage = new JLabel("Error message");
-        lblErrorMessage.setVisible(false);
-        lblErrorMessage.setName("lblErrorMessageEmail");
-        lblErrorMessage.setForeground(Color.RED);
-        add(lblErrorMessage, "cell 1 12 2 1");
-        
-        JButton btnRegister = new JButton("Register");
+
+        lblErrorMessageEmail = new JLabel("Error message");
+        lblErrorMessageEmail.setVisible(false);
+        lblErrorMessageEmail.setName("lblErrorMessageEmail");
+        lblErrorMessageEmail.setForeground(Color.RED);
+        add(lblErrorMessageEmail, "cell 1 12 2 1");
+
+        btnRegister = new JButton("Register");
         btnRegister.setName("btnConfirmRegister");
-        btnRegister.addActionListener(e ->{
-            lblErrorMessage.setVisible(true);
-        });
+        btnRegister.addActionListener(this::registrationEvent);
         add(btnRegister, "cell 1 14");
-        
-        JButton btnCancel = new JButton("Cancel");
+
+        btnCancel = new JButton("Cancel");
         btnCancel.setName("btnCancel");
         add(btnCancel, "cell 2 14");
 
+    }
+
+    private void registrationEvent(ActionEvent e){
+        if(tfUsername.getText().isEmpty()){
+            lblErrorMessageUsername.setVisible(true);
+            lblErrorMessageUsername.setText("Missing username");
+        }
+        char[] password = tfPassword.getPassword();
+        if(password.length == 0){
+            lblErrorMessagePassword.setVisible(true);
+            lblErrorMessagePassword.setText("Missing password");
+        }
+        if(tfEmail.getText().isEmpty()){
+            lblErrorMessageEmail.setVisible(true);
+            lblErrorMessageEmail.setText("Missing e-mail");
+        }
     }
 }
