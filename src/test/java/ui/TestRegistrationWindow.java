@@ -3,6 +3,7 @@ package ui;
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.DialogMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -90,6 +91,18 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         JLabelFixture lblErrorMessageUsername = frame.label(JLabelMatcher.withName("lblErrorMessageUsername"));
         lblErrorMessageUsername.requireVisible();
         lblErrorMessageUsername.requireText("Username exists");
+    }
+
+    @Test
+    @GUITest
+    public void testCorrectRegistration(){
+        frame.textBox("tfUsername").setText("newuser1");
+        frame.textBox("tfPassword").setText("password1");
+        frame.textBox("tfEmail").setText("email@email.it");
+
+        frame.button("btnConfirmRegister").click();
+
+        frame.dialog(DialogMatcher.withTitle("Registration completed")).requireVisible();
     }
 
 

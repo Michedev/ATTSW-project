@@ -79,29 +79,43 @@ public class RegistrationPage extends JPanel {
     }
 
     private void registrationEvent(ActionEvent e){
+        if(areFormsCorrects()){
+            JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Username " + tfUsername.getText() + " successfully registered", "Registration completed", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private boolean areFormsCorrects() {
+        boolean correct = true;
         if(tfUsername.getText().isEmpty()){
             lblErrorMessageUsername.setVisible(true);
             lblErrorMessageUsername.setText("Missing username");
+            correct = false;
         } else {
             if(model.userExists(tfUsername.getText())){
                 lblErrorMessageUsername.setVisible(true);
                 lblErrorMessageUsername.setText("Username exists");
+                correct = false;
             }
         }
         char[] password = tfPassword.getPassword();
         if(password.length == 0){
             lblErrorMessagePassword.setVisible(true);
             lblErrorMessagePassword.setText("Missing password");
+            correct = false;
         }
         if(tfEmail.getText().isEmpty()){
             lblErrorMessageEmail.setVisible(true);
             lblErrorMessageEmail.setText("Missing e-mail");
+            correct = false;
         } else {
             String regexEmail = "[\\w]+@[\\w]+\\.[\\w]{1,5}";
             if(!tfEmail.getText().matches(regexEmail)){
                 lblErrorMessageEmail.setVisible(true);
                 lblErrorMessageEmail.setText("The input prompted above is not an e-mail");
+                correct = false;
             }
         }
+        return correct;
     }
+
 }
