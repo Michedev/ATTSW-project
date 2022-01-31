@@ -6,6 +6,7 @@ import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import edu.mikedev.task_manager.Model;
+import edu.mikedev.task_manager.User;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -84,7 +85,10 @@ public class LoginWindow extends JFrame {
 		System.out.println("is correct " + isCorrect);
 		if(isCorrect){
 			setTitle("Main page");
-			this.setContentPane(new UserTasksPage());
+			User loggedUser = model.getUser(username, password);
+			setTitle(username + " tasks");
+			this.setContentPane(new UserTasksPage(loggedUser));
+			pack();
 		} else {
 			lblErrorMessage.setText("Username and/or password are wrong");
 			lblErrorMessage.setEnabled(true);
