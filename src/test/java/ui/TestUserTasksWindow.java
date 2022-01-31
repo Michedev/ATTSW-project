@@ -9,12 +9,12 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -25,6 +25,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
 
     LoginWindow window;
     FrameFixture frame;
+    Set<Task> tasksSet;
 
     @Override
     protected void onSetUp(){
@@ -35,9 +36,11 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
                 "password1",
                 "email1@email.com"
         );
-        Set<Task> tasksSet = new HashSet<>();
+        tasksSet = new HashSet<>();
         for (int i = 0; i < 5; i++) {
-            tasksSet.add(new Task("Task " + (i+1), "Description task " + (i+1), new Date(8328432848L), i == 3));
+            Task t = new Task("Task " + (i + 1), "Description task " + (i + 1), new Date(8328432848L), i == 3);
+            t.setId(i);
+            tasksSet.add(t);
         }
         dummyuser.setTasks(tasksSet);
         when(model.getUser(anyString(), anyString())).thenReturn(dummyuser);
@@ -59,6 +62,22 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
             frame.panel("task" + i).requireEnabled();
         }
         frame.button("newTask").requireEnabled();
+    }
+
+    @Test
+    @GUITest
+    public void testCorrectOrderTasks(){
+        List<Task> sortedTasks = tasksSet.stream().sorted((a,b) -> Comparator.comparingInt(Task::getId).compare(a,b)).collect(Collectors.toList());
+        for (int i = 0; i < 5; i++) {
+            frame.label("lblTitleTask" + i).requireText(sortedTasks.get(i).getTitle());
+            frame.label("lblDescrTask" + i).requireText(sortedTasks.get(i).getDescription());
+        }
+        frame.button("newTask").requireEnabled();
+    }
+
+    @After
+    public void after() {
+        frame.cleanUp();
     }
 
 }
