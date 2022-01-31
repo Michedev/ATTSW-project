@@ -10,10 +10,14 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -26,6 +30,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
     LoginWindow window;
     FrameFixture frame;
     Set<Task> tasksSet;
+    List<Task> tasksListSorted;
 
     @Override
     protected void onSetUp(){
@@ -37,10 +42,19 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
                 "email1@email.com"
         );
         tasksSet = new HashSet<>();
+        tasksListSorted = new ArrayList<Task>();
+        List<Date> taskDates = Arrays.asList(
+                new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
+                new GregorianCalendar(2025, Calendar.FEBRUARY, 11).getTime(),
+                new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(),
+                new GregorianCalendar(2026, Calendar.FEBRUARY, 11).getTime(),
+                new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime()
+        );
         for (int i = 0; i < 5; i++) {
-            Task t = new Task("Task " + (i + 1), "Description task " + (i + 1), new Date(8328432848L), i == 3);
+            Task t = new Task("Task " + (i + 1), "Description task " + (i + 1), taskDates.get(i), i >= 3);
             t.setId(i);
             tasksSet.add(t);
+            tasksListSorted.add(t);
         }
         dummyuser.setTasks(tasksSet);
         when(model.getUser(anyString(), anyString())).thenReturn(dummyuser);
@@ -61,18 +75,26 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         for (int i = 0; i < 5; i++) {
             frame.panel("task" + i).requireEnabled();
         }
-        frame.button("newTask").requireEnabled();
+        frame.button("btnNewTask").requireEnabled();
     }
 
     @Test
     @GUITest
     public void testCorrectOrderTasks(){
-        List<Task> sortedTasks = tasksSet.stream().sorted((a,b) -> Comparator.comparingInt(Task::getId).compare(a,b)).collect(Collectors.toList());
         for (int i = 0; i < 5; i++) {
-            frame.label("lblTitleTask" + i).requireText(sortedTasks.get(i).getTitle());
-            frame.label("lblDescrTask" + i).requireText(sortedTasks.get(i).getDescription());
+            frame.label("lblTitleTask" + i).requireText(tasksListSorted.get(i).getTitle());
+            frame.label("lblDescrTask" + i).requireText(tasksListSorted.get(i).getDescription());
         }
-        frame.button("newTask").requireEnabled();
+    }
+
+    @Test
+    @GUITest
+    public void testCorrectColorCards(){
+        List<Color> expectedColors = Arrays.asList(Color.RED, Color.ORANGE, Color.RED, Color.GREEN, Color.GREEN);
+        for(int i = 0; i < 5; i++){
+            JPanel taskPanel = frame.panel("task"+i).target();
+            Assert.assertEquals(expectedColors.get(i), taskPanel.getBackground());
+        }
     }
 
     @After
