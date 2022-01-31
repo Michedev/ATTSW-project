@@ -5,6 +5,8 @@ import edu.mikedev.task_manager.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,12 +42,14 @@ public class UserTasksPage extends JPanel {
 
 	private JPanel makeTaskCard(Task t, GridBagConstraints c) {
 		JPanel taskPanel = new JPanel();
+		colorBackground(taskPanel, t);
 		taskPanel.setName("task" + t.getId());
 		taskPanel.setMaximumSize(new Dimension(300, 1500000));
 		add(taskPanel, c);
 		taskPanel.setLayout(new GridLayout(2, 1, 5, 5));
 
 		JPanel headerPanelTask = new JPanel();
+		headerPanelTask.setBackground(new Color(0, 0, 0, 0));
 		taskPanel.add(headerPanelTask);
 		headerPanelTask.setLayout(new GridLayout(1, 2, 5, 0));
 
@@ -61,6 +65,7 @@ public class UserTasksPage extends JPanel {
 		headerPanelTask.add(lblDateTask);
 
 		JPanel contentPanelTask = new JPanel();
+		contentPanelTask.setBackground(new Color(0, 0, 0, 0));
 		contentPanelTask.setMaximumSize(new Dimension(150, 1500));
 		taskPanel.add(contentPanelTask);
 		contentPanelTask.setLayout(new GridLayout(1, 0, 0, 0));
@@ -72,6 +77,18 @@ public class UserTasksPage extends JPanel {
 		contentPanelTask.add(lblDescrTask);
 
 		return taskPanel;
+	}
+
+	private void colorBackground(JPanel taskPanel, Task task) {
+		if(task.isDone()){
+			taskPanel.setBackground(Color.GREEN);
+		} else {
+			if(task.getDeadline().after(Date.from(Instant.now()))){
+				taskPanel.setBackground(Color.ORANGE);
+			} else {
+				taskPanel.setBackground(Color.RED);
+			}
+		}
 	}
 
 }
