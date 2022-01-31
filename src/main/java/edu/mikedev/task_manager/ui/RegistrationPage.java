@@ -82,6 +82,11 @@ public class RegistrationPage extends JPanel {
         if(tfUsername.getText().isEmpty()){
             lblErrorMessageUsername.setVisible(true);
             lblErrorMessageUsername.setText("Missing username");
+        } else {
+            if(model.userExists(tfUsername.getText())){
+                lblErrorMessageUsername.setVisible(true);
+                lblErrorMessageUsername.setText("Username exists");
+            }
         }
         char[] password = tfPassword.getPassword();
         if(password.length == 0){
@@ -97,7 +102,6 @@ public class RegistrationPage extends JPanel {
                 lblErrorMessageEmail.setVisible(true);
                 lblErrorMessageEmail.setText("The input prompted above is not an e-mail");
             }
-
         }
     }
 }

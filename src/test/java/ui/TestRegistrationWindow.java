@@ -26,6 +26,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
     @Override
     protected void onSetUp(){
         Model model = mock(Model.class);
+        when(model.userExists(ArgumentMatchers.matches("existinguser1"))).thenReturn(true);
 
         GuiActionRunner.execute(() ->{
             window = new LoginWindow(model);
@@ -77,7 +78,18 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         JLabelFixture lblErrorMessageEmail = frame.label(JLabelMatcher.withName("lblErrorMessageEmail"));
         lblErrorMessageEmail.requireVisible();
         lblErrorMessageEmail.requireText("The input prompted above is not an e-mail");
+    }
 
+    @Test
+    @GUITest
+    public void testExistingUser(){
+        frame.textBox("tfUsername").setText("existinguser1");
+
+        frame.button("btnConfirmRegister").click();
+
+        JLabelFixture lblErrorMessageUsername = frame.label(JLabelMatcher.withName("lblErrorMessageUsername"));
+        lblErrorMessageUsername.requireVisible();
+        lblErrorMessageUsername.requireText("Username exists");
     }
 
 
