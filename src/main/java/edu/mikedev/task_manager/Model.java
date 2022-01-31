@@ -5,4 +5,6 @@ public interface Model {
     boolean areCredentialCorrect(String username, String password);
 
     boolean userExists(String username);
+
+    User registerUser(String username, String password, String email);
 }
