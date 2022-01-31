@@ -1,8 +1,5 @@
 package edu.mikedev.task_manager.ui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -14,12 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
-import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import javax.swing.Action;
 
 public class LoginWindow extends JFrame {
 
@@ -92,7 +84,7 @@ public class LoginWindow extends JFrame {
 		System.out.println("is correct " + isCorrect);
 		if(isCorrect){
 			setTitle("Main page");
-			this.setContentPane(new MainPage());
+			this.setContentPane(new UserTasksPage());
 		} else {
 			lblErrorMessage.setText("Username and/or password are wrong");
 			lblErrorMessage.setEnabled(true);

@@ -7,4 +7,6 @@ public interface Model {
     boolean userExists(String username);
 
     User registerUser(String username, String password, String email);
+
+    User getUser(String username, String password);
 }
