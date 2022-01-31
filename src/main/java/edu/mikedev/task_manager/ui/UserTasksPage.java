@@ -4,10 +4,10 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 
 import javax.swing.*;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Font;
-import java.awt.Dimension;
+import java.awt.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserTasksPage extends JPanel {
 
@@ -18,16 +18,31 @@ public class UserTasksPage extends JPanel {
 
 	public UserTasksPage(User user) {
 		this.user = user;
-		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		for(Task t: user.getTasks()){
-			makeTaskCard(t);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		int maxCols = 3;
+		setLayout(gridBagLayout);
+		List<Task> userTasksSorted = user.getTasks().stream().sorted((a, b) -> Comparator.comparingInt(Task::getId).compare(a,b)).collect(Collectors.toList());
+		JButton btnNewTask = new JButton("+");
+		btnNewTask.setName("btnNewTask");
+		int i = 0;
+		for(Task t: userTasksSorted){
+			c.gridx = i % maxCols;
+			c.gridy = i / maxCols;
+			makeTaskCard(t, c);
+			i++;
 		}
+		c.gridx = 3;
+		c.gridy = i / maxCols;
+		add(btnNewTask, c);
+
 	}
 
-	private JPanel makeTaskCard(Task t) {
+	private JPanel makeTaskCard(Task t, GridBagConstraints c) {
 		JPanel taskPanel = new JPanel();
+		taskPanel.setName("task" + t.getId());
 		taskPanel.setMaximumSize(new Dimension(300, 1500000));
-		add(taskPanel);
+		add(taskPanel, c);
 		taskPanel.setLayout(new GridLayout(2, 1, 5, 5));
 
 		JPanel headerPanelTask = new JPanel();
@@ -46,6 +61,7 @@ public class UserTasksPage extends JPanel {
 		headerPanelTask.add(lblDateTask);
 
 		JPanel contentPanelTask = new JPanel();
+		contentPanelTask.setMaximumSize(new Dimension(150, 1500));
 		taskPanel.add(contentPanelTask);
 		contentPanelTask.setLayout(new GridLayout(1, 0, 0, 0));
 
