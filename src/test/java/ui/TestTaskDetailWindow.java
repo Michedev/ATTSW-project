@@ -14,13 +14,8 @@ import org.assertj.swing.util.Triple;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 
-import java.util.*;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import java.util.List;
 
 @RunWith(GUITestRunner.class)
 public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
