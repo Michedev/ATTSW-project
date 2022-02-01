@@ -3,6 +3,7 @@ package ui;
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.ui.AppColors;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -79,6 +80,12 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         String textDescription = frame.label("lblTaskDescription").text();
         Assert.assertTrue(textDescription.startsWith("Super Long description"));
         Assert.assertTrue(textDescription.length() > 53);
+    }
+
+    @Test
+    @GUITest
+    public void testBackgroundColor(){
+        frame.panel("mainPanel").background().requireEqualTo(AppColors.GREEN);
     }
 
 }
