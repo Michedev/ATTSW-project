@@ -75,8 +75,8 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
     @Test
     @GUITest
     public void testInitialState(){
-        frame.label("lblTitleTask").requireText("Task 4");
-        String textDescription = frame.label("lblDescriptionTask").text();
+        frame.label("lblTaskTitle").requireText("Task 5");
+        String textDescription = frame.label("lblTaskDescription").text();
         Assert.assertTrue(textDescription.startsWith("Super Long description"));
         Assert.assertTrue(textDescription.length() > 53);
     }

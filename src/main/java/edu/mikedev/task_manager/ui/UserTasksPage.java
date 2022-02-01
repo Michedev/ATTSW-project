@@ -4,9 +4,10 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -47,6 +48,7 @@ public class UserTasksPage extends JPanel {
 
 	private JPanel makeTaskCard(Task t, GridBagConstraints c) {
 		JPanel taskPanel = new JPanel();
+		taskPanel.addMouseListener(new TaskDetailTransition(this, t, user));
 		Color backgroundColor = colorBackground(taskPanel, t);
 		taskPanel.setBorder(new LineBorder(backgroundColor, 5, true));
 		taskPanel.setName("task" + t.getId());
@@ -106,6 +108,29 @@ public class UserTasksPage extends JPanel {
 				return AppColors.RED;
 			}
 		}
+	}
+
+}
+
+class TaskDetailTransition extends MouseAdapter{
+
+	private JPanel panel;
+	private Task task;
+	private User user;
+
+	public TaskDetailTransition(JPanel panel, Task task, User user){
+
+		this.panel = panel;
+		this.task = task;
+		this.user = user;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		JFrame window = (JFrame) SwingUtilities.getWindowAncestor(panel);
+		window.setTitle("Task Detail");
+		window.setContentPane(new TaskDetailPage(task, user));
+		window.pack();
 	}
 
 }
