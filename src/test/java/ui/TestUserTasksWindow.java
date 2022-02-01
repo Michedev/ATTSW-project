@@ -3,6 +3,7 @@ package ui;
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.ui.AppColors;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -56,6 +57,11 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
             tasksSet.add(t);
             tasksListSorted.add(t);
         }
+        StringBuilder longDescription = new StringBuilder();
+        for (int i = 0; i < 100; i++) {
+            longDescription.append("Super Long description ");
+        }
+        tasksListSorted.get(4).setDescription(longDescription.toString());
         dummyuser.setTasks(tasksSet);
         when(model.getUser(anyString(), anyString())).thenReturn(dummyuser);
 
@@ -83,18 +89,30 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
     public void testCorrectOrderTasks(){
         for (int i = 0; i < 5; i++) {
             frame.label("lblTitleTask" + i).requireText(tasksListSorted.get(i).getTitle());
-            frame.label("lblDescrTask" + i).requireText(tasksListSorted.get(i).getDescription());
+            if(i == 4){
+                Assert.assertTrue(frame.label("lblDescrTask" + i).text().startsWith("Super Long description"));
+            } else {
+                frame.label("lblDescrTask" + i).requireText(tasksListSorted.get(i).getDescription());
+            }
         }
     }
 
     @Test
     @GUITest
     public void testCorrectColorCards(){
-        List<Color> expectedColors = Arrays.asList(Color.RED, Color.ORANGE, Color.RED, Color.GREEN, Color.GREEN);
+        List<Color> expectedColors = Arrays.asList(AppColors.RED, AppColors.ORANGE, AppColors.RED, AppColors.GREEN, AppColors.GREEN);
         for(int i = 0; i < 5; i++){
             JPanel taskPanel = frame.panel("task"+i).target();
             Assert.assertEquals(expectedColors.get(i), taskPanel.getBackground());
         }
+    }
+
+    @Test
+    @GUITest
+    public void testCorrectFormattingLongDescritption(){
+        String longDescription = frame.label("lblDescrTask4").text();
+        Assert.assertTrue(longDescription.startsWith("Super Long description"));
+        Assert.assertEquals(50 + 3, longDescription.length());
     }
 
     @After

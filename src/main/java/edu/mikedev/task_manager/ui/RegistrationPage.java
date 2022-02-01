@@ -35,7 +35,7 @@ public class RegistrationPage extends JPanel {
         lblErrorMessageUsername = new JLabel("Error message");
         lblErrorMessageUsername.setName("lblErrorMessageUsername");
         lblErrorMessageUsername.setVisible(false);
-        lblErrorMessageUsername.setForeground(Color.RED);
+        lblErrorMessageUsername.setForeground(AppColors.RED);
         add(lblErrorMessageUsername, "cell 1 4 2 1");
         
         JLabel lblPassword = new JLabel("Password");
@@ -48,7 +48,7 @@ public class RegistrationPage extends JPanel {
 
         lblErrorMessagePassword = new JLabel("Error Message");
         lblErrorMessagePassword.setVisible(false);
-        lblErrorMessagePassword.setForeground(Color.RED);
+        lblErrorMessagePassword.setForeground(AppColors.RED);
         lblErrorMessagePassword.setName("lblErrorMessagePassword");
         add(lblErrorMessagePassword, "cell 1 8 2 1");
         
@@ -64,7 +64,7 @@ public class RegistrationPage extends JPanel {
         lblErrorMessageEmail = new JLabel("Error message");
         lblErrorMessageEmail.setVisible(false);
         lblErrorMessageEmail.setName("lblErrorMessageEmail");
-        lblErrorMessageEmail.setForeground(Color.RED);
+        lblErrorMessageEmail.setForeground(AppColors.RED);
         add(lblErrorMessageEmail, "cell 1 12 2 1");
 
         btnRegister = new JButton("Register");

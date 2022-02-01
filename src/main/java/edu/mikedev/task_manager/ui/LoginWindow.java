@@ -1,17 +1,13 @@
 package edu.mikedev.task_manager.ui;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.User;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.Color;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class LoginWindow extends JFrame {
@@ -31,12 +27,24 @@ public class LoginWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginWindow(Model model) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+
 		this.model = model;
 		setTitle("Login page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[][][][grow][grow]", "[][][][][][][][][][]"));
 
@@ -62,7 +70,7 @@ public class LoginWindow extends JFrame {
 
 		lblErrorMessage = new JLabel("Error message");
 		lblErrorMessage.setName("lblErrorMessage");
-		lblErrorMessage.setForeground(Color.RED);
+		lblErrorMessage.setForeground(AppColors.RED);
 		lblErrorMessage.setEnabled(false);
 		lblErrorMessage.setVisible(false);
 		contentPane.add(lblErrorMessage, "cell 3 7 2 1");
@@ -88,6 +96,7 @@ public class LoginWindow extends JFrame {
 			User loggedUser = model.getUser(username, password);
 			setTitle(username + " tasks");
 			this.setContentPane(new UserTasksPage(loggedUser));
+			setMinimumSize(new Dimension(400, 300));
 			pack();
 		} else {
 			lblErrorMessage.setText("Username and/or password are wrong");
