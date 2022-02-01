@@ -18,9 +18,12 @@ public class TaskDetailPage extends JPanel {
 	private User user;
 
 	public TaskDetailPage(Task task, User user) {
+		setName("mainPanel");
 		this.task = task;
 		this.user = user;
 
+		Color backgroundColor = AppColors.getColorBackground(task);
+		setBackground(backgroundColor);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
@@ -58,7 +61,7 @@ public class TaskDetailPage extends JPanel {
 		
 		JLabel lblTaskDescription = new JLabel("<html><p style=\"width:300px\">"+task.getDescription()+"</p></html>");
 		lblTaskDescription.setName("lblTaskDescription");
-		lblTaskDescription.setFont(new Font("Cantarell", Font.PLAIN, 12));
+		lblTaskDescription.setFont(new Font("Cantarell", Font.PLAIN, 11));
 
 		GridBagConstraints gbc_lblTaskDescription = new GridBagConstraints();
 		gbc_lblTaskDescription.gridwidth = 2;

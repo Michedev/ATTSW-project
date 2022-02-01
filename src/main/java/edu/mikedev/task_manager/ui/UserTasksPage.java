@@ -49,7 +49,8 @@ public class UserTasksPage extends JPanel {
 	private JPanel makeTaskCard(Task t, GridBagConstraints c) {
 		JPanel taskPanel = new JPanel();
 		taskPanel.addMouseListener(new TaskDetailTransition(this, t, user));
-		Color backgroundColor = colorBackground(taskPanel, t);
+		Color backgroundColor = AppColors.getColorBackground(t);
+		taskPanel.setBackground(backgroundColor);
 		taskPanel.setBorder(new LineBorder(backgroundColor, 5, true));
 		taskPanel.setName("task" + t.getId());
 		taskPanel.setMaximumSize(new Dimension(300, 1500000));
@@ -95,42 +96,5 @@ public class UserTasksPage extends JPanel {
 		return description;
 	}
 
-	private Color colorBackground(JPanel taskPanel, Task task) {
-		if(task.isDone()){
-			taskPanel.setBackground(AppColors.GREEN);
-			return AppColors.GREEN;
-		} else {
-			if(task.getDeadline().after(Date.from(Instant.now()))){
-				taskPanel.setBackground(AppColors.ORANGE);
-				return AppColors.ORANGE;
-			} else {
-				taskPanel.setBackground(AppColors.RED);
-				return AppColors.RED;
-			}
-		}
-	}
-
 }
 
-class TaskDetailTransition extends MouseAdapter{
-
-	private JPanel panel;
-	private Task task;
-	private User user;
-
-	public TaskDetailTransition(JPanel panel, Task task, User user){
-
-		this.panel = panel;
-		this.task = task;
-		this.user = user;
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		JFrame window = (JFrame) SwingUtilities.getWindowAncestor(panel);
-		window.setTitle("Task Detail");
-		window.setContentPane(new TaskDetailPage(task, user));
-		window.pack();
-	}
-
-}
