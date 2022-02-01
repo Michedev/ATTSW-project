@@ -6,6 +6,7 @@ import edu.mikedev.task_manager.User;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
@@ -32,6 +33,7 @@ public class UserTasksPage extends JPanel {
 		setLayout(gridBagLayout);
 		List<Task> userTasksSorted = user.getTasks().stream().sorted((a, b) -> Comparator.comparingInt(Task::getId).compare(a,b)).collect(Collectors.toList());
 		JButton btnNewTask = new JButton("+");
+		btnNewTask.addActionListener(this::goToNewTask);
 		btnNewTask.setName("btnNewTask");
 		int i = 0;
 		for(Task t: userTasksSorted){
@@ -43,7 +45,13 @@ public class UserTasksPage extends JPanel {
 		c.gridx = maxCols-1;
 		c.gridy = i / maxCols;
 		add(btnNewTask, c);
+	}
 
+	private void goToNewTask(ActionEvent e) {
+		JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
+		windowAncestor.setContentPane(new NewUpdateTask());
+		windowAncestor.setTitle("New task");
+		windowAncestor.pack();
 	}
 
 	private JPanel makeTaskCard(Task t, GridBagConstraints c) {
