@@ -51,7 +51,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         frame.requireTitle("Task Details");
         frame.label("lblTaskTitle").requireText("Task 5");
         String textDescription = frame.label("lblTaskDescription").text();
-        Assert.assertTrue(textDescription.startsWith("<html><p style=\"width:300px\">SSuper Long description"));
+        Assert.assertTrue(textDescription.startsWith("<html><p style=\"width:300px\">Super Long description"));
         Assert.assertTrue(textDescription.length() > 53);
     }
 

@@ -76,7 +76,6 @@ public class UserTasksPage extends JPanel {
 
 		JPanel contentPanelTask = new JPanel();
 		contentPanelTask.setBackground(new Color(0, 0, 0, 0));
-		contentPanelTask.setMaximumSize(new Dimension(150, 1500));
 		taskPanel.add(contentPanelTask);
 		contentPanelTask.setLayout(new GridLayout(1, 0, 0, 0));
 

@@ -3,11 +3,10 @@ package edu.mikedev.task_manager.ui;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
-import javax.swing.JLabel;
+import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
-import javax.swing.JButton;
 
 public class TaskDetailPage extends JPanel {
 
@@ -31,13 +30,14 @@ public class TaskDetailPage extends JPanel {
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		JButton btnBack = new JButton("<");
-		btnBack.setName("btnBack");
+		JButton btnGoBack = new JButton("<");
+		btnGoBack.setName("btnGoBack");
+		btnGoBack.addActionListener(this::goBackAction);
 		GridBagConstraints gbc_btnBack = new GridBagConstraints();
 		gbc_btnBack.insets = new Insets(0, 0, 5, 5);
 		gbc_btnBack.gridx = 0;
 		gbc_btnBack.gridy = 0;
-		add(btnBack, gbc_btnBack);
+		add(btnGoBack, gbc_btnBack);
 		
 		JLabel lblTaskTitle = new JLabel(task.getTitle());
 		lblTaskTitle.setName("lblTaskTitle");
@@ -69,6 +69,13 @@ public class TaskDetailPage extends JPanel {
 		gbc_lblTaskDescription.gridy = 2;
 		add(lblTaskDescription, gbc_lblTaskDescription);
 
+	}
+
+	private void goBackAction(ActionEvent e){
+		JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
+		windowAncestor.setContentPane(new UserTasksPage(user));
+		windowAncestor.setTitle(user.getUsername() + " tasks");
+		windowAncestor.pack();
 	}
 
 }
