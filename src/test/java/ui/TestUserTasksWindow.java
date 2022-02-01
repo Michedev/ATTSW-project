@@ -51,6 +51,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
     @Test
     @GUITest
     public void testInitialState(){
+        frame.requireTitle("username1 tasks");
         for (int i = 0; i < 5; i++) {
             frame.panel("task" + i).requireEnabled();
         }

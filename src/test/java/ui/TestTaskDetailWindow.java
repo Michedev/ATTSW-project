@@ -61,4 +61,17 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         frame.panel("mainPanel").background().requireEqualTo(AppColors.GREEN);
     }
 
+    @Test
+    @GUITest
+    public void testGoBackButton(){
+        frame.button("btnGoBack").click();
+
+        frame.requireTitle("username1 tasks");
+        for (int i = 0; i < 5; i++) {
+            frame.panel("task" + i).requireEnabled();
+        }
+        frame.button("btnNewTask").requireEnabled();
+
+    }
+
 }
