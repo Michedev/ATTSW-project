@@ -10,6 +10,7 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.util.Triple;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,44 +27,15 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
 
     LoginWindow window;
     FrameFixture frame;
-    Set<Task> tasksSet;
     List<Task> tasksListSorted;
 
 
     @Override
     protected void onSetUp(){
-        Model model = mock(Model.class);
-        when(model.areCredentialCorrect(anyString(), anyString())).thenReturn(true);
-        User dummyuser = new User(
-                "username1",
-                "password1",
-                "email1@email.com"
-        );
-        tasksSet = new HashSet<>();
-        tasksListSorted = new ArrayList<Task>();
-        List<Date> taskDates = Arrays.asList(
-                new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
-                new GregorianCalendar(2025, Calendar.FEBRUARY, 11).getTime(),
-                new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(),
-                new GregorianCalendar(2026, Calendar.FEBRUARY, 11).getTime(),
-                new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime()
-        );
-        for (int i = 0; i < 5; i++) {
-            Task t = new Task("Task " + (i + 1), "Description task " + (i + 1), taskDates.get(i), i >= 3);
-            t.setId(i);
-            tasksSet.add(t);
-            tasksListSorted.add(t);
-        }
-        StringBuilder longDescription = new StringBuilder();
-        for (int i = 0; i < 100; i++) {
-            longDescription.append("Super Long description ");
-        }
-        tasksListSorted.get(4).setDescription(longDescription.toString());
-        dummyuser.setTasks(tasksSet);
-        when(model.getUser(anyString(), anyString())).thenReturn(dummyuser);
-
+        Triple<Model, User, List<Task>> scenario = TestUtils.anyLoginUserTasksScenario();
+        tasksListSorted = scenario.third;
         GuiActionRunner.execute(() ->{
-            window = new LoginWindow(model);
+            window = new LoginWindow(scenario.first);
             return window;
         });
         frame = new FrameFixture(robot(), window);
