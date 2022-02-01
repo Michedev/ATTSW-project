@@ -7,6 +7,7 @@ import edu.mikedev.task_manager.ui.AppColors;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
+import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
@@ -44,7 +45,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         });
         frame = new FrameFixture(robot(), window);
         frame.show();
-
+        frame.textBox("tfUsername").enterText("username1");
         frame.button("btnLogin").click();
     }
 
@@ -87,6 +88,20 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         String longDescription = frame.label("lblDescrTask4").text();
         Assert.assertTrue(longDescription.startsWith("Super Long description"));
         Assert.assertEquals(50 + 3, longDescription.length());
+    }
+
+    @Test
+    @GUITest
+    public void testNewTaskTransition(){
+        frame.button("btnNewTask").click();
+        frame.requireTitle("New task");
+        Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task0"));
+        Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task1"));
+        Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task2"));
+        Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task3"));
+        Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task4"));
+
+
     }
 
     @After
