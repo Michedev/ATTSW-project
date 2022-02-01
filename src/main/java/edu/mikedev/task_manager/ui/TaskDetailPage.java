@@ -17,7 +17,6 @@ public class TaskDetailPage extends JPanel {
 	private User user;
 
 	public TaskDetailPage(Task task, User user) {
-		setName("mainPanel");
 		this.task = task;
 		this.user = user;
 
