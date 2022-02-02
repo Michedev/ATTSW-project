@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +56,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         frame.requireTitle("username1 tasks");
         for (int i = 0; i < 5; i++) {
             frame.panel("task" + i).requireEnabled();
+
         }
         frame.button("btnNewTask").requireEnabled();
     }
@@ -62,6 +64,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
     @Test
     @GUITest
     public void testCorrectOrderTasks(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         for (int i = 0; i < 5; i++) {
             frame.label("lblTitleTask" + i).requireText(tasksListSorted.get(i).getTitle());
             if(i == 4){
@@ -69,6 +72,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
             } else {
                 frame.label("lblDescrTask" + i).requireText(tasksListSorted.get(i).getDescription());
             }
+            frame.label("lblDateTask" + i).requireText(dateFormat.format(tasksListSorted.get(i)));
         }
     }
 

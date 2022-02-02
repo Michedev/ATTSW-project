@@ -75,7 +75,7 @@ public class UserTasksPage extends JPanel {
 		lblTitleTask0.setName("lblTitleTask" + t.getId());
 		headerPanelTask.add(lblTitleTask0);
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		JLabel lblDateTask = new JLabel(dateFormat.format(t.getDeadline()));
 		lblDateTask.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblDateTask.setFont(new Font("Cantarell", Font.BOLD, 14));
