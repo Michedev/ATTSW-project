@@ -90,7 +90,6 @@ public class LoginWindow extends JFrame {
 		String username = tfUsername.getText();
 		String password = tfPassword.getText();
 		boolean isCorrect = model.areCredentialCorrect(username, password);
-		System.out.println("is correct " + isCorrect);
 		if(isCorrect){
 			setTitle(username + " tasks");
 			User loggedUser = model.getUser(username, password);

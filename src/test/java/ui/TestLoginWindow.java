@@ -1,6 +1,7 @@
 package ui;
 
 import edu.mikedev.task_manager.Model;
+import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
@@ -21,6 +22,9 @@ import org.mockito.ArgumentMatchers;
 
 import javax.swing.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static java.lang.Thread.sleep;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -37,7 +41,10 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		Model model = mock(Model.class);
 		when(model.areCredentialCorrect(ArgumentMatchers.matches("myusername"),
 				                        ArgumentMatchers.matches("mypassword"))).thenReturn(true);
-		when(model.getUser(anyString(), anyString())).thenReturn(new User());
+		User dummyUser = new User("myusername", "mypassword", "email@email.com");
+		Set<Task> taskSet = new HashSet<Task>();
+		dummyUser.setTasks(taskSet);
+		when(model.getUser(anyString(), anyString())).thenReturn(dummyUser);
 		GuiActionRunner.execute(() ->{
 			window = new LoginWindow(model);
 			return window;

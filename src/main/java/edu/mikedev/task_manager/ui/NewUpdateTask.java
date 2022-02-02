@@ -134,7 +134,7 @@ public class NewUpdateTask extends JPanel {
 		add(btnSave, gbc_btnSave);
 	}
 
-	public boolean updateMode(){
+	public boolean isUpdateMode(){
 		return toBeUpdatedTask != null;
 	}
 
