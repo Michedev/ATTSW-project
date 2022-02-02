@@ -46,44 +46,82 @@ public class LoginWindow extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[][][][grow][grow]", "[][][][][][][][][][]"));
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		contentPane.setLayout(gridBagLayout);
 
+		GridBagConstraints c = new GridBagConstraints();
+		
+		c.gridwidth = 2;
+		c.anchor = GridBagConstraints.WEST;
+		c.gridy = 0;
+		c.insets = new Insets(10, 0, 5, 0);
 		lblUsername = new JLabel("Username");
 		lblUsername.setName("lblUsername");
-		contentPane.add(lblUsername, "cell 3 2");
-		
+		contentPane.add(lblUsername, c);
+
+		c = new GridBagConstraints();
+		c.gridwidth = 2;
+		c.gridy = 1;
+		c.insets = new Insets(5, 0, 10, 0);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.WEST;
 		tfUsername = new JTextField();
 		tfUsername.setName("tfUsername");
 		tfUsername.setText("");
-		contentPane.add(tfUsername, "cell 3 3 2 1,growx");
+		contentPane.add(tfUsername, c);
 		tfUsername.setColumns(10);
 
+		c = new GridBagConstraints();
+		c.gridwidth = 2;
+		c.anchor = GridBagConstraints.WEST;
+		c.gridy = 2;
+		c.insets = new Insets(10, 0, 5, 0);
 		lblPassword = new JLabel("Password");
 		lblPassword.setText("Password");
-		contentPane.add(lblPassword, "cell 3 5");
-		
+		contentPane.add(lblPassword, c);
+
+		c = new GridBagConstraints();
+		c.gridwidth = 2;
+		c.gridy = 3;
+		c.anchor = GridBagConstraints.WEST;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(5, 0, 20, 0);
 		tfPassword = new JPasswordField();
 		tfPassword.setText("");
 		tfPassword.setName("tfPassword");
-		contentPane.add(tfPassword, "cell 3 6 2 1,growx");
+		contentPane.add(tfPassword, c);
 		tfPassword.setColumns(10);
 
+		c = new GridBagConstraints();
+		c.gridwidth = 2;
+		c.anchor = GridBagConstraints.WEST;
+		c.gridy = 4;
+		c.insets = new Insets(10, 0, 20, 0);
 		lblErrorMessage = new JLabel("Error message");
 		lblErrorMessage.setName("lblErrorMessage");
 		lblErrorMessage.setForeground(AppColors.RED);
 		lblErrorMessage.setEnabled(false);
 		lblErrorMessage.setVisible(false);
-		contentPane.add(lblErrorMessage, "cell 3 7 2 1");
+		contentPane.add(lblErrorMessage, c);
 
+		c = new GridBagConstraints();
+		c.gridwidth = 1;
+		c.gridx = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridy = 6;
 		btnLogin = new JButton("Login");
 		btnLogin.addActionListener(this::loginClickBtn);
 		btnLogin.setName("btnLogin");
-		contentPane.add(btnLogin, "cell 3 9");
+		contentPane.add(btnLogin, c);
 
+		c = new GridBagConstraints();
+		c.gridwidth = 1;
+		c.gridx = 1;
+		c.gridy = 6;
 		btnRegister = new JButton("Register");
 		btnRegister.addActionListener(this::registrationClickBtn);
 		btnRegister.setName("btnRegister");
-		contentPane.add(btnRegister, "cell 4 9");
+		contentPane.add(btnRegister, c);
 	}
 
 	private void loginClickBtn(ActionEvent e){

@@ -4,7 +4,6 @@ import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.ui.LoginWindow;
-import edu.mikedev.task_manager.ui.NewUpdateTask;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -13,11 +12,9 @@ import org.assertj.swing.fixture.JLabelFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.assertj.swing.util.Triple;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RunWith(GUITestRunner.class)
@@ -36,6 +33,7 @@ public class TestNewUpdateTaskWindow extends AssertJSwingJUnitTestCase{
             return window;
         });
         frame = new FrameFixture(robot(), window);
+        window.pack();
         frame.show();
 
         frame.button("btnLogin").click();

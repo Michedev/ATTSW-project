@@ -8,21 +8,18 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserTasksPage extends JPanel {
 
-	private Model model;
+
 	/**
 	 * Create the panel.
 	 */
+	private Model model;
 	private User user;
 
 	public UserTasksPage(Model model, User user) {
@@ -52,7 +49,7 @@ public class UserTasksPage extends JPanel {
 
 	private void goToNewTask(ActionEvent e) {
 		JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
-		windowAncestor.setContentPane(new NewUpdateTask(model, user));
+		windowAncestor.setContentPane(new NewUpdateTaskPage(model, user));
 		windowAncestor.setTitle("New task");
 		windowAncestor.pack();
 	}

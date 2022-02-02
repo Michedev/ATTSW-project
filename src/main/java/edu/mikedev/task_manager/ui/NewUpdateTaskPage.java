@@ -5,6 +5,7 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -15,7 +16,7 @@ import java.util.Date;
 import java.awt.Color;
 import java.util.Set;
 
-public class NewUpdateTask extends JPanel {
+public class NewUpdateTaskPage extends JPanel {
 	private final Model model;
 	private JTextField tfTaskName;
 	private JTextField tfTaskDescription;
@@ -28,10 +29,12 @@ public class NewUpdateTask extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public NewUpdateTask(Model model, User user) {
+	public NewUpdateTaskPage(Model model, User user) {
 		this.model = model;
 		this.user = user;
 		setName("mainPanel");
+		int borderSize = 20;
+		setBorder(new EmptyBorder(borderSize, borderSize, borderSize, borderSize));
 		// New task branch
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0};
@@ -151,7 +154,7 @@ public class NewUpdateTask extends JPanel {
 		}
 	}
 
-	public NewUpdateTask(Model model, User user, Task task){
+	public NewUpdateTaskPage(Model model, User user, Task task){
 		// Update task branch
 		this(model, user);
 		toBeUpdatedTask = task;
