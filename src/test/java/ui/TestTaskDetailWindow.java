@@ -51,6 +51,9 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         Assert.assertTrue(textDescription.length() > 53);
         frame.button("btnUpdate").requireEnabled();
         frame.button("btnDelete").requireEnabled();
+        frame.checkBox("cbDone").requireSelected();
+        frame.label("lblDone").requireText("Done");
+
     }
 
     @Test
@@ -97,6 +100,14 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         Assert.assertTrue(taskDescription.startsWith("Super Long description"));
         frame.textBox("tfTaskDeadline").requireText("11/02/2014");
 
+    }
+
+    @Test
+    @GUITest
+    public void undoneTask(){
+        frame.checkBox("cbDone").uncheck();
+
+        frame.panel("mainPanel").background().requireEqualTo(AppColors.RED);
     }
 
 }

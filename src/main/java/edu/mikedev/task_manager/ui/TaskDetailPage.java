@@ -5,6 +5,7 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ public class TaskDetailPage extends JPanel {
 	private Model model;
 	private Task task;
 	private User user;
+	private JCheckBox cbDone;
 
 	public TaskDetailPage(Model model, Task task, User user) {
 		setName("mainPanel");
@@ -73,6 +75,24 @@ public class TaskDetailPage extends JPanel {
 		lblTaskDescriptionContraints.gridy = 2;
 		add(lblTaskDescription, lblTaskDescriptionContraints);
 
+		cbDone = new JCheckBox();
+		cbDone.setName("cbDone");
+		cbDone.setSelected(task.isDone());
+		cbDone.addActionListener(this::toggleDone);
+
+		GridBagConstraints cbDoneConstrains = new GridBagConstraints();
+		cbDoneConstrains.gridx = 0;
+		cbDoneConstrains.gridy = 3;
+		add(cbDone, cbDoneConstrains);
+
+		JLabel lblDone = new JLabel("Done");
+		lblDone.setName("lblDone");
+
+		GridBagConstraints lblDoneConstraints = new GridBagConstraints();
+		lblDoneConstraints.gridx = 1;
+		lblDoneConstraints.gridy = 3;
+		add(lblDone, lblDoneConstraints);
+
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.setName("btnUpdate");
 		btnUpdate.addActionListener(this::updateEvent);
@@ -92,6 +112,12 @@ public class TaskDetailPage extends JPanel {
 		btnDeleteContraints.gridy = 3;
 		add(btnDelete, btnDeleteContraints);
 
+	}
+
+	private void toggleDone(ActionEvent e) {
+		task.setDone(cbDone.isSelected());
+		Color backgroundColor = AppColors.getColorBackground(task);
+		setBackground(backgroundColor);
 	}
 
 	private void updateEvent(ActionEvent e) {
