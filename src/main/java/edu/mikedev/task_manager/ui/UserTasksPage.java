@@ -105,16 +105,16 @@ public class UserTasksPage extends JPanel {
 		return taskPanel;
 	}
 
-	private String wrapDescription(String description){
+	public static String htmlWrappedDescription(String description){
 		return "<html><p style=\"width:75px\">" + description + "</p></html>";
 	}
 
 	private String formatDescription(String description) {
 		if(description.length() > 50){
-			return wrapDescription(description.substring(0, 50) + "...");
+			return htmlWrappedDescription(description.substring(0, 50) + "...");
 		}
 
-		return wrapDescription(description);
+		return htmlWrappedDescription(description);
 	}
 
 }

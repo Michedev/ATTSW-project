@@ -22,11 +22,9 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static edu.mikedev.task_manager.ui.UserTasksPage.htmlWrappedDescription;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(GUITestRunner.class)
 public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
@@ -68,11 +66,11 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         for (int i = 0; i < 5; i++) {
             frame.label("lblTitleTask" + i).requireText(tasksListSorted.get(i).getTitle());
             if(i == 4){
-                Assert.assertTrue(frame.label("lblDescrTask" + i).text().startsWith("Super Long description"));
+                Assert.assertTrue(frame.label("lblDescrTask" + i).text().startsWith("<html><p style=\"width:75px\">Super Long description"));
             } else {
-                frame.label("lblDescrTask" + i).requireText(tasksListSorted.get(i).getDescription());
+                frame.label("lblDescrTask" + i).requireText(htmlWrappedDescription(tasksListSorted.get(i).getDescription()));
             }
-            frame.label("lblDateTask" + i).requireText(dateFormat.format(tasksListSorted.get(i)));
+            frame.label("lblDateTask" + i).requireText(dateFormat.format(tasksListSorted.get(i).getDeadline()));
         }
     }
 
@@ -90,8 +88,8 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
     @GUITest
     public void testCorrectFormattingLongDescritption(){
         String longDescription = frame.label("lblDescrTask4").text();
-        Assert.assertTrue(longDescription.startsWith("Super Long description"));
-        Assert.assertEquals(50 + 3, longDescription.length());
+        Assert.assertTrue(longDescription.startsWith("<html><p style=\"width:75px\">Super Long description"));
+        Assert.assertEquals(50 + 3, longDescription.replaceAll("<html><p style=\"width:75px\">", "").replaceAll("</p></html>", "").length());
     }
 
     @Test

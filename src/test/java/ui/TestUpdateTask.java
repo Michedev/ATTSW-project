@@ -17,6 +17,8 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
+import static edu.mikedev.task_manager.ui.UserTasksPage.htmlWrappedDescription;
+
 @RunWith(GUITestRunner.class)
 public class TestUpdateTask extends AssertJSwingJUnitTestCase{
 
@@ -63,7 +65,7 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
         frame.button("btnSave").click();
 
         frame.label("lblTitleTask0").requireText("Updated task abc");
-        frame.label("lblDescrTask0").requireText("Updated description");
+        frame.label("lblDescrTask0").requireText(htmlWrappedDescription("Updated description"));
         frame.label("lblDateTask0").requireText("19/04/2022");
     }
 
