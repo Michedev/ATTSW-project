@@ -137,10 +137,16 @@
                         </configuration>
                         <executions>
                             <execution>
+                                <id>default-prepare-agent</id>
+                                <phase>test-compile</phase>
                                 <goals>
-                                    <!-- Binded to Initialize -->
                                     <goal>prepare-agent</goal>
-                                    <!-- Binded to verify -->
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-site</id>
+                                <phase>test</phase>
+                                <goals>
                                     <goal>report</goal>
                                 </goals>
                             </execution>

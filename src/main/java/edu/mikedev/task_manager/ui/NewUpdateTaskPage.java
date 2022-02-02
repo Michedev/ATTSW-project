@@ -169,10 +169,6 @@ public class NewUpdateTaskPage extends JPanel {
 		btnSave.setText("Update");
 		tfTaskName.setText(task.getTitle());
 		tfTaskDescription.setText(task.getDescription());
-		if(task.getDeadline() != null){
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-			tfTaskDeadline.setText(dateFormat.format(task.getDeadline()));
-		}
 	}
 
 
