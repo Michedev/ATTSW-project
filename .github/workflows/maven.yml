@@ -25,7 +25,9 @@ jobs:
         java-version: ${{matrix.java_version}}
         distribution: 'adopt'
         cache: maven
+    - name: Install UI test system requirements
+      run: apt-get install -y tightvncserver
     - name: Test UI classes
-      run: mvn test -Dtest="**ui/*"
+      run: execute-on-vnc.sh mvn test -Dtest="**ui/*"
     - name: Build with Maven using Java ${{matrix.java_version}}
       run: mvn -B package --file pom.xml -DsomeModule.test.excludes="**/ui/*.java"
