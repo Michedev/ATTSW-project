@@ -30,13 +30,13 @@ public class LoginWindow extends JFrame {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			// Leave default theme
 		} catch (InstantiationException e) {
-			e.printStackTrace();
+			// Leave default theme
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			// Leave default theme
 		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
+			// Leave default theme
 		}
 
 		this.model = model;
