@@ -25,7 +25,5 @@ jobs:
         java-version: ${{matrix.java_version}}
         distribution: 'adopt'
         cache: maven
-    - name: Test UI classes
-      run: xvfb-run mvn test -Dtest="**ui/*"
     - name: Build with Maven using Java ${{matrix.java_version}}
-      run: mvn -B package --file pom.xml -Dui.skip.tests=true test
+      run: xvfb-run mvn -B package --file pom.xml
