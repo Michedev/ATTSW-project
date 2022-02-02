@@ -5,6 +5,7 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,9 +27,6 @@ public class UserTasksPage extends JPanel {
 		this.model = model;
 		this.user = user;
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-		c.weightx = 0.9;
-		c.weighty = 0.9;
 		int maxCols = 3;
 		setLayout(gridBagLayout);
 		List<Task> userTasksSorted = user.getTasks().stream().sorted((a, b) -> Comparator.comparingInt(Task::getId).compare(a,b)).collect(Collectors.toList());
@@ -37,13 +35,23 @@ public class UserTasksPage extends JPanel {
 		btnNewTask.setName("btnNewTask");
 		int i = 0;
 		for(Task t: userTasksSorted){
+			GridBagConstraints c = new GridBagConstraints();
+			c.weightx = 0.9;
+			c.weighty = 0.9;
+			c.ipadx = 10;
+			c.ipady = 10;
 			c.gridx = i % maxCols;
 			c.gridy = i / maxCols;
 			makeTaskCard(t, c);
 			i++;
 		}
+		GridBagConstraints c = new GridBagConstraints();
+		c.weightx = 0.9;
+		c.weighty = 0.9;
+
 		c.gridx = maxCols-1;
-		c.gridy = i / maxCols;
+		c.gridy = i / maxCols + 1;
+		c.insets = new Insets(0, 0, 20, 0);
 		add(btnNewTask, c);
 	}
 
@@ -59,13 +67,14 @@ public class UserTasksPage extends JPanel {
 		taskPanel.addMouseListener(new TaskDetailTransition(this, model, t, user));
 		Color backgroundColor = AppColors.getColorBackground(t);
 		taskPanel.setBackground(backgroundColor);
-		taskPanel.setBorder(new LineBorder(backgroundColor, 5, true));
+		taskPanel.setBorder(new LineBorder(Color.black, 2, true));
 		taskPanel.setName("task" + t.getId());
-		taskPanel.setMaximumSize(new Dimension(300, 1500000));
+		c.insets = new Insets(20, 20, 20 , 20);
 		add(taskPanel, c);
 		taskPanel.setLayout(new GridLayout(2, 1, 5, 5));
 
 		JPanel headerPanelTask = new JPanel();
+		headerPanelTask.setBorder(new EmptyBorder(5, 5, 5, 5));
 		headerPanelTask.setBackground(new Color(0, 0, 0, 0));
 		taskPanel.add(headerPanelTask);
 		headerPanelTask.setLayout(new GridLayout(1, 2, 5, 0));
@@ -78,16 +87,18 @@ public class UserTasksPage extends JPanel {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		JLabel lblDateTask = new JLabel(dateFormat.format(t.getDeadline()));
 		lblDateTask.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDateTask.setFont(new Font("Cantarell", Font.BOLD, 14));
+		lblDateTask.setFont(new Font("Cantarell", Font.BOLD, 16));
 		lblDateTask.setName("lblDateTask" + t.getId());
 		headerPanelTask.add(lblDateTask);
 
 		JPanel contentPanelTask = new JPanel();
+		contentPanelTask.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanelTask.setBackground(new Color(0, 0, 0, 0));
 		taskPanel.add(contentPanelTask);
 		contentPanelTask.setLayout(new GridLayout(1, 0, 0, 0));
 
 		JLabel lblDescrTask = new JLabel(formatDescription(t.getDescription()));
+		lblDescrTask.setBorder(new EmptyBorder(5, 5, 5, 5));
 		lblDescrTask.setMaximumSize(new Dimension(150, 1500));
 		lblDescrTask.setFont(new Font("Cantarell", Font.PLAIN, 10));
 		lblDescrTask.setName("lblDescrTask" + t.getId());
@@ -96,11 +107,16 @@ public class UserTasksPage extends JPanel {
 		return taskPanel;
 	}
 
+	private String wrapDescription(String description){
+		return "<html><p style=\"width:75px\">" + description + "</p></html>";
+	}
+
 	private String formatDescription(String description) {
 		if(description.length() > 50){
-			return description.substring(0, 50) + "...";
+			return wrapDescription(description.substring(0, 50) + "...");
 		}
-		return description;
+
+		return wrapDescription(description);
 	}
 
 }
