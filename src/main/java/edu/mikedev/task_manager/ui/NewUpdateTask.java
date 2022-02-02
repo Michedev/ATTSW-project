@@ -2,20 +2,18 @@ package edu.mikedev.task_manager.ui;
 
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;
+import edu.mikedev.task_manager.User;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.GridBagLayout;
-import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
-import javax.swing.JTextField;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.JButton;
 import java.awt.Color;
-import javax.swing.SwingConstants;
+import java.util.Set;
 
 public class NewUpdateTask extends JPanel {
 	private final Model model;
@@ -23,14 +21,16 @@ public class NewUpdateTask extends JPanel {
 	private JTextField tfTaskDescription;
 	private JTextField tfTaskDeadline;
 	private JLabel lblErrorMessageDeadline;
+	private User user;
 
 	private Task toBeUpdatedTask = null;
 
 	/**
 	 * Create the panel.
 	 */
-	public NewUpdateTask(Model model) {
+	public NewUpdateTask(Model model, User user) {
 		this.model = model;
+		this.user = user;
 		setName("mainPanel");
 		// New task branch
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -141,13 +141,19 @@ public class NewUpdateTask extends JPanel {
 	private void saveTask(ActionEvent e) {
 		Task task = parseTask();
 		if(task != null){
-
+			Set<Task> userTasks = user.getTasks();
+			task.setId(userTasks.size());
+			userTasks.add(task);
+			JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
+			windowAncestor.setTitle(user.getUsername() + " tasks");
+			windowAncestor.setContentPane(new UserTasksPage(model, user));
+			windowAncestor.pack();
 		}
 	}
 
-	public NewUpdateTask(Model model, Task task){
+	public NewUpdateTask(Model model, User user, Task task){
 		// Update task branch
-		this(model);
+		this(model, user);
 		toBeUpdatedTask = task;
 		tfTaskName.setText(task.getTitle());
 		tfTaskDescription.setText(task.getDescription());

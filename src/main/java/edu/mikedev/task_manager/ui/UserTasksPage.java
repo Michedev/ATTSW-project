@@ -52,7 +52,7 @@ public class UserTasksPage extends JPanel {
 
 	private void goToNewTask(ActionEvent e) {
 		JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
-		windowAncestor.setContentPane(new NewUpdateTask(model));
+		windowAncestor.setContentPane(new NewUpdateTask(model, user));
 		windowAncestor.setTitle("New task");
 		windowAncestor.pack();
 	}
