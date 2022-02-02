@@ -5,8 +5,10 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JLabelFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.assertj.swing.util.Triple;
@@ -65,17 +67,38 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
         frame.label("lblDateTask0").requireText("19/04/2022");
     }
 
-//    @Test
-//    @GUITest
-//    public void testWrongDateFormat(){
-//
-//    }
-//
-//    @Test
-//    @GUITest
-//    public void testMissingTaskName(){
-//
-//    }
+    @Test
+    @GUITest
+    public void testWrongDateFormat(){
+        frame.textBox("tfTaskDeadline").deleteText().enterText("wrong date format");
+
+        JLabelFixture lblErrorMessageDeadline = frame.label(JLabelMatcher.withName("lblErrorMessageDeadline"));
+
+        lblErrorMessageDeadline.requireNotVisible();
+
+        frame.button("btnSave").click();
+
+        frame.requireTitle("Update task \"Task 1\"");
+
+        lblErrorMessageDeadline.requireVisible();
+        lblErrorMessageDeadline.requireText("Date parsing error. It should be in the format (dd/MM/yyyy)");
+    }
+
+    @Test
+    @GUITest
+    public void testMissingTaskName(){
+        frame.textBox("tfTaskName").deleteText();
+        JLabelFixture lblErrorMessageName = frame.label(JLabelMatcher.withName("lblErrorMessageName"));
+
+        lblErrorMessageName.requireNotVisible();
+
+        frame.button("btnSave").click();
+
+        frame.requireTitle("Update task \"Task 1\"");
+
+        lblErrorMessageName.requireVisible();
+        lblErrorMessageName.requireText("Missing task name");
+    }
 
 
 

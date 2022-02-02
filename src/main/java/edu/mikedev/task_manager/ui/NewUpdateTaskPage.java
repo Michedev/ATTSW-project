@@ -26,6 +26,7 @@ public class NewUpdateTaskPage extends JPanel {
 
 	private Task toBeUpdatedTask = null;
 	private JButton btnSave;
+	private JLabel lblErrorMessageName;
 
 	/**
 	 * Create the panel.
@@ -61,8 +62,8 @@ public class NewUpdateTaskPage extends JPanel {
 		gbc_tfTaskName.gridy = 2;
 		add(tfTaskName, gbc_tfTaskName);
 		tfTaskName.setColumns(10);
-		
-		JLabel lblErrorMessageName = new JLabel("Error message");
+
+		lblErrorMessageName = new JLabel("Error message");
 		lblErrorMessageName.setVisible(false);
 		lblErrorMessageName.setName("lblErrorMessageName");
 		lblErrorMessageName.setForeground(Color.RED);
@@ -177,6 +178,11 @@ public class NewUpdateTaskPage extends JPanel {
 
 	public Task parseTask() {
 		String taskTitle = tfTaskName.getText();
+		if(taskTitle.isEmpty()){
+			lblErrorMessageName.setVisible(true);
+			lblErrorMessageName.setText("Missing task name");
+			return null;
+		}
 		String taskDescription = tfTaskDescription.getText();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date taskDeadline = null;
