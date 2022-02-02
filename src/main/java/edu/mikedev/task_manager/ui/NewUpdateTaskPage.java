@@ -178,10 +178,11 @@ public class NewUpdateTaskPage extends JPanel {
 
 	public Task parseTask() {
 		String taskTitle = tfTaskName.getText();
+		boolean errorMode = false;
 		if(taskTitle.isEmpty()){
 			lblErrorMessageName.setVisible(true);
 			lblErrorMessageName.setText("Missing task name");
-			return null;
+			errorMode = true;
 		}
 		String taskDescription = tfTaskDescription.getText();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -191,6 +192,9 @@ public class NewUpdateTaskPage extends JPanel {
 		} catch (ParseException e) {
 			lblErrorMessageDeadline.setVisible(true);
 			lblErrorMessageDeadline.setText("Date parsing error. It should be in the format (dd/MM/yyyy)");
+			errorMode = true;
+		}
+		if(errorMode){
 			return null;
 		}
 		lblErrorMessageDeadline.setVisible(false);

@@ -33,7 +33,6 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
             return window;
         });
         frame = new FrameFixture(robot(), window);
-        window.pack();
         frame.show();
 
         frame.button("btnLogin").click();
@@ -81,4 +80,38 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
 
     }
 
+    @Test
+    @GUITest
+    public void testMissingTaskName(){
+        frame.textBox("tfTaskDescription").enterText("New task description");
+        frame.textBox("tfTaskDeadline").enterText("13/10/2022");
+
+        JLabelFixture lblErrorMessageName = frame.label(JLabelMatcher.withName("lblErrorMessageName"));
+
+        lblErrorMessageName.requireNotVisible();
+
+        frame.button("btnSave").click();
+
+        lblErrorMessageName.requireVisible();
+        lblErrorMessageName.requireText("Missing task name");
+    }
+
+
+    @Test
+    @GUITest
+    public void testAnythiningMissing(){
+        JLabelFixture lblErrorMessageName = frame.label(JLabelMatcher.withName("lblErrorMessageName"));
+        JLabelFixture lblErrorMessageDeadline = frame.label(JLabelMatcher.withName("lblErrorMessageDeadline"));
+
+        lblErrorMessageName.requireNotVisible();
+        lblErrorMessageDeadline.requireNotVisible();
+
+        frame.button("btnSave").click();
+
+        lblErrorMessageName.requireVisible();
+        lblErrorMessageName.requireText("Missing task name");
+        lblErrorMessageDeadline.requireVisible();
+        lblErrorMessageDeadline.requireText("Date parsing error. It should be in the format (dd/MM/yyyy)");
+
+    }
 }
