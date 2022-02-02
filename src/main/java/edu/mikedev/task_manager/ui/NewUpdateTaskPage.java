@@ -25,6 +25,7 @@ public class NewUpdateTaskPage extends JPanel {
 	private User user;
 
 	private Task toBeUpdatedTask = null;
+	private JButton btnSave;
 
 	/**
 	 * Create the panel.
@@ -127,8 +128,8 @@ public class NewUpdateTaskPage extends JPanel {
 		gbc_lblErrorMessageDeadline.gridx = 0;
 		gbc_lblErrorMessageDeadline.gridy = 11;
 		add(lblErrorMessageDeadline, gbc_lblErrorMessageDeadline);
-		
-		JButton btnSave = new JButton("Save");
+
+		btnSave = new JButton("Save");
 		btnSave.setName("btnSave");
 		btnSave.addActionListener(this::saveTask);
 		GridBagConstraints gbc_btnSave = new GridBagConstraints();
@@ -144,9 +145,15 @@ public class NewUpdateTaskPage extends JPanel {
 	private void saveTask(ActionEvent e) {
 		Task task = parseTask();
 		if(task != null){
-			Set<Task> userTasks = user.getTasks();
-			task.setId(userTasks.size());
-			userTasks.add(task);
+			if(isUpdateMode()){
+				toBeUpdatedTask.setTitle(task.getTitle());
+				toBeUpdatedTask.setDescription(task.getDescription());
+				toBeUpdatedTask.setDeadline(task.getDeadline());
+			} else {
+				Set<Task> userTasks = user.getTasks();
+				task.setId(userTasks.size());
+				userTasks.add(task);
+			}
 			JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
 			windowAncestor.setTitle(user.getUsername() + " tasks");
 			windowAncestor.setContentPane(new UserTasksPage(model, user));
@@ -158,6 +165,7 @@ public class NewUpdateTaskPage extends JPanel {
 		// Update task branch
 		this(model, user);
 		toBeUpdatedTask = task;
+		btnSave.setText("Update");
 		tfTaskName.setText(task.getTitle());
 		tfTaskDescription.setText(task.getDescription());
 		if(task.getDeadline() != null){

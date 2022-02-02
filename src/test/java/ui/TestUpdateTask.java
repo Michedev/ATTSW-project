@@ -5,10 +5,8 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
-import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.fixture.JLabelFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.assertj.swing.util.Triple;
@@ -33,7 +31,6 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
             return window;
         });
         frame = new FrameFixture(robot(), window);
-        window.pack();
         frame.show();
 
         frame.button("btnLogin").click();
@@ -53,6 +50,32 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
         frame.textBox("tfTaskDeadline").requireText("11/02/2014");
         frame.button("btnSave").requireText("Update");
     }
+
+    @Test
+    @GUITest
+    public void testCorrectUpdateTask(){
+        frame.textBox("tfTaskName").deleteText().enterText("Updated task abc");
+        frame.textBox("tfTaskDescription").deleteText().enterText("Updated description");
+        frame.textBox("tfTaskDeadline").deleteText().enterText("19/04/2022");
+
+        frame.button("btnSave").click();
+
+        frame.label("lblTitleTask0").requireText("Updated task abc");
+        frame.label("lblDescrTask0").requireText("Updated description");
+        frame.label("lblDateTask0").requireText("19/04/2022");
+    }
+
+//    @Test
+//    @GUITest
+//    public void testWrongDateFormat(){
+//
+//    }
+//
+//    @Test
+//    @GUITest
+//    public void testMissingTaskName(){
+//
+//    }
 
 
 
