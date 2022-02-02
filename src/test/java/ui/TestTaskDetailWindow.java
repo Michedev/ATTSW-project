@@ -79,6 +79,23 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         frame.requireTitle("username1 tasks");
         Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task4"));
         Assert.assertThrows(ComponentLookupException.class, () -> frame.label("lblTitleTask4"));
+    }
+
+    @Test
+    @GUITest
+    public void testUpdateButton(){
+        frame.button("btnUpdate").click();
+
+        frame.requireTitle("Update task \"Task 5\"");
+
+        frame.label("lblTaskName").requireEnabled();
+        frame.label("lblTaskDescription").requireEnabled();
+        frame.label("lblTaskDeadline").requireEnabled();
+
+        frame.textBox("tfTaskName").requireText("Task 5");
+        String taskDescription = frame.textBox("tfTaskDescription").text();
+        Assert.assertTrue(taskDescription.startsWith("Super Long description"));
+        frame.textBox("tfTaskDeadline").requireText("11/02/2014");
 
     }
 

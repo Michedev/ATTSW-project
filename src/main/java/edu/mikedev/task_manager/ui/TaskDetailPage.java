@@ -75,6 +75,7 @@ public class TaskDetailPage extends JPanel {
 
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.setName("btnUpdate");
+		btnUpdate.addActionListener(this::updateEvent);
 		GridBagConstraints btnUpdateConstraints = new GridBagConstraints();
 		btnUpdateConstraints.gridx = 2;
 		btnUpdateConstraints.gridy = 3;
@@ -93,9 +94,16 @@ public class TaskDetailPage extends JPanel {
 
 	}
 
+	private void updateEvent(ActionEvent e) {
+		JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
+		windowAncestor.setContentPane(new NewUpdateTaskPage(model, user, task));
+		windowAncestor.setTitle("Update task \"" + task.getTitle() + "\"");
+		windowAncestor.pack();
+	}
+
 	private void deleteEvent(ActionEvent e) {
 		user.getTasks().remove(task);
-		goBackAction(null);
+		goBackAction(e);
 	}
 
 	private void goBackAction(ActionEvent e){
