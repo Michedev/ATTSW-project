@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 @RunWith(GUITestRunner.class)
-public class TestNewUpdateTaskWindow extends AssertJSwingJUnitTestCase{
+public class TestNewTask extends AssertJSwingJUnitTestCase{
 
     LoginWindow window;
     FrameFixture frame;
@@ -52,7 +52,7 @@ public class TestNewUpdateTaskWindow extends AssertJSwingJUnitTestCase{
 
     @Test
     @GUITest
-    public void parseNewTask(){
+    public void testAddNewTask(){
         frame.textBox("tfTaskName").enterText("New task name");
         frame.textBox("tfTaskDescription").enterText("New task description");
         frame.textBox("tfTaskDeadline").enterText("13/10/2022");
@@ -66,7 +66,7 @@ public class TestNewUpdateTaskWindow extends AssertJSwingJUnitTestCase{
 
     @Test
     @GUITest
-    public void parseNewTaskWithDateError(){
+    public void testParseNewTaskWithDateError(){
         frame.textBox("tfTaskName").enterText("New task name");
         frame.textBox("tfTaskDescription").enterText("New task description");
         frame.textBox("tfTaskDeadline").enterText("wrong date");
@@ -78,7 +78,6 @@ public class TestNewUpdateTaskWindow extends AssertJSwingJUnitTestCase{
         frame.button("btnSave").click();
         lblErrorMessageDeadline.requireVisible();
         lblErrorMessageDeadline.requireText("Date parsing error. It should be in the format (dd/MM/yyyy)");
-
 
     }
 

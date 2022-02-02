@@ -67,11 +67,26 @@ public class TaskDetailPage extends JPanel {
 		lblTaskDescription.setName("lblTaskDescription");
 		lblTaskDescription.setFont(new Font("Cantarell", Font.PLAIN, 11));
 
-		GridBagConstraints gbc_lblTaskDescription = new GridBagConstraints();
-		gbc_lblTaskDescription.gridwidth = 2;
-		gbc_lblTaskDescription.gridx = 1;
-		gbc_lblTaskDescription.gridy = 2;
-		add(lblTaskDescription, gbc_lblTaskDescription);
+		GridBagConstraints lblTaskDescriptionContraints = new GridBagConstraints();
+		lblTaskDescriptionContraints.gridwidth = 2;
+		lblTaskDescriptionContraints.gridx = 1;
+		lblTaskDescriptionContraints.gridy = 2;
+		add(lblTaskDescription, lblTaskDescriptionContraints);
+
+		JButton btnUpdate = new JButton("Update");
+		GridBagConstraints btnUpdateContraints = new GridBagConstraints();
+		btnUpdateContraints.gridx = 2;
+		btnUpdateContraints.gridy = 3;
+		btnUpdateContraints.anchor = GridBagConstraints.LINE_END;
+		add(btnUpdate, btnUpdateContraints);
+
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.setBackground(Color.RED);
+
+		GridBagConstraints btnDeleteContraints = new GridBagConstraints();
+		btnDeleteContraints.gridx = 3;
+		btnDeleteContraints.gridy = 3;
+		add(btnDelete, btnDeleteContraints);
 
 	}
 
