@@ -75,9 +75,12 @@ public class TestNewUpdateTaskWindow extends AssertJSwingJUnitTestCase{
         frame.textBox("tfTaskDeadline").enterText("wrong date");
 
         JLabelFixture lblErrorMessageDeadline = frame.label(JLabelMatcher.withName("lblErrorMessageDeadline"));
-        lblErrorMessageDeadline.requireText("Date parsing error. It should be in the format (dd/MM/yyyy)");
+
+        lblErrorMessageDeadline.requireNotVisible();
 
         frame.button("btnSave").click();
+        lblErrorMessageDeadline.requireVisible();
+        lblErrorMessageDeadline.requireText("Date parsing error. It should be in the format (dd/MM/yyyy)");
 
 
     }
