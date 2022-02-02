@@ -83,6 +83,7 @@ public class TaskDetailPage extends JPanel {
 
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.setName("btnDelete");
+		btnDelete.addActionListener(this::deleteEvent);
 		btnDelete.setBackground(Color.RED);
 
 		GridBagConstraints btnDeleteContraints = new GridBagConstraints();
@@ -90,6 +91,11 @@ public class TaskDetailPage extends JPanel {
 		btnDeleteContraints.gridy = 3;
 		add(btnDelete, btnDeleteContraints);
 
+	}
+
+	private void deleteEvent(ActionEvent e) {
+		user.getTasks().remove(task);
+		goBackAction(null);
 	}
 
 	private void goBackAction(ActionEvent e){
