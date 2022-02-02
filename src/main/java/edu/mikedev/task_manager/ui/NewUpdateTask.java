@@ -1,5 +1,6 @@
 package edu.mikedev.task_manager.ui;
 
+import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;
 
 import javax.swing.JPanel;
@@ -8,24 +9,28 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 
 public class NewUpdateTask extends JPanel {
+	private final Model model;
 	private JTextField tfTaskName;
 	private JTextField tfTaskDescription;
 	private JTextField tfTaskDeadline;
 	private JLabel lblErrorMessageDeadline;
 
+	private Task toBeUpdatedTask = null;
+
 	/**
 	 * Create the panel.
 	 */
-	public NewUpdateTask() {
+	public NewUpdateTask(Model model) {
+		this.model = model;
 		setName("mainPanel");
 		// New task branch
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -122,15 +127,28 @@ public class NewUpdateTask extends JPanel {
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.setName("btnSave");
+		btnSave.addActionListener(this::saveTask);
 		GridBagConstraints gbc_btnSave = new GridBagConstraints();
 		gbc_btnSave.gridx = 0;
 		gbc_btnSave.gridy = 13;
 		add(btnSave, gbc_btnSave);
 	}
 
-	public NewUpdateTask(Task task){
+	public boolean updateMode(){
+		return toBeUpdatedTask != null;
+	}
+
+	private void saveTask(ActionEvent e) {
+		Task task = parseTask();
+		if(task != null){
+
+		}
+	}
+
+	public NewUpdateTask(Model model, Task task){
 		// Update task branch
-		this();
+		this(model);
+		toBeUpdatedTask = task;
 		tfTaskName.setText(task.getTitle());
 		tfTaskDescription.setText(task.getDescription());
 		if(task.getDeadline() != null){

@@ -1,5 +1,6 @@
 package edu.mikedev.task_manager.ui;
 
+import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 
@@ -13,10 +14,12 @@ public class TaskDetailPage extends JPanel {
 	/**
 	 * Create the panel.
 	 */
+	private Model model;
 	private Task task;
 	private User user;
 
-	public TaskDetailPage(Task task, User user) {
+	public TaskDetailPage(Model model, Task task, User user) {
+		this.model = model;
 		this.task = task;
 		this.user = user;
 
@@ -72,7 +75,7 @@ public class TaskDetailPage extends JPanel {
 
 	private void goBackAction(ActionEvent e){
 		JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
-		windowAncestor.setContentPane(new UserTasksPage(user));
+		windowAncestor.setContentPane(new UserTasksPage(model, user));
 		windowAncestor.setTitle(user.getUsername() + " tasks");
 		windowAncestor.pack();
 	}

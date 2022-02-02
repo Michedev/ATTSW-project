@@ -94,7 +94,7 @@ public class LoginWindow extends JFrame {
 		if(isCorrect){
 			setTitle(username + " tasks");
 			User loggedUser = model.getUser(username, password);
-			this.setContentPane(new UserTasksPage(loggedUser));
+			this.setContentPane(new UserTasksPage(model, loggedUser));
 			setMinimumSize(new Dimension(400, 300));
 			pack();
 		} else {

@@ -1,5 +1,6 @@
 package edu.mikedev.task_manager.ui;
 
+import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 
@@ -18,12 +19,14 @@ import java.util.stream.Collectors;
 
 public class UserTasksPage extends JPanel {
 
+	private Model model;
 	/**
 	 * Create the panel.
 	 */
 	private User user;
 
-	public UserTasksPage(User user) {
+	public UserTasksPage(Model model, User user) {
+		this.model = model;
 		this.user = user;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -49,14 +52,14 @@ public class UserTasksPage extends JPanel {
 
 	private void goToNewTask(ActionEvent e) {
 		JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
-		windowAncestor.setContentPane(new NewUpdateTask());
+		windowAncestor.setContentPane(new NewUpdateTask(model));
 		windowAncestor.setTitle("New task");
 		windowAncestor.pack();
 	}
 
 	private JPanel makeTaskCard(Task t, GridBagConstraints c) {
 		JPanel taskPanel = new JPanel();
-		taskPanel.addMouseListener(new TaskDetailTransition(this, t, user));
+		taskPanel.addMouseListener(new TaskDetailTransition(this, model, t, user));
 		Color backgroundColor = AppColors.getColorBackground(t);
 		taskPanel.setBackground(backgroundColor);
 		taskPanel.setBorder(new LineBorder(backgroundColor, 5, true));
