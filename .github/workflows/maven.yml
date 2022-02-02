@@ -28,4 +28,4 @@ jobs:
     - name: Test UI classes
       run: xvfb-run mvn test -Dtest="**ui/*"
     - name: Build with Maven using Java ${{matrix.java_version}}
-      run: mvn -B package --file pom.xml -DsomeModule.test.excludes="**/ui/*.java"
+      run: mvn -B package --file pom.xml -Dui.skip.tests=true test
