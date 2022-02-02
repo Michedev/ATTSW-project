@@ -59,12 +59,11 @@ public class TestNewUpdateTaskWindow extends AssertJSwingJUnitTestCase{
         frame.textBox("tfTaskDescription").enterText("New task description");
         frame.textBox("tfTaskDeadline").enterText("13/10/2022");
 
-        Task parsedTask = ((NewUpdateTask) frame.panel("mainPanel").target()).parseTask();
-        Assert.assertEquals("New task name", parsedTask.getTitle());
-        Assert.assertEquals("New task description", parsedTask.getDescription());
+        frame.button("btnSave").click();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Assert.assertEquals("13/10/2022", dateFormat.format(parsedTask.getDeadline()));
+        frame.requireTitle("username1 tasks");
+        frame.panel("task5").requireEnabled();
+        frame.label("lblTitleTask5").requireText("New task name");
     }
 
     @Test
