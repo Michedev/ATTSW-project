@@ -74,13 +74,15 @@ public class TaskDetailPage extends JPanel {
 		add(lblTaskDescription, lblTaskDescriptionContraints);
 
 		JButton btnUpdate = new JButton("Update");
-		GridBagConstraints btnUpdateContraints = new GridBagConstraints();
-		btnUpdateContraints.gridx = 2;
-		btnUpdateContraints.gridy = 3;
-		btnUpdateContraints.anchor = GridBagConstraints.LINE_END;
-		add(btnUpdate, btnUpdateContraints);
+		btnUpdate.setName("btnUpdate");
+		GridBagConstraints btnUpdateConstraints = new GridBagConstraints();
+		btnUpdateConstraints.gridx = 2;
+		btnUpdateConstraints.gridy = 3;
+		btnUpdateConstraints.anchor = GridBagConstraints.LINE_END;
+		add(btnUpdate, btnUpdateConstraints);
 
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.setName("btnDelete");
 		btnDelete.setBackground(Color.RED);
 
 		GridBagConstraints btnDeleteContraints = new GridBagConstraints();

@@ -7,6 +7,7 @@ import edu.mikedev.task_manager.ui.AppColors;
 import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
+import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
@@ -68,6 +69,16 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
             frame.panel("task" + i).requireEnabled();
         }
         frame.button("btnNewTask").requireEnabled();
+    }
+
+    @Test
+    @GUITest
+    public void testDeleteButton(){
+        frame.button("btnDelete").click();
+
+        frame.requireTitle("username1 tasks");
+        Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task4"));
+        Assert.assertThrows(ComponentLookupException.class, () -> frame.label("lblTitleTask4"));
 
     }
 
