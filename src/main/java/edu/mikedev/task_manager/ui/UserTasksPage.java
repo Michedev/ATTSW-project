@@ -38,8 +38,6 @@ public class UserTasksPage extends JPanel {
 			GridBagConstraints c = new GridBagConstraints();
 			c.weightx = 0.9;
 			c.weighty = 0.9;
-			c.ipadx = 10;
-			c.ipady = 10;
 			c.gridx = i % maxCols;
 			c.gridy = i / maxCols;
 			makeTaskCard(t, c);
