@@ -98,7 +98,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         frame.textBox("tfTaskName").requireText("Task 5");
         String taskDescription = frame.textBox("tfTaskDescription").text();
         Assert.assertTrue(taskDescription.startsWith("Super Long description"));
-        frame.textBox("tfTaskDeadline").requireText("11/02/2014");
+        frame.textBox("tfTaskDeadline").requireText("11/02/2014"); //todo: problem here
 
     }
 
