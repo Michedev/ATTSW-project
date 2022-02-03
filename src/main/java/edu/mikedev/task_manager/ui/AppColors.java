@@ -3,7 +3,7 @@ package edu.mikedev.task_manager.ui;
 import edu.mikedev.task_manager.Task;
 
 import java.awt.*;
-import java.sql.Date;
+import java.util.Date;
 import java.time.Instant;
 
 public class AppColors {

@@ -14,13 +14,14 @@ public class TaskDetailPage extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	private Model model;
-	private Task task;
-	private User user;
-	private JCheckBox cbDone;
+	private transient Model model;
+	private transient Task task;
+	private transient User user;
+	private transient JCheckBox cbDone;
 
 	public TaskDetailPage(Model model, Task task, User user) {
 		setName("mainPanel");
+		String fontFamily = "Cantarell";
 
 		this.model = model;
 		this.task = task;
@@ -34,7 +35,7 @@ public class TaskDetailPage extends JPanel {
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
-		
+
 		JButton btnGoBack = new JButton("<");
 		btnGoBack.setName("btnGoBack");
 		btnGoBack.addActionListener(this::goBackAction);
@@ -43,10 +44,10 @@ public class TaskDetailPage extends JPanel {
 		btnBackConstraints.gridx = 0;
 		btnBackConstraints.gridy = 0;
 		add(btnGoBack, btnBackConstraints);
-		
+
 		JLabel lblTaskTitle = new JLabel(task.getTitle());
 		lblTaskTitle.setName("lblTaskTitle");
-		lblTaskTitle.setFont(new Font("Cantarell", Font.BOLD, 20));
+		lblTaskTitle.setFont(new Font(fontFamily, Font.BOLD, 20));
 		GridBagConstraints lblTaskTitleConstraints = new GridBagConstraints();
 		lblTaskTitleConstraints.insets = new Insets(0, 0, 5, 5);
 		lblTaskTitleConstraints.gridx = 1;
@@ -55,7 +56,7 @@ public class TaskDetailPage extends JPanel {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		JLabel lblTaskDeadline = new JLabel(dateFormat.format(task.getDeadline()));
-		lblTaskDeadline.setFont(new Font("Cantarell", Font.BOLD, 18));
+		lblTaskDeadline.setFont(new Font(fontFamily, Font.BOLD, 18));
 
 		lblTaskDeadline.setName("lblTaskDeadline");
 		GridBagConstraints lblTaskDeadlineConstraints = new GridBagConstraints();
@@ -66,7 +67,7 @@ public class TaskDetailPage extends JPanel {
 		
 		JLabel lblTaskDescription = new JLabel("<html><p style=\"width:300px\">"+task.getDescription()+"</p></html>");
 		lblTaskDescription.setName("lblTaskDescription");
-		lblTaskDescription.setFont(new Font("Cantarell", Font.PLAIN, 11));
+		lblTaskDescription.setFont(new Font(fontFamily, Font.PLAIN, 11));
 
 		GridBagConstraints lblTaskDescriptionContraints = new GridBagConstraints();
 		lblTaskDescriptionContraints.gridwidth = 2;

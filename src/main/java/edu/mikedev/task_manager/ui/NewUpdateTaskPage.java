@@ -17,14 +17,14 @@ import java.awt.Color;
 import java.util.Set;
 
 public class NewUpdateTaskPage extends JPanel {
-	private final Model model;
+	private transient final Model model;
 	private JTextField tfTaskName;
 	private JTextField tfTaskDescription;
 	private JTextField tfTaskDeadline;
 	private JLabel lblErrorMessageDeadline;
 	private transient User user;
 
-	private Task toBeUpdatedTask = null;
+	private transient Task toBeUpdatedTask = null;
 	private JButton btnSave;
 	private JLabel lblErrorMessageName;
 
