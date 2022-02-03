@@ -20,8 +20,8 @@ public class UserTasksPage extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	private Model model;
-	private User user;
+	private transient Model model;
+	private transient User user;
 
 	public UserTasksPage(Model model, User user) {
 		this.model = model;

@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import net.miginfocom.swing.MigLayout;
 
 public class RegistrationPage extends JPanel {
-    private final Model model;
+    private final transient Model model;
     private JLabel lblErrorMessagePassword;
     private JLabel lblErrorMessageEmail;
     private JButton btnRegister;

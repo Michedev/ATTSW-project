@@ -17,7 +17,7 @@ import java.awt.Color;
 import java.util.Set;
 
 public class NewUpdateTaskPage extends JPanel {
-	private transient final Model model;
+	private final transient Model model;
 	private JTextField tfTaskName;
 	private JTextField tfTaskDescription;
 	private JTextField tfTaskDeadline;

@@ -16,7 +16,7 @@ public class LoginWindow extends JFrame {
 	private final JButton btnLogin;
 	private final JButton btnRegister;
 	private final JLabel lblUsername;
-	private final Model model;
+	private final transient Model model;
 	private JPanel contentPane;
 	private JTextField tfUsername;
 	private JTextField tfPassword;
