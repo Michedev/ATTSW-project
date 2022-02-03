@@ -20,14 +20,13 @@ import java.util.List;
 @RunWith(GUITestRunner.class)
 public class TestNewTask extends AssertJSwingJUnitTestCase{
 
-    LoginWindow window;
-    FrameFixture frame;
-    List<Task> tasksListSorted;
+    private transient LoginWindow window;
+    private transient FrameFixture frame;
 
     @Override
     protected void onSetUp() {
         Triple<Model, User, List<Task>> scenario = TestUtils.anyLoginUserTasksScenario();
-        tasksListSorted = scenario.third;
+        List<Task> tasksListSorted = scenario.third;
         GuiActionRunner.execute(() ->{
             window = new LoginWindow(scenario.first);
             return window;
@@ -105,7 +104,6 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
 
         lblErrorMessageName.requireNotVisible();
         lblErrorMessageDeadline.requireNotVisible();
-
         frame.button("btnSave").click();
 
         lblErrorMessageName.requireVisible();
