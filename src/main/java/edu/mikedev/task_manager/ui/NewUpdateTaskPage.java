@@ -63,7 +63,8 @@ public class NewUpdateTaskPage extends JPanel {
 		add(tfTaskName, tfTaskNameConstraints);
 		tfTaskName.setColumns(10);
 
-		lblErrorMessageName = new JLabel("Error message");
+		String defaultErrorMessage = "Error message";
+		lblErrorMessageName = new JLabel(defaultErrorMessage);
 		lblErrorMessageName.setVisible(false);
 		lblErrorMessageName.setName("lblErrorMessageName");
 		lblErrorMessageName.setForeground(Color.RED);
@@ -91,7 +92,7 @@ public class NewUpdateTaskPage extends JPanel {
 		add(tfTaskDescription, tfTaskDescriptionConstraints);
 		tfTaskDescription.setColumns(10);
 		
-		JLabel lblErrorMessageDescription = new JLabel("Error message");
+		JLabel lblErrorMessageDescription = new JLabel(defaultErrorMessage);
 		lblErrorMessageDescription.setVisible(false);
 		lblErrorMessageDescription.setHorizontalAlignment(SwingConstants.LEFT);
 		lblErrorMessageDescription.setForeground(Color.RED);
@@ -120,7 +121,7 @@ public class NewUpdateTaskPage extends JPanel {
 		add(tfTaskDeadline, tfDeadlineConstraints);
 		tfTaskDeadline.setColumns(10);
 
-		lblErrorMessageDeadline = new JLabel("Error message");
+		lblErrorMessageDeadline = new JLabel(defaultErrorMessage);
 		lblErrorMessageDeadline.setVisible(false);
 		lblErrorMessageDeadline.setName("lblErrorMessageDeadline");
 		lblErrorMessageDeadline.setForeground(Color.RED);
