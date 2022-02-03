@@ -61,6 +61,8 @@ public class UserTasksPage extends JPanel {
 	}
 
 	private JPanel makeTaskCard(Task t, GridBagConstraints c) {
+		String fontFamily = "Cantarell";
+
 		JPanel taskPanel = new JPanel();
 		taskPanel.addMouseListener(new TaskDetailTransition(this, model, t, user));
 		Color backgroundColor = AppColors.getColorBackground(t);
@@ -78,14 +80,14 @@ public class UserTasksPage extends JPanel {
 		headerPanelTask.setLayout(new GridLayout(1, 2, 5, 0));
 
 		JLabel lblTitleTask0 = new JLabel(t.getTitle());
-		lblTitleTask0.setFont(new Font("Cantarell", Font.BOLD, 18));
+		lblTitleTask0.setFont(new Font(fontFamily, Font.BOLD, 18));
 		lblTitleTask0.setName("lblTitleTask" + t.getId());
 		headerPanelTask.add(lblTitleTask0);
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		JLabel lblDateTask = new JLabel(dateFormat.format(t.getDeadline()));
 		lblDateTask.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDateTask.setFont(new Font("Cantarell", Font.BOLD, 16));
+		lblDateTask.setFont(new Font(fontFamily, Font.BOLD, 16));
 		lblDateTask.setName("lblDateTask" + t.getId());
 		headerPanelTask.add(lblDateTask);
 
@@ -98,7 +100,7 @@ public class UserTasksPage extends JPanel {
 		JLabel lblDescrTask = new JLabel(formatDescription(t.getDescription()));
 		lblDescrTask.setBorder(new EmptyBorder(5, 5, 5, 5));
 		lblDescrTask.setMaximumSize(new Dimension(150, 1500));
-		lblDescrTask.setFont(new Font("Cantarell", Font.PLAIN, 10));
+		lblDescrTask.setFont(new Font(fontFamily, Font.PLAIN, 10));
 		lblDescrTask.setName("lblDescrTask" + t.getId());
 		contentPanelTask.add(lblDescrTask);
 
