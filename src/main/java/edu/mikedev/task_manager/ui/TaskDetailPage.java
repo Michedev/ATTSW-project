@@ -39,31 +39,31 @@ public class TaskDetailPage extends JPanel {
 		JButton btnGoBack = new JButton("<");
 		btnGoBack.setName("btnGoBack");
 		btnGoBack.addActionListener(this::goBackAction);
-		GridBagConstraints gbc_btnBack = new GridBagConstraints();
-		gbc_btnBack.insets = new Insets(0, 0, 5, 5);
-		gbc_btnBack.gridx = 0;
-		gbc_btnBack.gridy = 0;
-		add(btnGoBack, gbc_btnBack);
+		GridBagConstraints btnBackConstraints = new GridBagConstraints();
+		btnBackConstraints.insets = new Insets(0, 0, 5, 5);
+		btnBackConstraints.gridx = 0;
+		btnBackConstraints.gridy = 0;
+		add(btnGoBack, btnBackConstraints);
 		
 		JLabel lblTaskTitle = new JLabel(task.getTitle());
 		lblTaskTitle.setName("lblTaskTitle");
 		lblTaskTitle.setFont(new Font("Cantarell", Font.BOLD, 20));
-		GridBagConstraints gbc_lblTaskTitle = new GridBagConstraints();
-		gbc_lblTaskTitle.insets = new Insets(0, 0, 5, 5);
-		gbc_lblTaskTitle.gridx = 1;
-		gbc_lblTaskTitle.gridy = 1;
-		add(lblTaskTitle, gbc_lblTaskTitle);
+		GridBagConstraints lblTaskTitleConstraints = new GridBagConstraints();
+		lblTaskTitleConstraints.insets = new Insets(0, 0, 5, 5);
+		lblTaskTitleConstraints.gridx = 1;
+		lblTaskTitleConstraints.gridy = 1;
+		add(lblTaskTitle, lblTaskTitleConstraints);
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		JLabel lblTaskDeadline = new JLabel(dateFormat.format(task.getDeadline()));
 		lblTaskDeadline.setFont(new Font("Cantarell", Font.BOLD, 18));
 
 		lblTaskDeadline.setName("lblTaskDeadline");
-		GridBagConstraints gbc_lblTaskDeadline = new GridBagConstraints();
-		gbc_lblTaskDeadline.insets = new Insets(0, 0, 5, 0);
-		gbc_lblTaskDeadline.gridx = 2;
-		gbc_lblTaskDeadline.gridy = 1;
-		add(lblTaskDeadline, gbc_lblTaskDeadline);
+		GridBagConstraints lblTaskDeadlineConstraints = new GridBagConstraints();
+		lblTaskDeadlineConstraints.insets = new Insets(0, 0, 5, 0);
+		lblTaskDeadlineConstraints.gridx = 2;
+		lblTaskDeadlineConstraints.gridy = 1;
+		add(lblTaskDeadline, lblTaskDeadlineConstraints);
 		
 		JLabel lblTaskDescription = new JLabel("<html><p style=\"width:300px\">"+task.getDescription()+"</p></html>");
 		lblTaskDescription.setName("lblTaskDescription");
