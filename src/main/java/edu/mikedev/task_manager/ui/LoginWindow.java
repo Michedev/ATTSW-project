@@ -5,7 +5,6 @@ import javax.swing.border.EmptyBorder;
 
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.User;
-import net.miginfocom.swing.MigLayout;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,13 +28,7 @@ public class LoginWindow extends JFrame {
 	public LoginWindow(Model model) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			// Leave default theme
-		} catch (InstantiationException e) {
-			// Leave default theme
-		} catch (IllegalAccessException e) {
-			// Leave default theme
-		} catch (UnsupportedLookAndFeelException e) {
+		} catch (ClassNotFoundException|InstantiationException|IllegalAccessException|UnsupportedLookAndFeelException e) {
 			// Leave default theme
 		}
 
