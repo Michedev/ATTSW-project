@@ -3,7 +3,6 @@ package edu.mikedev.task_manager.ui;
 import edu.mikedev.task_manager.Model;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 
 import net.miginfocom.swing.MigLayout;
