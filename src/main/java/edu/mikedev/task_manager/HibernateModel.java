@@ -66,7 +66,10 @@ public class HibernateModel implements Model{
 
     @Override
     public Task getTaskById(int id) {
-        return null;
+        if(!existsTaskId(id)){
+            throw new IllegalArgumentException();
+        }
+        return hibernateSession.createQuery("SELECT a FROM Task a where a.id = " + id, Task.class).getResultList().get(0);
     }
 
     @Override

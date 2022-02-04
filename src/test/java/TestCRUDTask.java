@@ -86,6 +86,29 @@ public class TestCRUDTask {
         verify(mockedSession, times(1)).delete(task);
     }
 
+    @Test
+    public void testGetTaskById(){
+        Task task = new Task("Title", "Description", Date.from(Instant.now()), false);
+        task.setId(3);
+
+        List<Integer> taskIds = Arrays.asList(0, 1, 2, 3);
+        Query mockedQueryTaskId = mock(Query.class);
+        when(mockedQueryTaskId.getResultList()).thenReturn(taskIds);
+        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT id from Task"), any())).thenReturn(mockedQueryTaskId);
+
+        Query mockedQuery = mock(Query.class);
+        List<Task> queryTasks = Arrays.asList(task);
+        when(mockedQuery.getResultList()).thenReturn(queryTasks);
+        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a FROM Task a where a.id = " + task.getId()), any())).thenReturn(mockedQuery);
+
+        Assert.assertEquals(task, model.getTaskById(3));
+
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.getTaskById(10));
+
+        verify(mockedSession, times(1)).createQuery(ArgumentMatchers.startsWith("SELECT a FROM Task a"), any());
+        verify(mockedSession, times(3)).createQuery(anyString(), any());
+    }
+
 
 
 }
