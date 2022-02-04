@@ -12,11 +12,11 @@ public interface Model {
 
     User getUser(String username, String password);
 
-    boolean updateTask(Task task);
+    void updateTask(Task task);
 
     void addNewTask(Task task);
 
-    boolean deleteTask(Task task);
+    void deleteTask(Task task);
 
     boolean existsTaskId(int id);
 

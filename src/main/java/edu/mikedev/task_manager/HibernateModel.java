@@ -34,8 +34,12 @@ public class HibernateModel implements Model{
     }
 
     @Override
-    public boolean updateTask(Task task) {
-        return false;
+    public void updateTask(Task task) {
+        if(!existsTaskId(task.getId())){
+            throw new IllegalArgumentException("Task id must exists already in DB");
+        }
+        hibernateSession.update(task);
+
     }
 
     @Override
@@ -47,8 +51,12 @@ public class HibernateModel implements Model{
     }
 
     @Override
-    public boolean deleteTask(Task task) {
-        return false;
+    public void deleteTask(Task task) {
+        if(!existsTaskId(task.getId())){
+            throw new IllegalArgumentException("Task id must exists already in DB");
+        }
+        hibernateSession.delete(task);
+
     }
 
     @Override

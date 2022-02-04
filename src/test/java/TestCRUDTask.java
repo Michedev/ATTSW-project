@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,5 +51,41 @@ public class TestCRUDTask {
 
         verify(mockedSession, times(1)).persist(any());
     }
+
+    @Test
+    public void testUpdateTask(){
+        Query mockedQuery = mock(Query.class);
+        List<Integer> taskIds = Arrays.asList(0, 1, 2, 3);
+
+        when(mockedQuery.getResultList()).thenReturn(taskIds);
+        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT id from Task"), any())).thenReturn(mockedQuery);
+
+        Task task = new Task("Title", "Description", Date.from(Instant.now()), false);
+        task.setId(0);
+
+        model.updateTask(task);
+
+        task.setId(4);
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.updateTask(task));
+
+        verify(mockedSession, times(1)).update(task);
+
+    }
+
+    @Test
+    public void testDeleteTask(){
+        Task task = new Task("Title", "Description", Date.from(Instant.now()), false);
+        Query mockedQuery = mock(Query.class);
+        List<Integer> taskIds = Arrays.asList(0, 1, 2, 3);
+
+        when(mockedQuery.getResultList()).thenReturn(taskIds);
+        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT id from Task"), any())).thenReturn(mockedQuery);
+
+        model.deleteTask(task);
+
+        verify(mockedSession, times(1)).delete(task);
+    }
+
+
 
 }
