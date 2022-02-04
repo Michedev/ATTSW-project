@@ -10,7 +10,11 @@ public interface Model {
 
     User registerUser(String username, String password, String email);
 
+    void addUser(User user);
+
     User getUser(String username, String password);
+
+    boolean existsUsername(String username);
 
     void updateTask(Task task);
 
