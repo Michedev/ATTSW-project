@@ -1,7 +1,7 @@
 <hibernate-mapping>
     <!-- class name is the fully qualified name of the POJO class -->
     <!-- table is the name of the database table which represents the Student -->
-    <class name="edu.mikedev.hibernate_learning_test.Task" table="tasks">
+    <class name="edu.mikedev.task_manager.Task" table="tasks">
         <!-- Attribute id is mapped to the column student_id -->
         <id name="id" type="integer">
             <column name="id" />

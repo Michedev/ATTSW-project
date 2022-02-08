@@ -4,6 +4,7 @@ import edu.mikedev.task_manager.HibernateDBUtils;
 import edu.mikedev.task_manager.HibernateModel;
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.Task;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -17,7 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class TestModelIT {
+public class ModelIT {
 
     private HibernateDBUtils hibernateDBUtils;
     private Session session;
@@ -29,6 +30,7 @@ public class TestModelIT {
         Path testResourceDirectory = Paths.get("src", "main", "resources");
         File hibernateConfigFile = new File(testResourceDirectory.resolve("hibernate.cfg.xml").toAbsolutePath().toString());
 
+        System.out.println(testResourceDirectory.toAbsolutePath().toString());
 
         Configuration cfg = new Configuration();
         SessionFactory factory = cfg.configure(hibernateConfigFile).buildSessionFactory();
@@ -39,11 +41,6 @@ public class TestModelIT {
         hibernateDBUtils.initTestDB();
 
         model = new HibernateModel(session);
-    }
-
-    @Test
-    public void failingTest(){
-        Assert.assertEquals(1, 2);
     }
 
     @Test
