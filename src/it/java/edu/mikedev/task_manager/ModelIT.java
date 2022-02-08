@@ -89,6 +89,16 @@ public class ModelIT {
     }
 
     @Test
+    public void getTasks(){
+        List<Task> tasks = hibernateDBUtils.pullTasks();
+        Assert.assertEquals(6, tasks.size());
+        Assert.assertEquals("Eat food", tasks.get(0).getTitle());
+        Assert.assertEquals("Sample task title 1", tasks.get(2).getTitle());
+        Assert.assertEquals("Sample task long description 3", tasks.get(4).getDescription());
+    }
+
+
+    @Test
     public void testAddNewTask(){
         Task toBeAdded = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
         toBeAdded.setId(0);

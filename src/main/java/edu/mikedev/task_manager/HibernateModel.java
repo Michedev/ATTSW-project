@@ -127,6 +127,6 @@ public class HibernateModel implements Model{
 
     @Override
     public List<Task> getTasks() {
-        return null;
+        return hibernateSession.createQuery("SELECT a FROM Task a", Task.class).getResultList();
     }
 }
