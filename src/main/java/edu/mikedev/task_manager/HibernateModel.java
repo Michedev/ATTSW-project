@@ -100,6 +100,7 @@ public class HibernateModel implements Model{
             throw new IllegalArgumentException("Task id must not exists already in DB");
         }
         hibernateSession.persist(newTask);
+        t.commit();
     }
 
     @Override
@@ -107,8 +108,8 @@ public class HibernateModel implements Model{
         if(!existsTaskId(task.getId())){
             throw new IllegalArgumentException("Task id must exists already in DB");
         }
-        hibernateSession.delete(task);
-
+        hibernateSession.remove(task);
+        t.commit();
     }
 
     @Override

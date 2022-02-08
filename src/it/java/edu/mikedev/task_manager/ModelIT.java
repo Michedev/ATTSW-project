@@ -129,4 +129,20 @@ public class ModelIT {
         Assert.assertThrows(IllegalArgumentException.class, () -> model.updateTask(toBeUpdated));
     }
 
+    @Test
+    public void testDeleteTask(){
+        List<Task> tasks = hibernateDBUtils.pullTasks();
+        Task toBeDeleted = tasks.get(2);
+
+        model.deleteTask(toBeDeleted);
+
+        List<Task> tasksAfterDelete = hibernateDBUtils.pullTasks();
+
+        Assert.assertEquals(5, tasksAfterDelete.size());
+
+        Task deletedTaskIndex = tasks.get(3);
+
+        Assert.assertEquals(3, deletedTaskIndex.getId());
+        Assert.assertEquals("Sample task title 2", deletedTaskIndex.getTitle());
+    }
 }
