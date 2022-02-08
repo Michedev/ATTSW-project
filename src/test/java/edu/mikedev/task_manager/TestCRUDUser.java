@@ -87,4 +87,38 @@ public class TestCRUDUser {
         verify(mockedSession, times(1)).persist(newUser);
 
     }
+
+    @Test
+    public void testUserExists(){
+        User expected = new User("username", "password", "email@email.it");
+        List<User> expctedQueryList = Arrays.asList(expected);
+        Query mockedQuery = mock(Query.class);
+        when(mockedQuery.getResultList()).thenReturn(expctedQueryList);
+
+        Query emptyQuery = mock(Query.class);
+        when(emptyQuery.getResultList()).thenReturn(new ArrayList());
+
+        when(mockedSession.createQuery(ArgumentMatchers.matches(String.format("SELECT a from User a where a.username = '%s'", expected.getUsername(), expected.getPassword())), any())).thenReturn(mockedQuery);
+        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a from User a where a.username = 'fakeuser'"), any())).thenReturn(emptyQuery);
+
+        Assert.assertTrue(model.userExists("username"));
+        Assert.assertFalse(model.userExists("fakeuser"));
+    }
+
+    @Test
+    public void testAreCredentialCorrect(){
+        User expected = new User("username", "password", "email@email.it");
+        List<User> expectedQueryList = Arrays.asList(expected);
+        Query mockedQuery = mock(Query.class);
+        when(mockedQuery.getResultList()).thenReturn(expectedQueryList);
+
+        Query emptyQuery = mock(Query.class);
+        when(emptyQuery.getResultList()).thenReturn(new ArrayList());
+
+        when(mockedSession.createQuery(ArgumentMatchers.matches(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", expected.getUsername(), expected.getPassword())), any())).thenReturn(mockedQuery);
+        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a from User a where a.username = 'fakeuser' and a.password = 'fakepassword'"), any())).thenReturn(emptyQuery);
+
+        Assert.assertTrue(model.areCredentialCorrect(expected.getUsername(), expected.getPassword()));
+        Assert.assertFalse(model.areCredentialCorrect("fakeuser", "fakepassword"));
+    }
 }
