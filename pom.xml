@@ -24,6 +24,7 @@
         <skipIntegrationTests>${skipTests}</skipIntegrationTests>
     </properties>
     <build>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>io.fabric8</groupId>
@@ -76,14 +77,35 @@
                </executions>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-integration-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/it/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
                     <skipTests>${skipUnitTests}</skipTests>
-                    <excludes>
-                        <exclude>*IT.java</exclude>
-                    </excludes>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/Test*.java</include>
+                        <include>Test*.java</include>
+                        <include>*Test.java</include>
+                    </includes>
                 </configuration>
             </plugin>
 
@@ -93,6 +115,7 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <includes>
+                        <include>**/*IT.java</include>
                         <include>*IT.java</include>
                     </includes>
                     <skipTests>${skipIntegrationTests}</skipTests>
@@ -107,13 +130,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                    <source>1.8</source>
+                    <target>1.8</target>
+            </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -155,6 +187,12 @@
             <artifactId>miglayout-swing</artifactId>
             <version>5.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.1</version>
+        </dependency>
+
     </dependencies>
     <profiles>
         <profile>
