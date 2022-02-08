@@ -9,13 +9,19 @@ public class HibernateModel implements Model{
     private Session hibernateSession;
 
     public HibernateModel(Session hibernateSession){
-
         this.hibernateSession = hibernateSession;
     }
 
     @Override
     public boolean areCredentialCorrect(String username, String password) {
-        return false;
+        List<User> users = hibernateSession.createQuery(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", username, password), User.class).getResultList();
+        if (users.isEmpty()){
+            return false;
+        }
+        if (users.size() > 1){
+            throw new RuntimeException(String.format("Users with username %s and password %s are %d", username, password, users.size()));
+        }
+        return true;
     }
 
     @Override
@@ -52,7 +58,7 @@ public class HibernateModel implements Model{
     @Override
     public User getUser(String username, String password) {
 
-        List<User> result = hibernateSession.createQuery("SELECT a FROM User a where a.username = " + username + " and a.password = " + password, User.class).getResultList();
+        List<User> result = hibernateSession.createQuery(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", username, password), User.class).getResultList();
         if(result.isEmpty()){
             throw new IllegalArgumentException("User with username " + username + " and password " + password + " not found");
         }

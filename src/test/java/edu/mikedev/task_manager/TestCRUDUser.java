@@ -53,8 +53,8 @@ public class TestCRUDUser {
         Query emptyQuery = mock(Query.class);
         when(emptyQuery.getResultList()).thenReturn(new ArrayList());
 
-        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a FROM User a where a.username = " + expected.getUsername() + " and a.password = " + expected.getPassword()), any())).thenReturn(mockedQuery);
-        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a FROM User a where a.username = aaa and a.password = bbb"), any())).thenReturn(emptyQuery);
+        when(mockedSession.createQuery(ArgumentMatchers.matches(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", expected.getUsername(), expected.getPassword())), any())).thenReturn(mockedQuery);
+        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a from User a where a.username = 'aaa' and a.password = 'bbb'"), any())).thenReturn(emptyQuery);
 
         User actual = model.getUser("username", "password");
 
