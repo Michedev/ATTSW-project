@@ -1,10 +1,5 @@
 package edu.mikedev.task_manager;
 
-import edu.mikedev.task_manager.HibernateDBUtils;
-import edu.mikedev.task_manager.HibernateModel;
-import edu.mikedev.task_manager.Model;
-import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.Task;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -44,7 +39,7 @@ public class ModelIT {
     }
 
     @Test
-    public void testAddNewUser(){
+    public void testRegisterUser(){
 
         List<User> usersPreRegister = hibernateDBUtils.pullUsers();
 
@@ -60,6 +55,14 @@ public class ModelIT {
         Assert.assertEquals("newusername", newUser.getUsername());
         Assert.assertEquals("password", newUser.getPassword());
         Assert.assertEquals("email@email.com", newUser.getEmail());
-
     }
+
+    @Test
+    public void testAreCredentialCorrect(){
+        Assert.assertTrue(model.areCredentialCorrect("tizio", "caio"));
+        Assert.assertFalse(model.areCredentialCorrect("nonexistentusername", "nonexistentpassword"));
+        Assert.assertFalse(model.areCredentialCorrect("pippo", "fakepassword1"));
+        Assert.assertFalse(model.areCredentialCorrect("fakeusername1", "pluto"));
+    }
+
 }
