@@ -26,7 +26,14 @@ public class HibernateModel implements Model{
 
     @Override
     public boolean userExists(String username) {
-        return false;
+        List<User> users = hibernateSession.createQuery(String.format("SELECT a from User a where a.username = '%s'", username), User.class).getResultList();
+        if(users.isEmpty()){
+            return false;
+        }
+        if (users.size() > 1){
+            throw new RuntimeException(String.format("Users with username %s are %d", username, users.size()));
+        }
+        return true;
     }
 
     @Override
