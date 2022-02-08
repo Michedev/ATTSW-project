@@ -77,4 +77,13 @@ public class ModelIT {
         Assert.assertThrows(IllegalArgumentException.class, () -> model.getUser("notexistentuser", "notexistentpassword"));
     }
 
+    @Test
+    public void testUserExists(){
+        Assert.assertTrue(model.userExists("tizio"));
+        Assert.assertFalse(model.userExists("fakeuser"));
+
+        Assert.assertTrue(model.userExists("johndoe"));
+        Assert.assertFalse(model.userExists("caio"));
+    }
+
 }
