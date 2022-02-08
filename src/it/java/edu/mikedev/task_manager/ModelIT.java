@@ -11,13 +11,16 @@ import org.junit.Test;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class ModelIT {
 
     private HibernateDBUtils hibernateDBUtils;
     private Session session;
-    private Transaction t;
     private Model model;
 
     @Before
@@ -31,7 +34,6 @@ public class ModelIT {
         SessionFactory factory = cfg.configure(hibernateConfigFile).buildSessionFactory();
 
         session = factory.openSession();
-        t = session.beginTransaction();
         this.hibernateDBUtils = new HibernateDBUtils(session);
         hibernateDBUtils.initTestDB();
 
@@ -84,6 +86,47 @@ public class ModelIT {
 
         Assert.assertTrue(model.userExists("johndoe"));
         Assert.assertFalse(model.userExists("caio"));
+    }
+
+    @Test
+    public void testAddNewTask(){
+        Task toBeAdded = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
+        toBeAdded.setId(0);
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.addNewTask(toBeAdded));
+
+        toBeAdded.setId(6);
+        model.addNewTask(toBeAdded);
+
+        List<Task> tasks = hibernateDBUtils.pullTasks();
+        Assert.assertEquals(7, tasks.size());
+
+        Task newTask = tasks.get(6);
+        Assert.assertEquals(6, newTask.getId());
+        Assert.assertEquals("newtask", newTask.getTitle());
+        Assert.assertEquals("newdescr", newTask.getDescription());
+        Assert.assertTrue(newTask.isDone());
+    }
+
+    @Test
+    public void testUpdateTask(){
+        List<Task> tasks = hibernateDBUtils.pullTasks();
+        Task toBeUpdated = tasks.get(1);
+        String oldTitle = toBeUpdated.getTitle();
+        toBeUpdated.setTitle("Updated title");
+
+        model.updateTask(toBeUpdated);
+
+        List<Task> tasksAfterUpdate = hibernateDBUtils.pullTasks();
+        Task updatedTask = tasksAfterUpdate.get(tasksAfterUpdate.size()-1);
+
+        Assert.assertEquals(1, updatedTask.getId());
+        Assert.assertNotEquals(oldTitle, updatedTask.getTitle());
+        Assert.assertEquals("Updated title", updatedTask.getTitle());
+        Assert.assertEquals(toBeUpdated.getDescription(), updatedTask.getDescription());
+        Assert.assertEquals(toBeUpdated.getDeadline(), updatedTask.getDeadline());
+
+        toBeUpdated.setId(401024);
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.updateTask(toBeUpdated));
     }
 
 }

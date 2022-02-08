@@ -1,15 +1,18 @@
 package edu.mikedev.task_manager;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
 public class HibernateModel implements Model{
 
     private Session hibernateSession;
+    private Transaction t;
 
     public HibernateModel(Session hibernateSession){
         this.hibernateSession = hibernateSession;
+        this.t = hibernateSession.beginTransaction();
     }
 
     @Override
@@ -86,8 +89,9 @@ public class HibernateModel implements Model{
         if(!existsTaskId(task.getId())){
             throw new IllegalArgumentException("Task id must exists already in DB");
         }
+        hibernateSession.evict(task);
         hibernateSession.update(task);
-
+        t.commit();
     }
 
     @Override
