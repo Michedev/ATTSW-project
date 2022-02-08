@@ -1,9 +1,8 @@
-package ui;
+package edu.mikedev.task_manager.ui;
 
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.ui.LoginWindow;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -17,16 +16,19 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
-@RunWith(GUITestRunner.class)
-public class TestNewTask extends AssertJSwingJUnitTestCase{
+import static edu.mikedev.task_manager.ui.UserTasksPage.htmlWrappedDescription;
 
-    private transient LoginWindow window;
-    private transient FrameFixture frame;
+@RunWith(GUITestRunner.class)
+public class TestUpdateTask extends AssertJSwingJUnitTestCase{
+
+    LoginWindow window;
+    FrameFixture frame;
+    List<Task> tasksListSorted;
 
     @Override
     protected void onSetUp() {
         Triple<Model, User, List<Task>> scenario = TestUtils.anyLoginUserTasksScenario();
-        List<Task> tasksListSorted = scenario.third;
+        tasksListSorted = scenario.third;
         GuiActionRunner.execute(() ->{
             window = new LoginWindow(scenario.first);
             return window;
@@ -35,81 +37,71 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
         frame.show();
 
         frame.button("btnLogin").click();
-        frame.button("btnNewTask").click();
+        frame.panel("task0").click();
+        frame.button("btnUpdate").click();
     }
 
     @Test
     @GUITest
     public void testInitialState(){
-        frame.requireTitle("New task");
+        frame.requireTitle("Update task \"Task 1\"");
         frame.label("lblTaskName").requireText("Task Name");
         frame.label("lblTaskDescription").requireText("Task Description");
         frame.label("lblTaskDeadline").requireText("Deadline (dd/MM/yyyy)");
-        frame.button("btnSave").requireText("Save");
+        frame.textBox("tfTaskName").requireText("Task 1");
+        frame.textBox("tfTaskDescription").requireText("Description task 1");
+        frame.textBox("tfTaskDeadline").requireText("11/02/2014");
+        frame.button("btnSave").requireText("Update");
     }
 
     @Test
     @GUITest
-    public void testAddNewTask(){
-        frame.textBox("tfTaskName").enterText("New task name");
-        frame.textBox("tfTaskDescription").enterText("New task description");
-        frame.textBox("tfTaskDeadline").enterText("13/10/2022");
+    public void testCorrectUpdateTask(){
+        frame.textBox("tfTaskName").deleteText().enterText("Updated task abc");
+        frame.textBox("tfTaskDescription").deleteText().enterText("Updated description");
+        frame.textBox("tfTaskDeadline").deleteText().enterText("19/04/2022");
 
         frame.button("btnSave").click();
 
-        frame.requireTitle("username1 tasks");
-        frame.panel("task5").requireEnabled();
-        frame.label("lblTitleTask5").requireText("New task name");
+        frame.label("lblTitleTask0").requireText("Updated task abc");
+        frame.label("lblDescrTask0").requireText(htmlWrappedDescription("Updated description"));
+        frame.label("lblDateTask0").requireText("19/04/2022");
     }
 
     @Test
     @GUITest
-    public void testParseNewTaskWithDateError(){
-        frame.textBox("tfTaskName").enterText("New task name");
-        frame.textBox("tfTaskDescription").enterText("New task description");
-        frame.textBox("tfTaskDeadline").enterText("wrong date");
+    public void testWrongDateFormat(){
+        frame.textBox("tfTaskDeadline").deleteText().enterText("wrong date format");
 
         JLabelFixture lblErrorMessageDeadline = frame.label(JLabelMatcher.withName("lblErrorMessageDeadline"));
 
         lblErrorMessageDeadline.requireNotVisible();
 
         frame.button("btnSave").click();
+
+        frame.requireTitle("Update task \"Task 1\"");
+
         lblErrorMessageDeadline.requireVisible();
         lblErrorMessageDeadline.requireText("Date parsing error. It should be in the format (dd/MM/yyyy)");
-
     }
 
     @Test
     @GUITest
     public void testMissingTaskName(){
-        frame.textBox("tfTaskDescription").enterText("New task description");
-        frame.textBox("tfTaskDeadline").enterText("13/10/2022");
-
+        frame.textBox("tfTaskName").deleteText();
         JLabelFixture lblErrorMessageName = frame.label(JLabelMatcher.withName("lblErrorMessageName"));
 
         lblErrorMessageName.requireNotVisible();
 
         frame.button("btnSave").click();
 
+        frame.requireTitle("Update task \"Task 1\"");
+
         lblErrorMessageName.requireVisible();
         lblErrorMessageName.requireText("Missing task name");
     }
 
 
-    @Test
-    @GUITest
-    public void testAnythiningMissing(){
-        JLabelFixture lblErrorMessageName = frame.label(JLabelMatcher.withName("lblErrorMessageName"));
-        JLabelFixture lblErrorMessageDeadline = frame.label(JLabelMatcher.withName("lblErrorMessageDeadline"));
 
-        lblErrorMessageName.requireNotVisible();
-        lblErrorMessageDeadline.requireNotVisible();
-        frame.button("btnSave").click();
 
-        lblErrorMessageName.requireVisible();
-        lblErrorMessageName.requireText("Missing task name");
-        lblErrorMessageDeadline.requireVisible();
-        lblErrorMessageDeadline.requireText("Date parsing error. It should be in the format (dd/MM/yyyy)");
-
-    }
 }

@@ -1,3 +1,5 @@
+package edu.mikedev.task_manager;
+
 import edu.mikedev.task_manager.HibernateModel;
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;

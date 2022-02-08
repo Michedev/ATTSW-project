@@ -1,9 +1,8 @@
-package ui;
+package edu.mikedev.task_manager.ui;
 
 import edu.mikedev.task_manager.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import org.assertj.swing.util.Pair;
 import org.assertj.swing.util.Triple;
 
 import java.util.*;
