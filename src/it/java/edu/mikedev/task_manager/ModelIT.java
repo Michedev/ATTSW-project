@@ -65,4 +65,16 @@ public class ModelIT {
         Assert.assertFalse(model.areCredentialCorrect("fakeusername1", "pluto"));
     }
 
+    @Test
+    public void testGetUser(){
+        User pulledUser = model.getUser("johndoe","randompassword");
+
+        Assert.assertEquals(2, pulledUser.getId());
+        Assert.assertEquals("johndoe", pulledUser.getUsername());
+        Assert.assertEquals("randompassword", pulledUser.getPassword());
+        Assert.assertEquals("johndoe@gmail.com", pulledUser.getEmail());
+
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.getUser("notexistentuser", "notexistentpassword"));
+    }
+
 }
