@@ -123,7 +123,7 @@ public class LoginWindow extends JFrame {
 		boolean isCorrect = model.areCredentialCorrect(username, password);
 		if(isCorrect){
 			setTitle(username + " tasks");
-			User loggedUser = model.getUser(username, password);
+			User loggedUser = model.loginUser(username, password);
 			this.setContentPane(new UserTasksPage(model, loggedUser));
 			setMinimumSize(new Dimension(400, 300));
 			pack();

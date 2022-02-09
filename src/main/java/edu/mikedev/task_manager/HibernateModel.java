@@ -66,7 +66,7 @@ public class HibernateModel implements Model{
     }
 
     @Override
-    public User getUser(String username, String password) {
+    public User loginUser(String username, String password) {
 
         List<User> result = hibernateSession.createQuery(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", username, password), User.class).getResultList();
         if(result.isEmpty()){

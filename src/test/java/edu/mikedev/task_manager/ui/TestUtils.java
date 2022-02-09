@@ -43,7 +43,7 @@ public class TestUtils {
         }
         tasksListSorted.get(4).setDescription(longDescription.toString());
         dummyuser.setTasks(tasksSet);
-        when(mockedModel.getUser(anyString(), anyString())).thenReturn(dummyuser);
+        when(mockedModel.loginUser(anyString(), anyString())).thenReturn(dummyuser);
 
         return Triple.of(mockedModel, dummyuser, tasksListSorted);
     }

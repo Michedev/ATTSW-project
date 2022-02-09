@@ -1,8 +1,5 @@
 package edu.mikedev.task_manager;
 
-import edu.mikedev.task_manager.HibernateModel;
-import edu.mikedev.task_manager.Model;
-import edu.mikedev.task_manager.User;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.junit.Assert;
@@ -10,12 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class TestCRUDUser {
@@ -56,16 +50,15 @@ public class TestCRUDUser {
         when(mockedSession.createQuery(ArgumentMatchers.matches(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", expected.getUsername(), expected.getPassword())), any())).thenReturn(mockedQuery);
         when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a from User a where a.username = 'aaa' and a.password = 'bbb'"), any())).thenReturn(emptyQuery);
 
-        User actual = model.getUser("username", "password");
+        User actual = model.loginUser("username", "password");
 
         Assert.assertEquals(actual, expected);
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> model.getUser("aaa", "bbb"));
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("aaa", "bbb"));
     }
 
     @Test
     public void testAddUser(){
-
         User newUser = new User("9t499t04", "b", "c");
         newUser.setId(50);
         model.addUser(newUser);
@@ -120,5 +113,33 @@ public class TestCRUDUser {
 
         Assert.assertTrue(model.areCredentialCorrect(expected.getUsername(), expected.getPassword()));
         Assert.assertFalse(model.areCredentialCorrect("fakeuser", "fakepassword"));
+    }
+
+    @Test
+    public void testUnallowedTaskAccessOnceLogged(){
+        Set<Task> taskSet = new HashSet<Task>();
+        Task task1 = new Task("title1", "description1", null, false);
+        task1.setId(5);
+        Task task2 = new Task("title2", "description2", null, false);
+        task2.setId(9);
+        Task task3 = new Task("title3", "description3", null, false);
+        task3.setId(12);
+
+        taskSet.add(task1);
+        taskSet.add(task2);
+        taskSet.add(task3);
+
+        User user = new User("username1", "password1", "email@email.com");
+        user.setTasks(taskSet);
+        when(model.loginUser(ArgumentMatchers.matches("username1"), ArgumentMatchers.matches("password1"))).thenReturn(user);
+        model.loginUser("username1", "password1");
+
+        Assert.assertThrows(IllegalAccessException.class, () -> model.getTaskById(0));
+        Assert.assertThrows(IllegalAccessException.class, () -> model.getTaskById(30));
+        Assert.assertEquals(task1, model.getTaskById(5));
+        Assert.assertEquals(task2, model.getTaskById(9));
+        Assert.assertEquals(task2, model.getTaskById(12));
+
+
     }
 }

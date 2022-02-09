@@ -36,7 +36,7 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		User dummyUser = new User("myusername", "mypassword", "email@email.com");
 		Set<Task> taskSet = new HashSet<Task>();
 		dummyUser.setTasks(taskSet);
-		when(model.getUser(anyString(), anyString())).thenReturn(dummyUser);
+		when(model.loginUser(anyString(), anyString())).thenReturn(dummyUser);
 		GuiActionRunner.execute(() ->{
 			window = new LoginWindow(model);
 			return window;

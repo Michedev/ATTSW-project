@@ -1,9 +1,12 @@
 package edu.mikedev.task_manager;
 
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,7 +15,21 @@ import java.util.List;
 import java.util.Properties;
 
 public class HibernateDBUtils {
-    private final Session session;
+    private Session session;
+
+    public static Session buildHBSession(){
+        Path testResourceDirectory = Paths.get("src", "main", "resources");
+        File hibernateConfigFile = new File(testResourceDirectory.resolve("hibernate.cfg.xml").toAbsolutePath().toString());
+
+        Configuration cfg = new Configuration();
+        SessionFactory factory = cfg.configure(hibernateConfigFile).buildSessionFactory();
+
+        return factory.openSession();
+    }
+
+    public HibernateDBUtils(){
+        this.session = buildHBSession();
+    }
 
     public HibernateDBUtils(Session session) {
         this.session = session;
@@ -42,5 +59,9 @@ public class HibernateDBUtils {
 
     public List<String> pullTaskTitles(){
         return session.createQuery("SELECT title from Task", String.class).getResultList();
+    }
+
+    public Session getSession() {
+        return session;
     }
 }

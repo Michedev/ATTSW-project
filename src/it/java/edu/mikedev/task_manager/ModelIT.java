@@ -2,7 +2,6 @@ package edu.mikedev.task_manager;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,8 +10,6 @@ import org.junit.Test;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Date;
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -27,8 +24,6 @@ public class ModelIT {
     public void setUp() throws Exception {
         Path testResourceDirectory = Paths.get("src", "main", "resources");
         File hibernateConfigFile = new File(testResourceDirectory.resolve("hibernate.cfg.xml").toAbsolutePath().toString());
-
-        System.out.println(testResourceDirectory.toAbsolutePath().toString());
 
         Configuration cfg = new Configuration();
         SessionFactory factory = cfg.configure(hibernateConfigFile).buildSessionFactory();
@@ -69,14 +64,14 @@ public class ModelIT {
 
     @Test
     public void testGetUser(){
-        User pulledUser = model.getUser("johndoe","randompassword");
+        User pulledUser = model.loginUser("johndoe","randompassword");
 
         Assert.assertEquals(2, pulledUser.getId());
         Assert.assertEquals("johndoe", pulledUser.getUsername());
         Assert.assertEquals("randompassword", pulledUser.getPassword());
         Assert.assertEquals("johndoe@gmail.com", pulledUser.getEmail());
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> model.getUser("notexistentuser", "notexistentpassword"));
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("notexistentuser", "notexistentpassword"));
     }
 
     @Test
@@ -154,5 +149,11 @@ public class ModelIT {
 
         Assert.assertEquals(3, deletedTaskIndex.getId());
         Assert.assertEquals("Sample task title 2", deletedTaskIndex.getTitle());
+    }
+
+    @Test
+    public void testUnallowedTaskAccess(){
+        User user = model.loginUser("tizio", "caio");
+
     }
 }
