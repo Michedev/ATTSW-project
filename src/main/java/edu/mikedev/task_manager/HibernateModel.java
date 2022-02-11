@@ -9,6 +9,7 @@ public class HibernateModel implements Model{
 
     private Session hibernateSession;
     private Transaction t;
+    private User loggedUser;
 
     public HibernateModel(Session hibernateSession){
         this.hibernateSession = hibernateSession;
@@ -68,14 +69,16 @@ public class HibernateModel implements Model{
     @Override
     public User loginUser(String username, String password) {
 
-        List<User> result = hibernateSession.createQuery(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", username, password), User.class).getResultList();
-        if(result.isEmpty()){
+        List<User> queryResult = hibernateSession.createQuery(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", username, password), User.class).getResultList();
+        if(queryResult.isEmpty()){
             throw new IllegalArgumentException("User with username " + username + " and password " + password + " not found");
         }
-        if(result.size() > 1){
+        if(queryResult.size() > 1){
             throw new IllegalArgumentException("There can't be two or more users with the same username and password");
         }
-        return result.get(0);
+        User result = queryResult.get(0);
+        loggedUser = result;
+        return result;
     }
 
     @Override
@@ -86,7 +89,10 @@ public class HibernateModel implements Model{
 
     @Override
     public void updateTask(Task task) {
-        if(!existsTaskId(task.getId())){
+        if(loggedUser == null){
+            throw new IllegalAccessError("You should login by calling this method");
+        }
+        if(!existsTaskIdLoggedUser(task.getId())){
             throw new IllegalArgumentException("Task id must exists already in DB");
         }
         hibernateSession.evict(task);
@@ -96,6 +102,9 @@ public class HibernateModel implements Model{
 
     @Override
     public void addNewTask(Task newTask) {
+        if(loggedUser == null){
+            throw new IllegalAccessError("You should login by calling this method");
+        }
         if(existsTaskId(newTask.getId())){
             throw new IllegalArgumentException("Task id must not exists already in DB");
         }
@@ -105,8 +114,11 @@ public class HibernateModel implements Model{
 
     @Override
     public void deleteTask(Task task) {
-        if(!existsTaskId(task.getId())){
-            throw new IllegalArgumentException("Task id must exists already in DB");
+        if(loggedUser == null){
+            throw new IllegalAccessError("You should login by calling this method");
+        }
+        if(!existsTaskIdLoggedUser(task.getId())){
+            throw new IllegalAccessError("You can access only to user tasks");
         }
         hibernateSession.remove(task);
         t.commit();
@@ -117,16 +129,33 @@ public class HibernateModel implements Model{
         return hibernateSession.createQuery("SELECT id from Task", Integer.class).getResultList().contains(id);
     }
 
+    public boolean existsTaskIdLoggedUser(int id){
+        String queryCmd = String.format("SELECT id from Task where id_user = %d", loggedUser.getId());
+        System.out.println(queryCmd);
+        return hibernateSession.createQuery(queryCmd, Integer.class).getResultList().contains(id);
+    }
+
     @Override
     public Task getTaskById(int id) {
-        if(!existsTaskId(id)){
-            throw new IllegalArgumentException();
+        if(loggedUser == null){
+            throw new IllegalAccessError("You should call loginUser() before calling this method");
         }
-        return hibernateSession.createQuery("SELECT a FROM Task a where a.id = " + id, Task.class).getResultList().get(0);
+        if(!existsTaskIdLoggedUser(id)){
+            throw new IllegalAccessError("You can access only to user tasks");
+        }
+        return hibernateSession.createQuery(String.format("SELECT a from Task a where id_user = %d and id = %d", loggedUser.getId(), id), Task.class).getResultList().get(0);
     }
 
     @Override
     public List<Task> getTasks() {
-        return hibernateSession.createQuery("SELECT a FROM Task a", Task.class).getResultList();
+        return hibernateSession.createQuery("SELECT a FROM Task a where id_user = " + loggedUser.getId(), Task.class).getResultList();
+    }
+
+    @Override
+    public void logout() {
+        if(loggedUser == null){
+            throw new IllegalAccessError("You can't logout without login before");
+        }
+        loggedUser = null;
     }
 }

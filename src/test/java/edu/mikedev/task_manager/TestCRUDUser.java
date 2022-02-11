@@ -1,5 +1,6 @@
 package edu.mikedev.task_manager;
 
+import net.bytebuddy.matcher.StringMatcher;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.junit.Assert;
@@ -35,6 +36,24 @@ public class TestCRUDUser {
         when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT id from User"), any())).thenReturn(mockedQueryUserId);
         when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT username from User"), any())).thenReturn(mockedQueryUsernames);
 
+        Set<Task> taskSet = new HashSet<Task>();
+        Task task1 = new Task("title1", "description1", null, false);
+        task1.setId(5);
+        Task task2 = new Task("title2", "description2", null, false);
+        task2.setId(9);
+        Task task3 = new Task("title3", "description3", null, false);
+        task3.setId(12);
+
+        taskSet.add(task1);
+        taskSet.add(task2);
+        taskSet.add(task3);
+
+        User user = new User("username1", "password1", "email@email.com");
+        user.setTasks(taskSet);
+        List<User> queryResult = Arrays.asList(user);
+
+        Query mockedQuery = mock(Query.class);
+        when(mockedQuery.getResultList()).thenReturn(queryResult);
     }
 
     @Test
@@ -98,48 +117,4 @@ public class TestCRUDUser {
         Assert.assertFalse(model.userExists("fakeuser"));
     }
 
-    @Test
-    public void testAreCredentialCorrect(){
-        User expected = new User("username", "password", "email@email.it");
-        List<User> expectedQueryList = Arrays.asList(expected);
-        Query mockedQuery = mock(Query.class);
-        when(mockedQuery.getResultList()).thenReturn(expectedQueryList);
-
-        Query emptyQuery = mock(Query.class);
-        when(emptyQuery.getResultList()).thenReturn(new ArrayList());
-
-        when(mockedSession.createQuery(ArgumentMatchers.matches(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", expected.getUsername(), expected.getPassword())), any())).thenReturn(mockedQuery);
-        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a from User a where a.username = 'fakeuser' and a.password = 'fakepassword'"), any())).thenReturn(emptyQuery);
-
-        Assert.assertTrue(model.areCredentialCorrect(expected.getUsername(), expected.getPassword()));
-        Assert.assertFalse(model.areCredentialCorrect("fakeuser", "fakepassword"));
-    }
-
-    @Test
-    public void testUnallowedTaskAccessOnceLogged(){
-        Set<Task> taskSet = new HashSet<Task>();
-        Task task1 = new Task("title1", "description1", null, false);
-        task1.setId(5);
-        Task task2 = new Task("title2", "description2", null, false);
-        task2.setId(9);
-        Task task3 = new Task("title3", "description3", null, false);
-        task3.setId(12);
-
-        taskSet.add(task1);
-        taskSet.add(task2);
-        taskSet.add(task3);
-
-        User user = new User("username1", "password1", "email@email.com");
-        user.setTasks(taskSet);
-        when(model.loginUser(ArgumentMatchers.matches("username1"), ArgumentMatchers.matches("password1"))).thenReturn(user);
-        model.loginUser("username1", "password1");
-
-        Assert.assertThrows(IllegalAccessException.class, () -> model.getTaskById(0));
-        Assert.assertThrows(IllegalAccessException.class, () -> model.getTaskById(30));
-        Assert.assertEquals(task1, model.getTaskById(5));
-        Assert.assertEquals(task2, model.getTaskById(9));
-        Assert.assertEquals(task2, model.getTaskById(12));
-
-
-    }
 }

@@ -1,5 +1,6 @@
 package edu.mikedev.task_manager;
 
+import javax.security.auth.login.LoginException;
 import java.util.List;
 
 public interface Model {
@@ -27,4 +28,6 @@ public interface Model {
     Task getTaskById(int id);
 
     List<Task> getTasks();
+
+    void logout();
 }
