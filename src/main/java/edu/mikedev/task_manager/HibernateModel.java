@@ -108,6 +108,7 @@ public class HibernateModel implements Model{
         if(existsTaskId(newTask.getId())){
             throw new IllegalArgumentException("Task id must not exists already in DB");
         }
+
         hibernateSession.persist(newTask);
         t.commit();
     }

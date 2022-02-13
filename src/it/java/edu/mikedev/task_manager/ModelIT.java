@@ -95,6 +95,7 @@ public class ModelIT {
 
     @Test
     public void testAddNewTask(){
+        model.loginUser("tizio", "caio");
         Task toBeAdded = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
         toBeAdded.setId(0);
         Assert.assertThrows(IllegalArgumentException.class, () -> model.addNewTask(toBeAdded));
@@ -114,6 +115,8 @@ public class ModelIT {
 
     @Test
     public void testUpdateTask(){
+        model.loginUser("tizio", "caio");
+
         List<Task> tasks = hibernateDBUtils.pullTasks();
         Task toBeUpdated = tasks.get(1);
         String oldTitle = toBeUpdated.getTitle();
@@ -136,6 +139,8 @@ public class ModelIT {
 
     @Test
     public void testDeleteTask(){
+        User pulledUser = model.loginUser("pippo","pluto");
+
         List<Task> tasks = hibernateDBUtils.pullTasks();
         Task toBeDeleted = tasks.get(2);
 
@@ -149,6 +154,8 @@ public class ModelIT {
 
         Assert.assertEquals(3, deletedTaskIndex.getId());
         Assert.assertEquals("Sample task title 2", deletedTaskIndex.getTitle());
+
+        Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(tasks.get(0)));
     }
 
     @Test
