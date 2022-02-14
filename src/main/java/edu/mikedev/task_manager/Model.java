@@ -11,19 +11,13 @@ public interface Model {
 
     User registerUser(String username, String password, String email);
 
-    void addUser(User user);
-
     User loginUser(String username, String password);
-
-    boolean existsUsername(String username);
 
     void updateTask(Task task);
 
     void addNewTask(Task task);
 
     void deleteTask(Task task);
-
-    boolean existsTaskId(int id);
 
     Task getTaskById(int id);
 

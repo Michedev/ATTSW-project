@@ -2,26 +2,17 @@ package edu.mikedev.task_manager;
 
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatchers;
 
 import java.sql.SQLException;
-import java.util.*;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-public class TestCRUDUser {
+public class TestHibernateModel {
 
     Session session;
     HibernateModel model;
-    Transaction t;
 
 
     @Before
@@ -30,13 +21,13 @@ public class TestCRUDUser {
         session = hibernateDBUtils.getSession();
         model = new HibernateModel(session);
         hibernateDBUtils.initInMemoryTestDB();
-        hibernateDBUtils.addFakeUsers();
-        t = model.getTransaction();
+        hibernateDBUtils.addFakeUsers(model.getDBLayer());
     }
 
     @After
-    public void commitTransaction(){
-        model.getTransaction().commit();
+    public void closeSession(){
+        session.flush();
+        session.close();
     }
 
     @Test
@@ -50,18 +41,6 @@ public class TestCRUDUser {
         Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("aaa", "bbb"));
     }
 
-    @Test
-    public void testAddUser(){
-        User newUser = new User("9t499t04", "b", "c");
-        newUser.setId(43);
-        newUser.setTasks(new HashSet<>());
-        model.addUser(newUser);
-
-        User newUser2 = new User("fefemkfe", "bfe49e894", "cfeji");
-        newUser2.setId(1);
-
-        Assert.assertThrows(IllegalArgumentException.class, () -> model.addUser(newUser2));
-    }
 
     @Test
     public void testRegistrationUser(){

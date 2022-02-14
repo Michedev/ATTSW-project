@@ -1,5 +1,7 @@
 package edu.mikedev.task_manager.utils;
 
+import edu.mikedev.task_manager.DBLayer;
+import edu.mikedev.task_manager.HibernateDBLayer;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import org.hibernate.Session;
@@ -73,6 +75,10 @@ public class HibernateDBUtils {
     }
 
     public void addFakeUsers(){
+        addFakeUsers(new HibernateDBLayer(session));
+    }
+
+    public void addFakeUsers(DBLayer dbLayer){
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Set<Task> taskSet = new HashSet<Task>();
         Task task1 = null;
@@ -112,7 +118,7 @@ public class HibernateDBUtils {
             t.setUser(user1);
         }
 
-        session.persist(user1);
+        dbLayer.add(user1);
 
 
         taskSet1.add(task4);
@@ -126,7 +132,7 @@ public class HibernateDBUtils {
             t.setUser(user2);
         }
 
-        session.persist(user2);
+        dbLayer.add(user2);
     }
 
     public List<User> pullUsers() {
