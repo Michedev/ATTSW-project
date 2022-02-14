@@ -9,6 +9,7 @@ public class Task {
 	private String description;
 	private Date deadline;
     private boolean done;
+	private User user;
 
 	public Task(){}
        
@@ -48,8 +49,10 @@ public class Task {
 	public void setDone(boolean done) {
 		this.done = done;
 	}
-    
-    
-    
-
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public User getUser() {
+		return user;
+	}
 }

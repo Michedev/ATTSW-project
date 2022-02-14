@@ -1,5 +1,6 @@
 package edu.mikedev.task_manager;
 
+import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.jbehave.core.annotations.Given;
 
 public class E2EStory {

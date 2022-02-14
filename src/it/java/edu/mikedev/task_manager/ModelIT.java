@@ -1,5 +1,6 @@
 package edu.mikedev.task_manager;
 
+import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -30,7 +31,7 @@ public class ModelIT {
 
         session = factory.openSession();
         this.hibernateDBUtils = new HibernateDBUtils(session);
-        hibernateDBUtils.initTestDB();
+        hibernateDBUtils.initRealTestDB();
 
         model = new HibernateModel(session);
     }
@@ -159,8 +160,14 @@ public class ModelIT {
     }
 
     @Test
-    public void testUnallowedTaskAccess(){
+    public void testGetTaskByID(){
+        Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(0));
         User user = model.loginUser("tizio", "caio");
 
+        Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(5));
+        Task task = model.getTaskById(0);
+
+        Assert.assertEquals("Eat food", task.getTitle());
+        Assert.assertEquals("Eat food for 15 days", task.getDescription());
     }
 }

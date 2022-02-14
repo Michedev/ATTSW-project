@@ -33,9 +33,6 @@ public class TestCRUDTask {
 
     @Before
     public void setUp(){
-        mockedSession = mock(Session.class);
-        when(mockedSession.beginTransaction()).thenReturn(mock(Transaction.class));
-        mockedQuery = mock(Query.class);
 
         model = new HibernateModel(mockedSession);
 

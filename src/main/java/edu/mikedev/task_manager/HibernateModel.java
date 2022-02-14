@@ -3,17 +3,23 @@ package edu.mikedev.task_manager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class HibernateModel implements Model{
 
     private Session hibernateSession;
-    private Transaction t;
+    private Transaction transaction;
     private User loggedUser;
 
     public HibernateModel(Session hibernateSession){
         this.hibernateSession = hibernateSession;
-        this.t = hibernateSession.beginTransaction();
+        this.transaction = hibernateSession.beginTransaction();
+    }
+
+    public Transaction getTransaction(){
+        return transaction;
     }
 
     @Override
@@ -42,24 +48,41 @@ public class HibernateModel implements Model{
 
     @Override
     public User registerUser(String username, String password, String email) {
-        int newId = getUserIds().stream().max(Integer::compareTo).get() + 1;
+        int newId = findNewId();
         User newUser = new User(username, password, email);
         newUser.setId(newId);
+        newUser.setTasks(new HashSet<>());
         addUser(newUser);
         return newUser;
     }
 
+    private int findNewId() {
+        List<Integer> userIds = getUserIds();
+        int endRange = userIds.stream().max(Integer::compareTo).get() + 1;
+        for(int i: IntStream.range(0, endRange).toArray()){
+            if(!userIds.contains(i)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
     public void addUser(User user) {
-        if(isUserUnique(user.getId(), user.getUsername())){
+        if(userExists(user.getId(), user.getUsername())){
             throw new IllegalArgumentException("User id " + user.getId() + " already exists");
         }
         hibernateSession.persist(user);
+
     }
 
-    private boolean isUserUnique(int id, String username) {
+    private boolean userExists(int id, String username) {
         return getUserIds().contains(id) ||
-                hibernateSession.createQuery("SELECT username from User", String.class).getResultList().contains(username);
+                getUsernames().contains(username);
+    }
+
+    private List<String> getUsernames() {
+        return hibernateSession.createQuery("SELECT username from User", String.class).getResultList();
     }
 
     private List<Integer> getUserIds() {
@@ -97,7 +120,7 @@ public class HibernateModel implements Model{
         }
         hibernateSession.evict(task);
         hibernateSession.update(task);
-        t.commit();
+        transaction.commit();
     }
 
     @Override
@@ -110,7 +133,7 @@ public class HibernateModel implements Model{
         }
 
         hibernateSession.persist(newTask);
-        t.commit();
+        transaction.commit();
     }
 
     @Override
@@ -122,7 +145,7 @@ public class HibernateModel implements Model{
             throw new IllegalAccessError("You can access only to user tasks");
         }
         hibernateSession.remove(task);
-        t.commit();
+        transaction.commit();
     }
 
     @Override

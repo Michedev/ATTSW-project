@@ -1,13 +1,17 @@
 package edu.mikedev.task_manager;
 
-import net.bytebuddy.matcher.StringMatcher;
+import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -15,63 +19,33 @@ import static org.mockito.Mockito.*;
 
 public class TestCRUDUser {
 
-    Session mockedSession;
-    Model model;
+    Session session;
+    HibernateModel model;
+    Transaction t;
 
 
     @Before
-    public void setUp(){
-        mockedSession = mock(Session.class);
+    public void setUp() throws SQLException {
+        HibernateDBUtils hibernateDBUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSessionInMemory());
+        session = hibernateDBUtils.getSession();
+        model = new HibernateModel(session);
+        hibernateDBUtils.initInMemoryTestDB();
+        hibernateDBUtils.addFakeUsers();
+        t = model.getTransaction();
+    }
 
-        model = new HibernateModel(mockedSession);
-
-        Query mockedQueryUserId = mock(Query.class);
-        List<Integer> userIds = Arrays.asList(0, 1, 2, 3);
-        Query mockedQueryUsernames = mock(Query.class);
-        List<String> usernames = Arrays.asList("a", "tizio", "caio");
-
-        when(mockedQueryUsernames.getResultList()).thenReturn(usernames);
-        when(mockedQueryUserId.getResultList()).thenReturn(userIds);
-
-        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT id from User"), any())).thenReturn(mockedQueryUserId);
-        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT username from User"), any())).thenReturn(mockedQueryUsernames);
-
-        Set<Task> taskSet = new HashSet<Task>();
-        Task task1 = new Task("title1", "description1", null, false);
-        task1.setId(5);
-        Task task2 = new Task("title2", "description2", null, false);
-        task2.setId(9);
-        Task task3 = new Task("title3", "description3", null, false);
-        task3.setId(12);
-
-        taskSet.add(task1);
-        taskSet.add(task2);
-        taskSet.add(task3);
-
-        User user = new User("username1", "password1", "email@email.com");
-        user.setTasks(taskSet);
-        List<User> queryResult = Arrays.asList(user);
-
-        Query mockedQuery = mock(Query.class);
-        when(mockedQuery.getResultList()).thenReturn(queryResult);
+    @After
+    public void commitTransaction(){
+        model.getTransaction().commit();
     }
 
     @Test
-    public void testGetUser(){
-        User expected = new User("username", "password", "email@email.it");
-        List<User> expctedQueryList = Arrays.asList(expected);
-        Query mockedQuery = mock(Query.class);
-        when(mockedQuery.getResultList()).thenReturn(expctedQueryList);
+    public void testLoginUser(){
+        User actual = model.loginUser("username1", "password1");
 
-        Query emptyQuery = mock(Query.class);
-        when(emptyQuery.getResultList()).thenReturn(new ArrayList());
-
-        when(mockedSession.createQuery(ArgumentMatchers.matches(String.format("SELECT a from User a where a.username = '%s' and a.password = '%s'", expected.getUsername(), expected.getPassword())), any())).thenReturn(mockedQuery);
-        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a from User a where a.username = 'aaa' and a.password = 'bbb'"), any())).thenReturn(emptyQuery);
-
-        User actual = model.loginUser("username", "password");
-
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals("username1", actual.getUsername());
+        Assert.assertEquals("password1", actual.getPassword());
+        Assert.assertEquals("email@email.com", actual.getEmail());
 
         Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("aaa", "bbb"));
     }
@@ -79,42 +53,32 @@ public class TestCRUDUser {
     @Test
     public void testAddUser(){
         User newUser = new User("9t499t04", "b", "c");
-        newUser.setId(50);
+        newUser.setId(43);
+        newUser.setTasks(new HashSet<>());
         model.addUser(newUser);
 
-        newUser.setId(1);
+        User newUser2 = new User("fefemkfe", "bfe49e894", "cfeji");
+        newUser2.setId(1);
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> model.addUser(newUser));
-
-        verify(mockedSession, times(1)).persist(any(User.class));
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.addUser(newUser2));
     }
 
     @Test
     public void testRegistrationUser(){
         User newUser = model.registerUser("tt4tu84", "b", "c");
-        Assert.assertEquals(4, newUser.getId());
+        Assert.assertEquals(0, newUser.getId());
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> model.registerUser("a", "b", "c"));
+        User newUser1 = model.registerUser("t489u89t48t", "re345r435t3", "c@email.com");
+        Assert.assertEquals(2, newUser1.getId());
 
-        verify(mockedSession, times(1)).persist(newUser);
-
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.registerUser("t489u89t48t", "b", "c"));
     }
 
     @Test
     public void testUserExists(){
-        User expected = new User("username", "password", "email@email.it");
-        List<User> expctedQueryList = Arrays.asList(expected);
-        Query mockedQuery = mock(Query.class);
-        when(mockedQuery.getResultList()).thenReturn(expctedQueryList);
-
-        Query emptyQuery = mock(Query.class);
-        when(emptyQuery.getResultList()).thenReturn(new ArrayList());
-
-        when(mockedSession.createQuery(ArgumentMatchers.matches(String.format("SELECT a from User a where a.username = '%s'", expected.getUsername(), expected.getPassword())), any())).thenReturn(mockedQuery);
-        when(mockedSession.createQuery(ArgumentMatchers.matches("SELECT a from User a where a.username = 'fakeuser'"), any())).thenReturn(emptyQuery);
-
         Assert.assertTrue(model.userExists("username"));
         Assert.assertFalse(model.userExists("fakeuser"));
+        Assert.assertTrue(model.userExists("username1"));
     }
 
 }
