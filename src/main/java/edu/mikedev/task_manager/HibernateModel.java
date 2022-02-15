@@ -87,7 +87,7 @@ public class HibernateModel implements Model{
 
     @Override
     public void updateTask(Task task) {
-        if(loggedUser == null){
+        if(!isUserLogged()){
             throw new IllegalAccessError("You should login by calling this method");
         }
         if(!existsTaskIdLoggedUser(task.getId())){
@@ -98,7 +98,7 @@ public class HibernateModel implements Model{
 
     @Override
     public void addNewTask(Task newTask) {
-        if(loggedUser == null){
+        if(!isUserLogged()){
             throw new IllegalAccessError("You should login by calling this method");
         }
         if(dbLayer.getTasksId().contains(newTask.getId())){
@@ -110,7 +110,7 @@ public class HibernateModel implements Model{
 
     @Override
     public void deleteTask(Task task) {
-        if(loggedUser == null){
+        if(!isUserLogged()){
             throw new IllegalAccessError("You should login by calling this method");
         }
         if(!existsTaskIdLoggedUser(task.getId())){
@@ -126,7 +126,7 @@ public class HibernateModel implements Model{
 
     @Override
     public Task getTaskById(int id) {
-        if(loggedUser == null){
+        if(!isUserLogged()){
             throw new IllegalAccessError("You should call loginUser() before calling this method");
         }
         if(!existsTaskIdLoggedUser(id)){
@@ -137,16 +137,24 @@ public class HibernateModel implements Model{
 
     @Override
     public List<Task> getTasks() {
+        if(!isUserLogged()){
+            throw new IllegalAccessError("You should call loginUser() before calling this method");
+        }
         return dbLayer.getTasks(loggedUser.getId());
     }
 
 
     @Override
     public void logout() {
-        if(loggedUser == null){
+        if(!isUserLogged()){
             throw new IllegalAccessError("You can't logout without login before");
         }
         loggedUser = null;
+    }
+
+    @Override
+    public boolean isUserLogged() {
+        return loggedUser != null;
     }
 
     public DBLayer getDBLayer() {

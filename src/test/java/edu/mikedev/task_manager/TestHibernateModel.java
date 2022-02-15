@@ -10,8 +10,10 @@ import org.junit.Test;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TestHibernateModel {
 
@@ -155,6 +157,16 @@ public class TestHibernateModel {
 
     @Test
     public void testGetTasks() {
+        Assert.assertThrows(IllegalAccessError.class, () -> model.getTasks());
+
+        User user = users.get(0);
+        List<Task> expectedTasks = user.getTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());
+
+        model.loginUser(user.getUsername(), user.getPassword());
+
+        List<Task> actualTasks = model.getTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());;
+
+        Assert.assertArrayEquals(expectedTasks.toArray(), actualTasks.toArray());
     }
 
     @Test

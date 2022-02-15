@@ -24,4 +24,6 @@ public interface Model {
     List<Task> getTasks();
 
     void logout();
+
+    boolean isUserLogged();
 }
