@@ -31,7 +31,6 @@ public class TestHibernateModel {
 
     @After
     public void closeSession(){
-        session.flush();
         session.close();
     }
 
@@ -124,11 +123,35 @@ public class TestHibernateModel {
 
     @Test
     public void testDeleteTask() {
+        User user = users.get(0);
+        Task taskToDelete = user.getTasks().iterator().next();
+
+        User wrongUser = users.get(1);
+        Task wrongTaskToDelete = wrongUser.getTasks().iterator().next();
+
+        Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(taskToDelete));
+
+        model.loginUser(user.getUsername(), user.getPassword());
+
+        model.deleteTask(taskToDelete);
+
+        List<Task> userTasksAfterDelete = model.getTasks();
+        Assert.assertFalse(userTasksAfterDelete.stream().anyMatch((x) -> x.getId() == taskToDelete.getId()));
+        Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(wrongTaskToDelete));
     }
 
     @Test
     public void testGetTaskById() {
+        Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(0));
+        User user = users.get(1);
+
+        model.loginUser(user.getUsername(), user.getPassword());
+
+        Task task = model.getTaskById(0);
+        Assert.assertEquals("title4", task.getTitle());
+        Assert.assertEquals("description4", task.getDescription());
     }
+
 
     @Test
     public void testGetTasks() {

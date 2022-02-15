@@ -9,14 +9,14 @@ public class HibernateDBLayer implements DBLayer {
 
     private Session hibernateSession;
     private Transaction transaction;
-    private User loggedUser;
 
     public HibernateDBLayer(Session hibernateSession){
         this.hibernateSession = hibernateSession;
         this.transaction = hibernateSession.beginTransaction();
     }
 
-    private void closeTransaction(){
+    private void commitTransaction(){
+        transaction.commit();
     }
 
     @Override
@@ -27,7 +27,6 @@ public class HibernateDBLayer implements DBLayer {
     @Override
     public Task getTaskByID(int id){
         List<Task> resultList = hibernateSession.createQuery(String.format("SELECT a from Task a where a.id = %d", id), Task.class).getResultList();
-        closeTransaction();
         if(resultList.size() == 0){
             return null;
         }
@@ -37,39 +36,37 @@ public class HibernateDBLayer implements DBLayer {
     @Override
     public void add(Task task){
         hibernateSession.persist(task);
-        closeTransaction();
+        commitTransaction();
     }
 
     @Override
     public void add(User user){
         hibernateSession.persist(user);
-        closeTransaction();
     }
 
     @Override
     public List<Task> getTasks() {
         List<Task> tasks = hibernateSession.createQuery("SELECT a FROM Task a", Task.class).getResultList();
-        closeTransaction();
         return tasks;
     }
 
     @Override
     public List<Task> getTasks(int userId){
         List<Task> result = hibernateSession.createQuery(String.format("SELECT a FROM Task a where id_user = %d", userId), Task.class).getResultList();
-        closeTransaction();
         return result;
     }
 
     @Override
     public void delete(User user){
-        hibernateSession.remove(user);
-        closeTransaction();
+        hibernateSession.delete(user);
+        commitTransaction();
     }
 
     @Override
-    public void delete(Task task){
-        hibernateSession.remove(task);
-        closeTransaction();
+    public void deleteTask(User taskOwner, Task task){
+        taskOwner.getTasks().remove(task);
+        hibernateSession.delete(task);
+        commitTransaction();
     }
 
     @Override
@@ -97,13 +94,12 @@ public class HibernateDBLayer implements DBLayer {
     public void update(Task task) {
         hibernateSession.evict(task);
         hibernateSession.update(task);
-        closeTransaction();
+        commitTransaction();
     }
 
     @Override
     public Task getTaskByIdWithUserId(int id, int id_user) {
         List<Task> resultList = hibernateSession.createQuery(String.format("SELECT a from Task a where id_user = %d and id = %d", id_user, id), Task.class).getResultList();
-        closeTransaction();
         if (resultList.size() == 0) {
             return null;
         }
@@ -114,7 +110,6 @@ public class HibernateDBLayer implements DBLayer {
     @Override
     public List<Integer> getTasksId() {
         List<Integer> result = hibernateSession.createQuery("SELECT id from Task", Integer.class).getResultList();
-        closeTransaction();
         return result;
     }
 

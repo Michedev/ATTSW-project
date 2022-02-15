@@ -1,7 +1,6 @@
 package edu.mikedev.task_manager;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.util.HashSet;
 import java.util.List;
@@ -117,7 +116,7 @@ public class HibernateModel implements Model{
         if(!existsTaskIdLoggedUser(task.getId())){
             throw new IllegalAccessError("You can access only to user tasks");
         }
-        dbLayer.delete(task);
+        dbLayer.deleteTask(loggedUser, task);
     }
 
 

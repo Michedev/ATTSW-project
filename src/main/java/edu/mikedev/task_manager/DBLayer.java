@@ -17,7 +17,7 @@ public interface DBLayer {
 
     void delete(User user);
 
-    void delete(Task task);
+    void deleteTask(User taskOwner, Task task);
 
     List<String> getUsernames();
 
