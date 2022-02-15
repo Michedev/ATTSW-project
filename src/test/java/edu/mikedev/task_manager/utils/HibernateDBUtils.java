@@ -78,7 +78,7 @@ public class HibernateDBUtils {
         addFakeUsers(new HibernateDBLayer(session));
     }
 
-    public void addFakeUsers(DBLayer dbLayer){
+    public List<User> addFakeUsers(DBLayer dbLayer){
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Set<Task> taskSet = new HashSet<Task>();
         Task task1 = null;
@@ -133,6 +133,7 @@ public class HibernateDBUtils {
         }
 
         dbLayer.add(user2);
+        return Arrays.asList(user1, user2);
     }
 
     public List<User> pullUsers() {
