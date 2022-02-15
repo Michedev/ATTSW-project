@@ -171,5 +171,13 @@ public class TestHibernateModel {
 
     @Test
     public void testLogout() {
+        Assert.assertThrows(IllegalAccessError.class, () -> model.logout());
+
+        User user = users.get(0);
+        model.loginUser(user.getUsername(), user.getPassword());
+        Assert.assertTrue(model.isUserLogged());
+        model.logout();
+        Assert.assertFalse(model.isUserLogged());
+        Assert.assertThrows(IllegalAccessError.class, () -> model.logout());
     }
 }
