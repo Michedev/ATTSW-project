@@ -6,12 +6,13 @@ import org.hibernate.Session;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 
 public class HibernateModel implements Model{
 
-    private final String msgErrorUserNotLogged = "You should login before calling this method";
+    private final static String msgErrorUserNotLogged = "You should login before calling this method";
     private User loggedUser;
     private DBLayer dbLayer;
 
@@ -22,25 +23,13 @@ public class HibernateModel implements Model{
     @Override
     public boolean areCredentialCorrect(String username, String password) {
         List<User> users = dbLayer.getUsers(username, password);
-        if (users.isEmpty()){
-            return false;
-        }
-        if (users.size() > 1){
-            throw new ArrayLongerThanOneException(String.format("Users with username %s and password %s are %d", username, password, users.size()));
-        }
-        return true;
+        return !users.isEmpty();
     }
 
     @Override
     public boolean userExists(String username) {
         List<User> users = dbLayer.getUsers(username);
-        if(users.isEmpty()){
-            return false;
-        }
-        if (users.size() > 1){
-            throw new ArrayLongerThanOneException(String.format("Users with username %s are %d", username, users.size()));
-        }
-        return true;
+        return !users.isEmpty();
     }
 
     @Override
@@ -67,7 +56,9 @@ public class HibernateModel implements Model{
     }
 
     private int findNewId(List<Integer> existingIds) {
-        int endRange = existingIds.stream().max(Integer::compareTo).get() + 2;
+        Optional<Integer> optionalMax = existingIds.stream().max(Integer::compareTo);
+
+        int endRange = optionalMax.map(integer -> integer + 2).orElseGet(() -> 0);
         for(int i: IntStream.range(0, endRange).toArray()){
             if(!existingIds.contains(i)){
                 return i;
