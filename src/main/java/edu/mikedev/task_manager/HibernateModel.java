@@ -41,7 +41,7 @@ public class HibernateModel implements Model{
 
     @Override
     public User registerUser(String username, String password, String email) {
-        int newId = findNewId();
+        int newId = findNewUserId();
         User newUser = new User(username, password, email);
         newUser.setId(newId);
         newUser.setTasks(new HashSet<>());
@@ -52,11 +52,20 @@ public class HibernateModel implements Model{
         return newUser;
     }
 
-    private int findNewId() {
+    private int findNewUserId() {
         List<Integer> userIds = dbLayer.getUserIds();
-        int endRange = userIds.stream().max(Integer::compareTo).get() + 2;
+        return findNewId(userIds);
+    }
+
+    private int findNewTaskId(){
+        List<Integer> taskIds = dbLayer.getTasksId();
+        return findNewId(taskIds);
+    }
+
+    private int findNewId(List<Integer> existingIds) {
+        int endRange = existingIds.stream().max(Integer::compareTo).get() + 2;
         for(int i: IntStream.range(0, endRange).toArray()){
-            if(!userIds.contains(i)){
+            if(!existingIds.contains(i)){
                 return i;
             }
         }
@@ -104,6 +113,7 @@ public class HibernateModel implements Model{
         if(dbLayer.getTasksId().contains(newTask.getId())){
             throw new IllegalArgumentException("Task id must not exists already in DB");
         }
+        newTask.setId(findNewTaskId());
         newTask.setUser(loggedUser);
         dbLayer.add(newTask);
     }
