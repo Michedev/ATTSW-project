@@ -38,6 +38,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         frame.button("btnRegister").click();
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testInitState(){
@@ -51,6 +52,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
 
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testEmptyFieldsRegistration(){
@@ -68,6 +70,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         lblErrorMessageEmail.requireText("Missing e-mail");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testWrongFormattedEmail(){
@@ -80,6 +83,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         lblErrorMessageEmail.requireText("The input prompted above is not an e-mail");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testExistingUser(){
@@ -92,6 +96,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         lblErrorMessageUsername.requireText("Username exists");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testCorrectRegistration(){

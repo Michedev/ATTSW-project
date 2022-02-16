@@ -1,4 +1,4 @@
-package edu.mikedev.task_manager.ui;
+package edu.mikedev.task_manager.utils;
 
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
@@ -11,7 +11,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestUtils {
+public class UIScenarios {
 
 
     public static Triple<Model, User, List<Task>> anyLoginUserTasksScenario(){

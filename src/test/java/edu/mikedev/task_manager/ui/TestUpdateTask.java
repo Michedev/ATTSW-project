@@ -3,6 +3,7 @@ package edu.mikedev.task_manager.ui;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -27,7 +28,7 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
 
     @Override
     protected void onSetUp() {
-        Triple<Model, User, List<Task>> scenario = TestUtils.anyLoginUserTasksScenario();
+        Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
         tasksListSorted = scenario.third;
         GuiActionRunner.execute(() ->{
             window = new LoginWindow(scenario.first);
@@ -41,6 +42,7 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
         frame.button("btnUpdate").click();
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testInitialState(){
@@ -54,6 +56,7 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
         frame.button("btnSave").requireText("Update");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testCorrectUpdateTask(){
@@ -68,6 +71,7 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
         frame.label("lblDateTask0").requireText("19/04/2022");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testWrongDateFormat(){
@@ -85,6 +89,7 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
         lblErrorMessageDeadline.requireText("Date parsing error. It should be in the format (dd/MM/yyyy)");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testMissingTaskName(){

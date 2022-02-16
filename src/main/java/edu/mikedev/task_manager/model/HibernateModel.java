@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 
 public class HibernateModel implements Model{
 
+    private final String msgErrorUserNotLogged = "You should login before calling this method";
     private User loggedUser;
     private DBLayer dbLayer;
 
@@ -25,7 +26,7 @@ public class HibernateModel implements Model{
             return false;
         }
         if (users.size() > 1){
-            throw new RuntimeException(String.format("Users with username %s and password %s are %d", username, password, users.size()));
+            throw new ArrayLongerThanOneException(String.format("Users with username %s and password %s are %d", username, password, users.size()));
         }
         return true;
     }
@@ -100,7 +101,7 @@ public class HibernateModel implements Model{
     @Override
     public void updateTask(Task task) {
         if(!isUserLogged()){
-            throw new IllegalAccessError("You should login by calling this method");
+            throw new IllegalAccessError(msgErrorUserNotLogged);
         }
         if(!existsTaskIdLoggedUser(task.getId())){
             throw new IllegalArgumentException("Task id must exists already in DB");
@@ -111,7 +112,7 @@ public class HibernateModel implements Model{
     @Override
     public void addNewTask(Task newTask) {
         if(!isUserLogged()){
-            throw new IllegalAccessError("You should login by calling this method");
+            throw new IllegalAccessError(msgErrorUserNotLogged);
         }
         if(dbLayer.getTasksId().contains(newTask.getId())){
             throw new IllegalArgumentException("Task id must not exists already in DB");
@@ -124,7 +125,7 @@ public class HibernateModel implements Model{
     @Override
     public void deleteTask(Task task) {
         if(!isUserLogged()){
-            throw new IllegalAccessError("You should login by calling this method");
+            throw new IllegalAccessError(msgErrorUserNotLogged);
         }
         if(!existsTaskIdLoggedUser(task.getId())){
             throw new IllegalAccessError("You can access only to user tasks");

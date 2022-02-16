@@ -46,7 +46,8 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 	}
 
 
-	@Test
+    @SuppressWarnings("java:S2699")
+    @Test
 	@GUITest
 	public void testInitialState(){
 		frame.requireTitle("Login page");
@@ -55,7 +56,8 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.label(JLabelMatcher.withName("lblErrorMessage")).requireNotVisible();
 	}
 
-	@Test
+    @SuppressWarnings("java:S2699")
+    @Test
 	@GUITest
 	public void testClickLoginAndThenErrorMessage(){
 		frame.label(JLabelMatcher.withName("lblErrorMessage")).requireNotVisible();  //to find not visible elements they must be found through Matcher class
@@ -64,7 +66,8 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.label("lblErrorMessage").requireText("Username and/or password are wrong");
 	}
 
-	@Test
+    @SuppressWarnings("java:S2699")
+    @Test
 	@GUITest
 	public void testCorrectLogin() throws InterruptedException {
 		frame.textBox("tfUsername").click().enterText("myusername");
@@ -73,7 +76,8 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.requireTitle("myusername tasks");
 	}
 
-	@Test
+    @SuppressWarnings("java:S2699")
+    @Test
 	@GUITest
 	public void testWrongPromptedLogin(){
 		frame.textBox("tfUsername").click().enterText("wrongusername");
@@ -86,7 +90,8 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.label("lblErrorMessage").requireEnabled();
 	}
 
-	@Test
+    @SuppressWarnings("java:S2699")
+    @Test
 	@GUITest
 	public void goToRegisterPage(){
 		frame.button("btnRegister").click();
