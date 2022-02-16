@@ -28,11 +28,7 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public Task getTaskById(int id){
-        List<Task> resultList = hibernateSession.createQuery(String.format("SELECT a from Task a where a.id = %d", id), Task.class).getResultList();
-        if(resultList.isEmpty()){
-            return null;
-        }
-        return resultList.get(0);
+        return hibernateSession.createQuery(String.format("SELECT a from Task a where a.id = %d", id), Task.class).getResultList().get(0);
     }
     
     @Override

@@ -48,7 +48,7 @@ public class TestHibernateDBLayer {
     public void testGetTaskById() {
         Task task = hibernateDBLayer.getTaskById(0);
         Assert.assertEquals("title4", task.getTitle());
-        Assert.assertThrows(IndexOutOfBoundsException.class, () -> hibernateDBLayer.getUserById(100));
+        Assert.assertThrows(IndexOutOfBoundsException.class, () -> hibernateDBLayer.getTaskById(100));
 
     }
 

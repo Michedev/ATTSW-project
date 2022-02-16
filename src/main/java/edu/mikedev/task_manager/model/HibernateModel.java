@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class HibernateModel implements Model{
 
-    private final static String msgErrorUserNotLogged = "You should login before calling this method";
+    private static final String MSG_ERROR_USER_NOT_LOGGED = "You should login before calling this method";
     private User loggedUser;
     private DBLayer dbLayer;
 
@@ -38,7 +38,7 @@ public class HibernateModel implements Model{
         User newUser = new User(username, password, email);
         newUser.setId(newId);
         newUser.setTasks(new HashSet<>());
-        if(userExists(newUser.getId(), newUser.getUsername())){
+        if(userExists(newUser.getUsername())){
             throw new IllegalArgumentException("User id " + newUser.getId() + " already exists");
         }
         dbLayer.add(newUser);
@@ -67,13 +67,6 @@ public class HibernateModel implements Model{
         return -1;
     }
 
-
-    private boolean userExists(int id, String username) {
-        return dbLayer.getUserIds().contains(id) ||
-                dbLayer.getUsernames().contains(username);
-    }
-
-
     @Override
     public User loginUser(String username, String password) {
 
@@ -92,7 +85,7 @@ public class HibernateModel implements Model{
     @Override
     public void updateTask(Task task) {
         if(!isUserLogged()){
-            throw new IllegalAccessError(msgErrorUserNotLogged);
+            throw new IllegalAccessError(MSG_ERROR_USER_NOT_LOGGED);
         }
         if(!existsTaskIdLoggedUser(task.getId())){
             throw new IllegalArgumentException("Task id must exists already in DB");
@@ -103,7 +96,7 @@ public class HibernateModel implements Model{
     @Override
     public void addNewTask(Task newTask) {
         if(!isUserLogged()){
-            throw new IllegalAccessError(msgErrorUserNotLogged);
+            throw new IllegalAccessError(MSG_ERROR_USER_NOT_LOGGED);
         }
         if(dbLayer.getTasksId().contains(newTask.getId())){
             throw new IllegalArgumentException("Task id must not exists already in DB");
@@ -116,7 +109,7 @@ public class HibernateModel implements Model{
     @Override
     public void deleteTask(Task task) {
         if(!isUserLogged()){
-            throw new IllegalAccessError(msgErrorUserNotLogged);
+            throw new IllegalAccessError(MSG_ERROR_USER_NOT_LOGGED);
         }
         if(!existsTaskIdLoggedUser(task.getId())){
             throw new IllegalAccessError("You can access only to user tasks");
