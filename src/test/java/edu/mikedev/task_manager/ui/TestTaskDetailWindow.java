@@ -1,10 +1,9 @@
-package ui;
+package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.Model;
+import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.ui.AppColors;
-import edu.mikedev.task_manager.ui.LoginWindow;
+import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.exception.ComponentLookupException;
@@ -28,7 +27,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
 
     @Override
     protected void onSetUp(){
-        Triple<Model, User, List<Task>> scenario = TestUtils.anyLoginUserTasksScenario();
+        Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
         tasksListSorted = scenario.third;
         GuiActionRunner.execute(() ->{
             window = new LoginWindow(scenario.first);
@@ -41,6 +40,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         frame.panel("task4").click();
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testInitialState(){
@@ -56,12 +56,14 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
 
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testBackgroundColor(){
         frame.panel("mainPanel").background().requireEqualTo(AppColors.GREEN);
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testGoBackButton(){
@@ -74,6 +76,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         frame.button("btnNewTask").requireEnabled();
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testDeleteButton(){
@@ -84,6 +87,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         Assert.assertThrows(ComponentLookupException.class, () -> frame.label("lblTitleTask4"));
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testUpdateButton(){
@@ -102,6 +106,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
 
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void undoneTask(){

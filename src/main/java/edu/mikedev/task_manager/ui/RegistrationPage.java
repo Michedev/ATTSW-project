@@ -1,6 +1,6 @@
 package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.Model;
+import edu.mikedev.task_manager.model.Model;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

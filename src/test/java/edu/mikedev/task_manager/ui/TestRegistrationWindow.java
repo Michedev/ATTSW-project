@@ -1,7 +1,6 @@
-package ui;
+package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.Model;
-import edu.mikedev.task_manager.ui.LoginWindow;
+import edu.mikedev.task_manager.model.Model;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.DialogMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
@@ -39,6 +38,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         frame.button("btnRegister").click();
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testInitState(){
@@ -52,6 +52,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
 
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testEmptyFieldsRegistration(){
@@ -69,6 +70,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         lblErrorMessageEmail.requireText("Missing e-mail");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testWrongFormattedEmail(){
@@ -81,6 +83,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         lblErrorMessageEmail.requireText("The input prompted above is not an e-mail");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testExistingUser(){
@@ -93,6 +96,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         lblErrorMessageUsername.requireText("Username exists");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testCorrectRegistration(){

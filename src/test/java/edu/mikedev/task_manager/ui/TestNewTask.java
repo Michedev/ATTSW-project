@@ -1,9 +1,9 @@
-package ui;
+package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.Model;
+import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.ui.LoginWindow;
+import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -25,7 +25,7 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
 
     @Override
     protected void onSetUp() {
-        Triple<Model, User, List<Task>> scenario = TestUtils.anyLoginUserTasksScenario();
+        Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
         List<Task> tasksListSorted = scenario.third;
         GuiActionRunner.execute(() ->{
             window = new LoginWindow(scenario.first);
@@ -38,6 +38,7 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
         frame.button("btnNewTask").click();
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testInitialState(){
@@ -48,6 +49,7 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
         frame.button("btnSave").requireText("Save");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testAddNewTask(){
@@ -62,6 +64,7 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
         frame.label("lblTitleTask5").requireText("New task name");
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testParseNewTaskWithDateError(){
@@ -79,6 +82,7 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
 
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testMissingTaskName(){
@@ -96,6 +100,7 @@ public class TestNewTask extends AssertJSwingJUnitTestCase{
     }
 
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testAnythiningMissing(){

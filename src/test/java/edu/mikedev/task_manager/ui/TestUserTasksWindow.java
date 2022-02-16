@@ -1,10 +1,9 @@
-package ui;
+package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.Model;
+import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.ui.AppColors;
-import edu.mikedev.task_manager.ui.LoginWindow;
+import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.exception.ComponentLookupException;
@@ -35,7 +34,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
 
     @Override
     protected void onSetUp(){
-        Triple<Model, User, List<Task>> scenario = TestUtils.anyLoginUserTasksScenario();
+        Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
         Model model = scenario.first;
         tasksListSorted = scenario.third;
         GuiActionRunner.execute(() ->{
@@ -48,6 +47,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         frame.button("btnLogin").click();
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testInitialState(){
@@ -59,6 +59,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         frame.button("btnNewTask").requireEnabled();
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testCorrectOrderTasks(){
@@ -74,6 +75,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         }
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testCorrectColorCards(){
@@ -84,6 +86,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         }
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testCorrectFormattingLongDescritption(){
@@ -92,6 +95,7 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
         Assert.assertEquals(50 + 3, longDescription.replaceAll("<html><p style=\"width:75px\">", "").replaceAll("</p></html>", "").length());
     }
 
+    @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testNewTaskTransition(){

@@ -3,7 +3,7 @@ package edu.mikedev.task_manager.ui;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import edu.mikedev.task_manager.Model;
+import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.User;
 
 import java.awt.*;
@@ -123,7 +123,7 @@ public class LoginWindow extends JFrame {
 		boolean isCorrect = model.areCredentialCorrect(username, password);
 		if(isCorrect){
 			setTitle(username + " tasks");
-			User loggedUser = model.getUser(username, password);
+			User loggedUser = model.loginUser(username, password);
 			this.setContentPane(new UserTasksPage(model, loggedUser));
 			setMinimumSize(new Dimension(400, 300));
 			pack();

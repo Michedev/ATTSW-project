@@ -1,9 +1,8 @@
-package ui;
+package edu.mikedev.task_manager.utils;
 
-import edu.mikedev.task_manager.Model;
+import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import org.assertj.swing.util.Pair;
 import org.assertj.swing.util.Triple;
 
 import java.util.*;
@@ -12,7 +11,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestUtils {
+public class UIScenarios {
 
 
     public static Triple<Model, User, List<Task>> anyLoginUserTasksScenario(){
@@ -44,7 +43,7 @@ public class TestUtils {
         }
         tasksListSorted.get(4).setDescription(longDescription.toString());
         dummyuser.setTasks(tasksSet);
-        when(mockedModel.getUser(anyString(), anyString())).thenReturn(dummyuser);
+        when(mockedModel.loginUser(anyString(), anyString())).thenReturn(dummyuser);
 
         return Triple.of(mockedModel, dummyuser, tasksListSorted);
     }

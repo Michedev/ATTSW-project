@@ -1,7 +1,7 @@
-<hibernate-mapping>
+<hibernate-mapping package="edu.mikedev.task_manager">
     <!-- class name is the fully qualified name of the POJO class -->
     <!-- table is the name of the database table which represents the Student -->
-    <class name="edu.mikedev.hibernate_learning_test.Task" table="tasks">
+    <class name="Task" table="tasks">
         <!-- Attribute id is mapped to the column student_id -->
         <id name="id" type="integer">
             <column name="id" />
@@ -23,6 +23,9 @@
         <property name="done" type="boolean">
             <column name="done" />
         </property>
+
+        <many-to-one name="user" class="User"
+                     column="ID_USER" not-null="true"/>
 
     </class>
 </hibernate-mapping>
