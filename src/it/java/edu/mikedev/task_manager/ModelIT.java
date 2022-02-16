@@ -2,15 +2,11 @@ package edu.mikedev.task_manager;
 
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -18,22 +14,21 @@ import java.util.List;
 public class ModelIT {
 
     private HibernateDBUtils hibernateDBUtils;
-    private Session session;
     private Model model;
+    private Session session;
 
     @Before
     public void setUp() throws Exception {
-        Path testResourceDirectory = Paths.get("src", "main", "resources");
-        File hibernateConfigFile = new File(testResourceDirectory.resolve("hibernate.cfg.xml").toAbsolutePath().toString());
-
-        Configuration cfg = new Configuration();
-        SessionFactory factory = cfg.configure(hibernateConfigFile).buildSessionFactory();
-
-        session = factory.openSession();
-        this.hibernateDBUtils = new HibernateDBUtils(session);
+        this.hibernateDBUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSession());
         hibernateDBUtils.initRealTestDB();
 
+        session = hibernateDBUtils.getSession();
         model = new HibernateModel(session);
+    }
+
+    @After
+    public void closeSession(){
+        session.close();
     }
 
     @Test
@@ -85,7 +80,7 @@ public class ModelIT {
     }
 
     @Test
-    public void getTasks(){
+    public void testGetTasks(){
         List<Task> tasks = hibernateDBUtils.pullTasks();
         Assert.assertEquals(6, tasks.size());
         Assert.assertEquals("Eat food", tasks.get(0).getTitle());
@@ -160,7 +155,7 @@ public class ModelIT {
     }
 
     @Test
-    public void testGetTaskByID(){
+    public void testGetTaskById(){
         Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(0));
         User user = model.loginUser("tizio", "caio");
 

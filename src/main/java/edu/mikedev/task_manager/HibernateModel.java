@@ -54,7 +54,7 @@ public class HibernateModel implements Model{
 
     private int findNewId() {
         List<Integer> userIds = dbLayer.getUserIds();
-        int endRange = userIds.stream().max(Integer::compareTo).get() + 1;
+        int endRange = userIds.stream().max(Integer::compareTo).get() + 2;
         for(int i: IntStream.range(0, endRange).toArray()){
             if(!userIds.contains(i)){
                 return i;
