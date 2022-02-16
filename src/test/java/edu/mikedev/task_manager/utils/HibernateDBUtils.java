@@ -1,7 +1,7 @@
 package edu.mikedev.task_manager.utils;
 
-import edu.mikedev.task_manager.DBLayer;
-import edu.mikedev.task_manager.HibernateDBLayer;
+import edu.mikedev.task_manager.model.DBLayer;
+import edu.mikedev.task_manager.model.HibernateDBLayer;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import org.hibernate.Session;

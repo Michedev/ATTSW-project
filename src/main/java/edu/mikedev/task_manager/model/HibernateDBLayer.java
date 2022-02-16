@@ -1,5 +1,7 @@
-package edu.mikedev.task_manager;
+package edu.mikedev.task_manager.model;
 
+import edu.mikedev.task_manager.Task;
+import edu.mikedev.task_manager.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -20,14 +22,14 @@ public class HibernateDBLayer implements DBLayer {
     }
 
     @Override
-    public User getUserByID(int id){
+    public User getUserById(int id){
         return hibernateSession.createQuery(String.format("SELECT a from User a where a.id = %d", id), User.class).getResultList().get(0);
     }
 
     @Override
-    public Task getTaskByID(int id){
+    public Task getTaskById(int id){
         List<Task> resultList = hibernateSession.createQuery(String.format("SELECT a from Task a where a.id = %d", id), Task.class).getResultList();
-        if(resultList.size() == 0){
+        if(resultList.isEmpty()){
             return null;
         }
         return resultList.get(0);
@@ -46,14 +48,12 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public List<Task> getTasks() {
-        List<Task> tasks = hibernateSession.createQuery("SELECT a FROM Task a", Task.class).getResultList();
-        return tasks;
+        return hibernateSession.createQuery("SELECT a FROM Task a", Task.class).getResultList();
     }
 
     @Override
     public List<Task> getTasks(int userId){
-        List<Task> result = hibernateSession.createQuery(String.format("SELECT a FROM Task a where id_user = %d", userId), Task.class).getResultList();
-        return result;
+        return hibernateSession.createQuery(String.format("SELECT a FROM Task a where id_user = %d", userId), Task.class).getResultList();
     }
 
     @Override
@@ -91,6 +91,12 @@ public class HibernateDBLayer implements DBLayer {
     }
 
     @Override
+    public List<User> getUsers(){
+        return hibernateSession.createQuery("SELECT a from User a", User.class).getResultList();
+
+    }
+
+    @Override
     public void update(Task task) {
         hibernateSession.evict(task);
         hibernateSession.update(task);
@@ -98,9 +104,9 @@ public class HibernateDBLayer implements DBLayer {
     }
 
     @Override
-    public Task getTaskByIdWithUserId(int id, int id_user) {
-        List<Task> resultList = hibernateSession.createQuery(String.format("SELECT a from Task a where id_user = %d and id = %d", id_user, id), Task.class).getResultList();
-        if (resultList.size() == 0) {
+    public Task getTaskByIdWithUserId(int id, int userId) {
+        List<Task> resultList = hibernateSession.createQuery(String.format("SELECT a from Task a where id_user = %d and id = %d", userId, id), Task.class).getResultList();
+        if (resultList.isEmpty()) {
             return null;
         }
         return resultList.get(0);
@@ -109,8 +115,7 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public List<Integer> getTasksId() {
-        List<Integer> result = hibernateSession.createQuery("SELECT id from Task", Integer.class).getResultList();
-        return result;
+        return hibernateSession.createQuery("SELECT id from Task", Integer.class).getResultList();
     }
 
 }

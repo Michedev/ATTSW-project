@@ -1,6 +1,8 @@
-package edu.mikedev.task_manager;
+package edu.mikedev.task_manager.model;
 
-import javax.security.auth.login.LoginException;
+import edu.mikedev.task_manager.Task;
+import edu.mikedev.task_manager.User;
+
 import java.util.List;
 
 public interface Model {

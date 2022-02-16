@@ -1,10 +1,13 @@
-package edu.mikedev.task_manager;
+package edu.mikedev.task_manager.model;
 
+import edu.mikedev.task_manager.Task;
+import edu.mikedev.task_manager.User;
 import org.hibernate.Session;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.IntStream;
+
 
 public class HibernateModel implements Model{
 
@@ -34,7 +37,7 @@ public class HibernateModel implements Model{
             return false;
         }
         if (users.size() > 1){
-            throw new RuntimeException(String.format("Users with username %s are %d", username, users.size()));
+            throw new ArrayLongerThanOneException(String.format("Users with username %s are %d", username, users.size()));
         }
         return true;
     }

@@ -1,11 +1,14 @@
-package edu.mikedev.task_manager;
+package edu.mikedev.task_manager.model;
+
+import edu.mikedev.task_manager.Task;
+import edu.mikedev.task_manager.User;
 
 import java.util.List;
 
 public interface DBLayer {
-    User getUserByID(int id);
+    User getUserById(int id);
 
-    Task getTaskByID(int id);
+    Task getTaskById(int id);
 
     void add(Task task);
 
@@ -27,9 +30,11 @@ public interface DBLayer {
 
     List<User> getUsers(String username);
 
+    List<User> getUsers();
+
     void update(Task task);
 
-    Task getTaskByIdWithUserId(int id, int id_user);
+    Task getTaskByIdWithUserId(int id, int userId);
 
     List<Integer> getTasksId();
 }

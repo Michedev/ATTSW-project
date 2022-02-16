@@ -1,5 +1,7 @@
 package edu.mikedev.task_manager;
 
+import edu.mikedev.task_manager.model.HibernateModel;
+import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.hibernate.Session;
 import org.junit.After;
@@ -151,7 +153,9 @@ public class ModelIT {
         Assert.assertEquals(3, deletedTaskIndex.getId());
         Assert.assertEquals("Sample task title 2", deletedTaskIndex.getTitle());
 
-        Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(tasks.get(0)));
+        Task anotherUserTask = tasks.get(0);
+
+        Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(anotherUserTask));
     }
 
     @Test

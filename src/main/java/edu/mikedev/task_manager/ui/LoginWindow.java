@@ -3,7 +3,7 @@ package edu.mikedev.task_manager.ui;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import edu.mikedev.task_manager.Model;
+import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.User;
 
 import java.awt.*;
