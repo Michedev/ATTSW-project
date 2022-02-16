@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,13 @@ public class TestHibernateModel {
         Assert.assertEquals("email@email.com", actual.getEmail());
 
         Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("aaa", "bbb"));
+
+        User duplicateUser = new User("username1", "password1", "email1");
+        duplicateUser.setId(1000);
+        duplicateUser.setTasks(new HashSet<>());
+        session.persist(duplicateUser);
+
+        Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("username1", "password1"));
     }
 
 

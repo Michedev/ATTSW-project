@@ -10,8 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class TestHibernateDBLayer {
 
@@ -81,5 +84,16 @@ public class TestHibernateDBLayer {
         for(User user: usersDB){
             Assert.assertTrue(users.contains(user));
         }
+    }
+
+    @Test
+    public void testGetUsernames(){
+        List<String> expected = Stream.of("username", "username1").sorted().collect(Collectors.toList());
+        List<String> actual = hibernateDBLayer.getUsernames().stream().sorted().collect(Collectors.toList());
+        Assert.assertEquals(expected.size(), actual.size());
+        for (int i = 0; i < expected.size(); i++) {
+            Assert.assertEquals(expected.get(i), actual.get(i));
+        }
+
     }
 }
