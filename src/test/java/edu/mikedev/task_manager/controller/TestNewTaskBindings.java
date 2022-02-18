@@ -18,10 +18,15 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 @RunWith(GUITestRunner.class)
 public class TestNewTaskBindings extends AssertJSwingJUnitTestCase{
 
     private transient LoginWindow window;
+    Model model;
     private transient FrameFixture frame;
     TaskManagerController controller;
 
@@ -29,6 +34,7 @@ public class TestNewTaskBindings extends AssertJSwingJUnitTestCase{
     @Override
     protected void onSetUp() {
         Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
+        model = scenario.first;
         GuiActionRunner.execute(() ->{
             window = new LoginWindow();
             return window;
@@ -52,8 +58,8 @@ public class TestNewTaskBindings extends AssertJSwingJUnitTestCase{
         frame.button("btnSave").click();
 
         frame.requireTitle("username1 tasks");
-        frame.panel("task5").requireEnabled();
-        frame.label("lblTitleTask5").requireText("New task name");
+
+        verify(model, times(1)).addNewTask(any());
     }
 
     @SuppressWarnings("java:S2699")
