@@ -28,7 +28,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
     @Override
     protected void onSetUp(){
         Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
-        task = scenario.third.get(0);
+        task = scenario.third.get(4);
         GuiActionRunner.execute(() ->{
             window = new JFrame();
             window.setContentPane(new TaskDetailPage(task));
@@ -61,27 +61,4 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
         frame.panel("mainPanel").background().requireEqualTo(AppColors.GREEN);
     }
 
-    @SuppressWarnings("java:S2699")
-    @Test
-    @GUITest
-    public void testGoBackButton(){
-        frame.button("btnGoBack").click();
-
-        frame.requireTitle("username1 tasks");
-        for (int i = 0; i < 5; i++) {
-            frame.panel("task" + i).requireEnabled();
-        }
-        frame.button("btnNewTask").requireEnabled();
-    }
-
-    @SuppressWarnings("java:S2699")
-    @Test
-    @GUITest
-    public void testDeleteButton(){
-        frame.button("btnDelete").click();
-
-        frame.requireTitle("username1 tasks");
-        Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task4"));
-        Assert.assertThrows(ComponentLookupException.class, () -> frame.label("lblTitleTask4"));
-    }
 }

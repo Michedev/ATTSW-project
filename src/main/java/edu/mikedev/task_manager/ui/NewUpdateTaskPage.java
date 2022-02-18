@@ -137,6 +137,7 @@ public class NewUpdateTaskPage extends JPanel {
 
 	public NewUpdateTaskPage(Task task){
 		// Update task branch
+		this();
 		toBeUpdatedTask = task;
 		btnSave.setText("Update");
 		tfTaskName.setText(task.getTitle());

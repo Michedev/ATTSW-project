@@ -44,6 +44,7 @@ public class UIScenarios {
         }
         tasksListSorted.get(4).setDescription(longDescription.toString());
         dummyuser.setTasks(tasksSet);
+        when(mockedModel.getTasks()).thenReturn(tasksListSorted);
         when(mockedModel.loginUser(anyString(), anyString())).thenReturn(dummyuser);
         return Triple.of(mockedModel, dummyuser, tasksListSorted);
     }

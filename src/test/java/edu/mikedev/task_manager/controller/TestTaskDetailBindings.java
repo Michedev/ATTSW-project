@@ -19,6 +19,9 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 @RunWith(GUITestRunner.class)
 public class TestTaskDetailBindings extends AssertJSwingJUnitTestCase {
 
@@ -26,12 +29,14 @@ public class TestTaskDetailBindings extends AssertJSwingJUnitTestCase {
     FrameFixture frame;
     List<Task> tasksListSorted;
     TaskManagerController controller;
+    Model model;
 
 
     @Override
     protected void onSetUp(){
         Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
         tasksListSorted = scenario.third;
+        model = scenario.first;
         GuiActionRunner.execute(() ->{
             window = new LoginWindow();
             return window;
@@ -64,8 +69,8 @@ public class TestTaskDetailBindings extends AssertJSwingJUnitTestCase {
         frame.button("btnDelete").click();
 
         frame.requireTitle("username1 tasks");
-        Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task4"));
-        Assert.assertThrows(ComponentLookupException.class, () -> frame.label("lblTitleTask4"));
+
+        verify(model, times(1)).deleteTask(tasksListSorted.get(4));
     }
 
     @SuppressWarnings("java:S2699")
@@ -83,7 +88,7 @@ public class TestTaskDetailBindings extends AssertJSwingJUnitTestCase {
         frame.textBox("tfTaskName").requireText("Task 5");
         String taskDescription = frame.textBox("tfTaskDescription").text();
         Assert.assertTrue(taskDescription.startsWith("Super Long description"));
-        frame.textBox("tfTaskDeadline").requireText("11/02/2014"); //todo: problem here
+        frame.textBox("tfTaskDeadline").requireText("11/02/2014");
 
     }
 

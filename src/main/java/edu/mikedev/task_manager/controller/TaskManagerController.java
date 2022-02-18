@@ -2,19 +2,12 @@ package edu.mikedev.task_manager.controller;
 
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.model.HibernateModel;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.ui.*;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,10 +36,19 @@ public class TaskManagerController {
         loginWindow.getBtnRegister().addActionListener(this::registrationClickBtn);
     }
 
-    public void setGuiBindingsTaskDetailPage(Task task){
+    public void setGuiBindingsTaskDetailPage(final Task task){
+        taskDetailPage.getBtnUpdate().addActionListener(e -> goToUpdateTaskPage(e, task));
         taskDetailPage.getBtnGoBack().addActionListener(this::goBackAction);
         taskDetailPage.getBtnDelete().addActionListener(this::deleteTask);
         taskDetailPage.getCbDone().addActionListener(this::toggleDone);
+    }
+
+    private void goToUpdateTaskPage(ActionEvent e, Task task) {
+        newUpdateTaskPage = new NewUpdateTaskPage(task);
+        window.setContentPane(newUpdateTaskPage);
+        window.setTitle(String.format("Update task \"%s\"", task.getTitle()));
+        taskDetailPage = null;
+        window.pack();
     }
 
     public void setGuiBindingsNewUpdateTask(){
@@ -67,9 +69,13 @@ public class TaskManagerController {
             taskPanel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    userTasksPage = null;
                     taskDetailPage = new TaskDetailPage(task);
                     setGuiBindingsTaskDetailPage(task);
                     currentPanel = taskDetailPage;
+                    window.setTitle(String.format("Update task \"%s\"", task.getTitle()));
+                    window.setContentPane(taskDetailPage);
+                    window.pack();
 
                 }
             });

@@ -38,7 +38,6 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
         frame = new FrameFixture(robot(), window);
         frame.show();
 
-        frame.button("btnRegister").click();
     }
 
     @SuppressWarnings("java:S2699")
