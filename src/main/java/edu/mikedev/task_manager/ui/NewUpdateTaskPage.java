@@ -1,28 +1,22 @@
 package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.Color;
-import java.util.Set;
 
 public class NewUpdateTaskPage extends JPanel {
-	private final transient Model model;
 	private JTextField tfTaskName;
 	private JTextField tfTaskDescription;
 	private JTextField tfTaskDeadline;
 	private JLabel lblErrorMessageDeadline;
-	private transient User user;
 
 	private transient Task toBeUpdatedTask = null;
 	private JButton btnSave;
@@ -31,9 +25,7 @@ public class NewUpdateTaskPage extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public NewUpdateTaskPage(Model model, User user) {
-		this.model = model;
-		this.user = user;
+	public NewUpdateTaskPage() {
 		setName("mainPanel");
 		int borderSize = 20;
 		setBorder(new EmptyBorder(borderSize, borderSize, borderSize, borderSize));
@@ -133,7 +125,6 @@ public class NewUpdateTaskPage extends JPanel {
 
 		btnSave = new JButton("Save");
 		btnSave.setName("btnSave");
-		btnSave.addActionListener(this::saveTask);
 		GridBagConstraints btnSaveConstraints = new GridBagConstraints();
 		btnSaveConstraints.gridx = 0;
 		btnSaveConstraints.gridy = 13;
@@ -144,28 +135,8 @@ public class NewUpdateTaskPage extends JPanel {
 		return toBeUpdatedTask != null;
 	}
 
-	private void saveTask(ActionEvent e) {
-		Task task = parseTask();
-		if(task != null){
-			if(isUpdateMode()){
-				toBeUpdatedTask.setTitle(task.getTitle());
-				toBeUpdatedTask.setDescription(task.getDescription());
-				toBeUpdatedTask.setDeadline(task.getDeadline());
-			} else {
-				Set<Task> userTasks = user.getTasks();
-				task.setId(userTasks.size());
-				userTasks.add(task);
-			}
-			JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
-			windowAncestor.setTitle(user.getUsername() + " tasks");
-			windowAncestor.setContentPane(new UserTasksPage(model, user));
-			windowAncestor.pack();
-		}
-	}
-
-	public NewUpdateTaskPage(Model model, User user, Task task){
+	public NewUpdateTaskPage(Task task){
 		// Update task branch
-		this(model, user);
 		toBeUpdatedTask = task;
 		btnSave.setText("Update");
 		tfTaskName.setText(task.getTitle());
@@ -199,5 +170,13 @@ public class NewUpdateTaskPage extends JPanel {
 		lblErrorMessageDeadline.setVisible(false);
 		return new Task(taskTitle, taskDescription, taskDeadline, false);
 
+	}
+
+	public Task getToBeUpdatedTask() {
+		return toBeUpdatedTask;
+	}
+
+	public JButton getBtnSave() {
+		return btnSave;
 	}
 }

@@ -28,4 +28,8 @@ public interface Model {
     void logout();
 
     boolean isUserLogged();
+
+    User getLoggedUser();
+
+    User registerUser(User newUser);
 }

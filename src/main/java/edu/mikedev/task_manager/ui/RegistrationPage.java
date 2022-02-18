@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import net.miginfocom.swing.MigLayout;
 
 public class RegistrationPage extends JPanel {
-    private final transient Model model;
+
     private JLabel lblErrorMessagePassword;
     private JLabel lblErrorMessageEmail;
     private JButton btnRegister;
@@ -18,8 +18,7 @@ public class RegistrationPage extends JPanel {
     private JPasswordField tfPassword;
     private JTextField tfEmail;
 
-    public RegistrationPage(Model model) {
-        this.model = model;
+    public RegistrationPage() {
         setLayout(new MigLayout("", "[][][][][]", "[][][][][][][][][][][][][][][]"));
 
         JLabel lblUsername = new JLabel("Username");
@@ -68,7 +67,6 @@ public class RegistrationPage extends JPanel {
 
         btnRegister = new JButton("Register");
         btnRegister.setName("btnConfirmRegister");
-        btnRegister.addActionListener(this::registrationEvent);
         add(btnRegister, "cell 1 14");
 
         btnCancel = new JButton("Cancel");
@@ -77,44 +75,35 @@ public class RegistrationPage extends JPanel {
 
     }
 
-    private void registrationEvent(ActionEvent e){
-        if(areFormsCorrects()){
-            JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Username " + tfUsername.getText() + " successfully registered", "Registration completed", JOptionPane.INFORMATION_MESSAGE);
-        }
+    public JLabel getLblErrorMessagePassword() {
+        return lblErrorMessagePassword;
     }
 
-    private boolean areFormsCorrects() {
-        boolean correct = true;
-        if(tfUsername.getText().isEmpty()){
-            lblErrorMessageUsername.setVisible(true);
-            lblErrorMessageUsername.setText("Missing username");
-            correct = false;
-        } else {
-            if(model.userExists(tfUsername.getText())){
-                lblErrorMessageUsername.setVisible(true);
-                lblErrorMessageUsername.setText("Username exists");
-                correct = false;
-            }
-        }
-        char[] password = tfPassword.getPassword();
-        if(password.length == 0){
-            lblErrorMessagePassword.setVisible(true);
-            lblErrorMessagePassword.setText("Missing password");
-            correct = false;
-        }
-        if(tfEmail.getText().isEmpty()){
-            lblErrorMessageEmail.setVisible(true);
-            lblErrorMessageEmail.setText("Missing e-mail");
-            correct = false;
-        } else {
-            String regexEmail = "[\\w]+@[\\w]+\\.[\\w]{1,5}";
-            if(!tfEmail.getText().matches(regexEmail)){
-                lblErrorMessageEmail.setVisible(true);
-                lblErrorMessageEmail.setText("The input prompted above is not an e-mail");
-                correct = false;
-            }
-        }
-        return correct;
+    public JLabel getLblErrorMessageEmail() {
+        return lblErrorMessageEmail;
     }
 
+    public JButton getBtnRegister() {
+        return btnRegister;
+    }
+
+    public JButton getBtnCancel() {
+        return btnCancel;
+    }
+
+    public JLabel getLblErrorMessageUsername() {
+        return lblErrorMessageUsername;
+    }
+
+    public JTextField getTfUsername() {
+        return tfUsername;
+    }
+
+    public JPasswordField getTfPassword() {
+        return tfPassword;
+    }
+
+    public JTextField getTfEmail() {
+        return tfEmail;
+    }
 }

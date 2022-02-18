@@ -34,8 +34,13 @@ public class HibernateModel implements Model{
 
     @Override
     public User registerUser(String username, String password, String email) {
-        int newId = findNewUserId();
         User newUser = new User(username, password, email);
+        return registerUser(newUser);
+    }
+
+    @Override
+    public User registerUser(User newUser) {
+        int newId = findNewUserId();
         newUser.setId(newId);
         newUser.setTasks(new HashSet<>());
         if(userExists(newUser.getUsername())){
@@ -159,5 +164,8 @@ public class HibernateModel implements Model{
         return dbLayer;
     }
 
-
+    @Override
+    public User getLoggedUser() {
+        return loggedUser;
+    }
 }
