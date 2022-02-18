@@ -3,8 +3,8 @@ package edu.mikedev.task_manager.ui;
 import edu.mikedev.task_manager.Task;
 
 import java.awt.*;
-import java.util.Date;
 import java.time.Instant;
+import java.util.Date;
 
 public class AppColors {
     public static final Color RED = new Color(255, 107, 108);

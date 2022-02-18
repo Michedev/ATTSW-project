@@ -1,12 +1,9 @@
 package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
 
 public class TaskDetailPage extends JPanel {

@@ -2,7 +2,6 @@ package edu.mikedev.task_manager.ui;
 
 import edu.mikedev.task_manager.model.Model;
 import org.assertj.swing.annotation.GUITest;
-import org.assertj.swing.core.matcher.DialogMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;

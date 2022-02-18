@@ -1,11 +1,8 @@
 package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.model.Model;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-
-import net.miginfocom.swing.MigLayout;
 
 public class RegistrationPage extends JPanel {
 

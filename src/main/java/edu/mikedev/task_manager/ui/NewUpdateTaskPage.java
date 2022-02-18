@@ -4,13 +4,10 @@ import edu.mikedev.task_manager.Task;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.awt.Color;
 
 public class NewUpdateTaskPage extends JPanel {
 	private JTextField tfTaskName;

@@ -1,8 +1,8 @@
 package edu.mikedev.task_manager.utils;
 
-import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.model.Model;
 import org.assertj.swing.util.Triple;
 
 import java.util.*;

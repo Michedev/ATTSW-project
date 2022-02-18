@@ -1,8 +1,5 @@
 package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.model.Model;
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -12,15 +9,6 @@ import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static java.lang.Thread.sleep;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(GUITestRunner.class)
 public class TestLoginWindow extends AssertJSwingJUnitTestCase {
