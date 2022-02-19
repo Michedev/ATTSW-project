@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class LoginWindow extends JFrame {
+public class LoginPage extends JPanel {
 
 	private final JLabel lblErrorMessage;
 	private final JLabel lblPassword;
@@ -12,7 +12,6 @@ public class LoginWindow extends JFrame {
 	private final JButton btnLogin;
 	private final JButton btnRegister;
 	private final JLabel lblUsername;
-	private JPanel contentPane;
 	private JTextField tfUsername;
 	private JTextField tfPassword;
 
@@ -20,21 +19,10 @@ public class LoginWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LoginWindow() {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException|InstantiationException|IllegalAccessException|UnsupportedLookAndFeelException e) {
-			// Leave default theme
-		}
-
-		setTitle("Login page");
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-		setContentPane(contentPane);
+	public LoginPage() {
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		contentPane.setLayout(gridBagLayout);
+		setLayout(gridBagLayout);
 
 		GridBagConstraints c = new GridBagConstraints();
 		
@@ -44,7 +32,7 @@ public class LoginWindow extends JFrame {
 		c.insets = new Insets(10, 0, 5, 0);
 		lblUsername = new JLabel("Username");
 		lblUsername.setName("lblUsername");
-		contentPane.add(lblUsername, c);
+		add(lblUsername, c);
 
 		c = new GridBagConstraints();
 		c.gridwidth = 2;
@@ -55,7 +43,7 @@ public class LoginWindow extends JFrame {
 		tfUsername = new JTextField();
 		tfUsername.setName("tfUsername");
 		tfUsername.setText("");
-		contentPane.add(tfUsername, c);
+		add(tfUsername, c);
 		tfUsername.setColumns(10);
 
 		c = new GridBagConstraints();
@@ -65,7 +53,7 @@ public class LoginWindow extends JFrame {
 		c.insets = new Insets(10, 0, 5, 0);
 		lblPassword = new JLabel("Password");
 		lblPassword.setText("Password");
-		contentPane.add(lblPassword, c);
+		add(lblPassword, c);
 
 		c = new GridBagConstraints();
 		c.gridwidth = 2;
@@ -76,7 +64,7 @@ public class LoginWindow extends JFrame {
 		tfPassword = new JPasswordField();
 		tfPassword.setText("");
 		tfPassword.setName("tfPassword");
-		contentPane.add(tfPassword, c);
+		add(tfPassword, c);
 		tfPassword.setColumns(10);
 
 		c = new GridBagConstraints();
@@ -89,7 +77,7 @@ public class LoginWindow extends JFrame {
 		lblErrorMessage.setForeground(AppColors.RED);
 		lblErrorMessage.setEnabled(false);
 		lblErrorMessage.setVisible(false);
-		contentPane.add(lblErrorMessage, c);
+		add(lblErrorMessage, c);
 
 		c = new GridBagConstraints();
 		c.gridwidth = 1;
@@ -98,7 +86,7 @@ public class LoginWindow extends JFrame {
 		c.gridy = 6;
 		btnLogin = new JButton("Login");
 		btnLogin.setName("btnLogin");
-		contentPane.add(btnLogin, c);
+		add(btnLogin, c);
 
 		c = new GridBagConstraints();
 		c.gridwidth = 1;
@@ -106,7 +94,7 @@ public class LoginWindow extends JFrame {
 		c.gridy = 6;
 		btnRegister = new JButton("Register");
 		btnRegister.setName("btnRegister");
-		contentPane.add(btnRegister, c);
+		add(btnRegister, c);
 	}
 
 

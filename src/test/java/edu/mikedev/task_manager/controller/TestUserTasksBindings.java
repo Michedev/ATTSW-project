@@ -4,7 +4,7 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.ui.AppColors;
-import edu.mikedev.task_manager.ui.LoginWindow;
+import edu.mikedev.task_manager.ui.LoginPage;
 import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -29,7 +29,7 @@ import static edu.mikedev.task_manager.ui.UserTasksPage.htmlWrappedDescription;
 @RunWith(GUITestRunner.class)
 public class TestUserTasksBindings extends AssertJSwingJUnitTestCase {
 
-    LoginWindow window;
+    JFrame window;
     FrameFixture frame;
     List<Task> tasksListSorted;
     TaskManagerController controller;
@@ -39,10 +39,10 @@ public class TestUserTasksBindings extends AssertJSwingJUnitTestCase {
         Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
         tasksListSorted = scenario.third;
         GuiActionRunner.execute(() ->{
-            window = new LoginWindow();
-            return window;
+            controller = new TaskManagerController(scenario.first, new LoginPage());
+            return controller.getWindow();
         });
-        controller = new TaskManagerController(scenario.first, window);
+        window = controller.getWindow();
         frame = new FrameFixture(robot(), window);
         frame.show();
         frame.textBox("tfUsername").enterText("username1");

@@ -3,18 +3,22 @@ package edu.mikedev.task_manager.controller;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.model.Model;
-import edu.mikedev.task_manager.ui.LoginWindow;
+import edu.mikedev.task_manager.ui.LoginPage;
+import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.util.Triple;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 
+import javax.swing.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,7 +31,7 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
 
     private Model model;
 
-    LoginWindow window;
+    JFrame window;
     FrameFixture frame;
     TaskManagerController controller;
 
@@ -41,10 +45,10 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
         dummyUser.setTasks(taskSet);
         when(model.loginUser(anyString(), anyString())).thenReturn(dummyUser);
         GuiActionRunner.execute(() ->{
-            window = new LoginWindow();
-            return window;
+            controller = new TaskManagerController(model, new LoginPage());
+            return controller.getWindow();
         });
-        controller = new TaskManagerController(model, window);
+        window = controller.getWindow();
         frame = new FrameFixture(robot(), window);
         frame.show();
     }

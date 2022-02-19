@@ -3,7 +3,7 @@ package edu.mikedev.task_manager.controller;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.model.Model;
-import edu.mikedev.task_manager.ui.LoginWindow;
+import edu.mikedev.task_manager.ui.LoginPage;
 import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -14,12 +14,13 @@ import org.assertj.swing.util.Triple;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.swing.*;
 import java.util.List;
 
 @RunWith(GUITestRunner.class)
 public class TestUpdateTaskBindings extends AssertJSwingJUnitTestCase{
 
-    LoginWindow window;
+    JFrame window;
     FrameFixture frame;
     List<Task> tasksListSorted;
     TaskManagerController controller;
@@ -29,10 +30,10 @@ public class TestUpdateTaskBindings extends AssertJSwingJUnitTestCase{
         Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
         tasksListSorted = scenario.third;
         GuiActionRunner.execute(() ->{
-            window = new LoginWindow();
-            return window;
+            controller = new TaskManagerController(scenario.first, new LoginPage());
+            return controller.getWindow();
         });
-        controller = new TaskManagerController(scenario.first, window);
+        window = controller.getWindow();
         frame = new FrameFixture(robot(), window);
         frame.show();
 

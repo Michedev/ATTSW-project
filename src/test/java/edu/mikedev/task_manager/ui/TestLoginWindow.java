@@ -10,16 +10,19 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.swing.*;
+
 @RunWith(GUITestRunner.class)
 public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 
-	LoginWindow window;
+	JFrame window;
 	FrameFixture frame;
 
 	@Override
 	protected void onSetUp(){
 		GuiActionRunner.execute(() ->{
-			window = new LoginWindow();
+			window = new JFrame();
+			window.setContentPane(new LoginPage());
 			return window;
 		});
 		frame = new FrameFixture(robot(), window);
@@ -31,7 +34,6 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
     @Test
 	@GUITest
 	public void testInitialState(){
-		frame.requireTitle("Login page");
 		frame.textBox("tfUsername").requireEditable();
 		frame.textBox("tfPassword").requireEditable();
 		frame.label(JLabelMatcher.withName("lblErrorMessage")).requireNotVisible();

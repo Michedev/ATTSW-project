@@ -1,7 +1,10 @@
 package edu.mikedev.task_manager.controller;
 
+import edu.mikedev.task_manager.Task;
+import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.model.Model;
-import edu.mikedev.task_manager.ui.LoginWindow;
+import edu.mikedev.task_manager.ui.LoginPage;
+import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.DialogMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
@@ -10,10 +13,15 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JLabelFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.util.Triple;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
+
+import javax.swing.*;
+
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -22,21 +30,21 @@ import static org.mockito.Mockito.when;
 public class TestRegistrationBindings extends AssertJSwingJUnitTestCase {
 
     Model model;
-    LoginWindow window;
+    JFrame window;
     FrameFixture frame;
     TaskManagerController controller;
 
 
     @Override
     protected void onSetUp(){
-        model = mock(Model.class);
-        when(model.userExists(ArgumentMatchers.matches("existinguser1"))).thenReturn(true);
+        Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
+        when(scenario.first.userExists(ArgumentMatchers.matches("existinguser1"))).thenReturn(true);
 
         GuiActionRunner.execute(() ->{
-            window = new LoginWindow();
-            return window;
+            controller = new TaskManagerController(scenario.first, new LoginPage());
+            return controller.getWindow();
         });
-        controller = new TaskManagerController(model, window);
+        window = controller.getWindow();
         frame = new FrameFixture(robot(), window);
         frame.show();
 
