@@ -65,26 +65,13 @@ public class RegistrationPageController extends TaskPageController<RegistrationP
 
         if(newUser != null){
             model.registerUser(newUser);
-            final JOptionPane optionPane = new JOptionPane(
+            JOptionPane.showMessageDialog(controller.getWindow(),
                     String.format("Username %s successfully registered", newUser.getUsername()),
-                    JOptionPane.INFORMATION_MESSAGE,
-                    JOptionPane.OK_OPTION);
+                    "Registration completed", 1);
+            LoginPage loginWindow = new LoginPage();
+            LoginPageController pageController = new LoginPageController(loginWindow, controller);
+            controller.setContentPane(pageController, "Login page");
 
-            final JDialog dialog = new JDialog(controller.getWindow(),
-                    "Registration completed",
-                    true);
-            dialog.setContentPane(optionPane);
-            final TaskManagerController finalController = this.controller;
-            dialog.addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent we) {
-                    LoginPage loginWindow = new LoginPage();
-                    LoginPageController controller = new LoginPageController(loginWindow, finalController);
-                    finalController.setContentPane(controller, "Login page");
-                }
-            });
-            dialog.pack();
-            dialog.setVisible(true);
-            //todo implement test about this
         }
 
     }

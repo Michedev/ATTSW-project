@@ -4,6 +4,7 @@ import edu.mikedev.task_manager.controller.TaskManagerController;
 import edu.mikedev.task_manager.model.HibernateModel;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
+import org.assertj.swing.core.matcher.DialogMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -35,6 +36,12 @@ public class BDDSteps extends Steps {
 
         frame.button("btnLogin").click();
     }
+
+    @Given("an unauthenticated user")
+    public void unauthUser(){
+
+    }
+
 
     @When("it makes a new task called \"$taskTitle\" with description \"$taskDescription\" and deadline date \"$taskDeadline\"")
     public void makeNewTask(String taskTitle, String taskDescription, String taskDeadline){
@@ -101,6 +108,25 @@ public class BDDSteps extends Steps {
         frame.checkBox("cbDone").check();
     }
 
+    @When("it register with username \"$username\", password \"$password\" and email \"$email\"")
+    public void register(String username, String password, String email){
+        frame.button("btnRegister").click();
+        frame.textBox("tfUsername").enterText(username);
+        frame.textBox("tfPassword").enterText(password);
+        frame.textBox("tfEmail").enterText(email);
+
+        frame.button("btnConfirmRegister").click();
+
+        frame.dialog(DialogMatcher.withTitle("Registration completed")).close();
+    }
+
+    @When("it login with username \"$username\" and password \"$password\"")
+    public void loginUser(String username, String password){
+        frame.textBox("tfUsername").click().enterText(username);
+        frame.textBox("tfPassword").click().enterText(password);
+
+        frame.button("btnLogin").click();
+    }
     @Then("the task \"$taskTitle\" should be done")
     public void isTaskChecked(String taskTitle){
         Task task = findExistingTaskByName(taskTitle);
