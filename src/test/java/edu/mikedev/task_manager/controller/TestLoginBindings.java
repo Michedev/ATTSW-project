@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(GUITestRunner.class)
 public class TestLoginBindings extends AssertJSwingJUnitTestCase{
@@ -45,7 +44,7 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
         dummyUser.setTasks(taskSet);
         when(model.loginUser(anyString(), anyString())).thenReturn(dummyUser);
         GuiActionRunner.execute(() ->{
-            controller = new TaskManagerController(model, new LoginPage());
+            controller = new TaskManagerController(model);
             return controller.getWindow();
         });
         window = controller.getWindow();
@@ -62,6 +61,9 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
         frame.button("btnLogin").click();
         frame.label("lblErrorMessage").requireVisible();
         frame.label("lblErrorMessage").requireText("Username and/or password are wrong");
+
+        verify(model, times(1)).areCredentialCorrect(anyString(), anyString());
+        verify(model, times(0)).loginUser(anyString(), anyString());
     }
 
     @SuppressWarnings("java:S2699")

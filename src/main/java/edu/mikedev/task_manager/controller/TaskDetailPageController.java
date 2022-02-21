@@ -6,7 +6,6 @@ import edu.mikedev.task_manager.ui.NewUpdateTaskPage;
 import edu.mikedev.task_manager.ui.TaskDetailPage;
 import edu.mikedev.task_manager.ui.UserTasksPage;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -42,7 +41,7 @@ public class TaskDetailPageController extends TaskPageController<TaskDetailPage>
     }
 
     private void goBackAction(ActionEvent e){
-        UserTasksPage userTasksPage = new UserTasksPage(model.getTasks());
+        UserTasksPage userTasksPage = new UserTasksPage(model.getUserTasks());
         UserTasksPageController pageController = new UserTasksPageController(userTasksPage, controller);
         controller.setContentPane(pageController, model.getLoggedUser().getUsername() + " tasks");
     }

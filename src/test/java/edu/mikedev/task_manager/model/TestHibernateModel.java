@@ -123,7 +123,7 @@ public class TestHibernateModel {
         model.loginUser(user.getUsername(), user.getPassword());
         model.addNewTask(newTask);
 
-        List<Task> tasks = model.getTasks();
+        List<Task> tasks = model.getUserTasks();
         Task actual = tasks.get(tasks.size()-1);
 
         Assert.assertEquals(newTask.getTitle(), actual.getTitle());
@@ -147,7 +147,7 @@ public class TestHibernateModel {
 
         model.deleteTask(taskToDelete);
 
-        List<Task> userTasksAfterDelete = model.getTasks();
+        List<Task> userTasksAfterDelete = model.getUserTasks();
         Assert.assertFalse(userTasksAfterDelete.stream().anyMatch((x) -> x.getId() == taskToDelete.getId()));
         Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(wrongTaskToDelete));
     }
@@ -167,14 +167,14 @@ public class TestHibernateModel {
 
     @Test
     public void testGetTasks() {
-        Assert.assertThrows(IllegalAccessError.class, () -> model.getTasks());
+        Assert.assertThrows(IllegalAccessError.class, () -> model.getUserTasks());
 
         User user = users.get(0);
         List<Task> expectedTasks = user.getTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());
 
         model.loginUser(user.getUsername(), user.getPassword());
 
-        List<Task> actualTasks = model.getTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());;
+        List<Task> actualTasks = model.getUserTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());;
 
         Assert.assertArrayEquals(expectedTasks.toArray(), actualTasks.toArray());
     }

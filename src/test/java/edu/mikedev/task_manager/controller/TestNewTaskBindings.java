@@ -37,7 +37,7 @@ public class TestNewTaskBindings extends AssertJSwingJUnitTestCase{
         Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
         model = scenario.first;
         GuiActionRunner.execute(() ->{
-            controller = new TaskManagerController(scenario.first, new LoginPage());
+            controller = new TaskManagerController(scenario.first);
             return controller.getWindow();
         });
         window = controller.getWindow();

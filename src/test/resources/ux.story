@@ -1,39 +1,15 @@
 Narrative: Common user interactions with the applications
 
-
-Scenario: Authenticated user makes a new task without  a deadline
-
-Given authenticated user with name "tizio" and password "caio"
-When it makes a new task called "Task sample 1"
-Then  there should be a task with name "Task sample 1", null deadline and the secondary key of  "User1"
-
 Scenario: Authenticated user makes a new task with a deadline
 
-Given authenticated user with name "tizio" and password "caio"
-When it makes a new task called "Task sample 1" and deadline date 03/05/2021
-Then  there should be a task with name "Task sample 1", 03/05/2021 deadline and the secondary key of  "User1"
+Given an authenticated user with name "tizio" and password "caio"
+When it makes a new task called "Task sample 1" with description "Task description 23" and deadline date "03/05/2021"
+Then there should be a task with name "Task sample 1", description "Task description 23" and "03/05/2021" deadline and the secondary key of "tizio"
 
-Scenario: Not authenticated user fails to make a new task
-
-Given an unauthenticated user
-When it makes a new task called "Task sample 1" and deadline date 03/05/2021
-Then  it should throw an IllegallAccessException
-
-Scenario: Authenticated user delete an existing task
-
-Given authenticated user with name "tizio" and password "caio"
-When it deletes a task called "Task to delete 1"
-Then the task with name "Task to delete 1" should not exists into the DB
 
 Scenario: User wants to modify a task
 
-Given authenticated user with name "tizio" and password "caio"
-When it modifies the task with name "Task to modify 1" to "Task to modify 2"
-Then the task "Task to modify 1" should not exists into the DB 
-And "Task to modify 2" should exists into the DB
-
-Scenario: Authenticated user delete a non-existing task
-
-Given authenticated user with name "tizio" and password "caio"
-When it deletes a task called "Task not existing"
-Then it should throw IllegalArgumentException
+Given an authenticated user with name "tizio" and password "caio"
+When it modifies the task with name "Run a marathon" to "Task to modify 2"
+Then the task "Run a marathon" should not exists into the DB
+And the task "Task to modify 2" should exists into the DB

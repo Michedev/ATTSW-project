@@ -7,23 +7,28 @@ import javax.swing.*;
 
 public class TaskManagerController {
 
-    private final JFrame window;
+    private JFrame window;
     private final Model model;
     private JPanel currentPanel;
     private TaskPageController pageController;
 
-    public TaskManagerController(Model model, LoginPage loginPage){
-        this.window = new JFrame();
+    public TaskManagerController(Model model){
+        this.model = model;
+        initView();
+    }
+
+    private void initView() {
+        LoginPage loginPage = new LoginPage();
+        window = new JFrame();
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException|InstantiationException|IllegalAccessException|UnsupportedLookAndFeelException e) {
             // Leave default theme
         }
 
-        this.window.setTitle("Login page");
-        this.window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        window.setTitle("Login page");
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        this.model = model;
         LoginPageController pageController = new LoginPageController(loginPage, this);
         setContentPane(pageController, "Login page");
     }
@@ -39,6 +44,7 @@ public class TaskManagerController {
     private void setContentPane(JPanel panel){
         window.setContentPane(panel);
         window.pack();
+        this.currentPanel = panel;
     }
 
     private void setContentPane(JPanel panel, String title){
@@ -49,6 +55,7 @@ public class TaskManagerController {
     public <T extends JPanel> void setContentPane(TaskPageController<T> pageController, String title){
         setContentPane(pageController.panel, title);
         pageController.setGUIBindings();
+        this.pageController = pageController;
     }
 
 

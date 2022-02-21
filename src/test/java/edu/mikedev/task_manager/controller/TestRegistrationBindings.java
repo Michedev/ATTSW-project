@@ -41,7 +41,7 @@ public class TestRegistrationBindings extends AssertJSwingJUnitTestCase {
         when(scenario.first.userExists(ArgumentMatchers.matches("existinguser1"))).thenReturn(true);
 
         GuiActionRunner.execute(() ->{
-            controller = new TaskManagerController(scenario.first, new LoginPage());
+            controller = new TaskManagerController(scenario.first);
             return controller.getWindow();
         });
         window = controller.getWindow();

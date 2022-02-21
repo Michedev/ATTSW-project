@@ -20,7 +20,7 @@ public class UserTasksPageController extends TaskPageController<UserTasksPage> {
 
     @Override
     public void setGUIBindings() {
-        List<Task> tasks = controller.getModel().getTasks();
+        List<Task> tasks = controller.getModel().getUserTasks();
         List<JPanel> tasksPanel = panel.getTasksPanel();
         for (int i = 0; i < tasks.size(); i++) {
             JPanel taskPanel = tasksPanel.get(i);

@@ -4,7 +4,6 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.ui.NewUpdateTaskPage;
 import edu.mikedev.task_manager.ui.UserTasksPage;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.Comparator;
 import java.util.List;
@@ -34,7 +33,7 @@ public class NewUpdateTaskPageController extends TaskPageController<NewUpdateTas
             } else {
                 model.addNewTask(task);
             }
-            List<Task> sortedUserTasks = controller.getModel().getTasks().stream().sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
+            List<Task> sortedUserTasks = controller.getModel().getUserTasks().stream().sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
             UserTasksPage userTasksPage = new UserTasksPage(sortedUserTasks);
             UserTasksPageController pageController = new UserTasksPageController(userTasksPage, controller);
             controller.setContentPane(pageController, model.getLoggedUser().getUsername() + " tasks");

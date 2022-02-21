@@ -17,7 +17,7 @@ public class LoginPageController extends TaskPageController<LoginPage> {
     }
 
     private List<Task> getSortedUserTasks() {
-        return model.getTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());
+        return model.getUserTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());
     }
 
 
