@@ -54,22 +54,15 @@ public class BDDSteps extends Steps {
         List<Task> userTasks = model.getUserTasks();
         System.out.print("user tasks: ");
         System.out.println(userTasks);
-        Optional<Task> optionalTask = userTasks.stream().filter(t -> t.getTitle().equals(taskTitle)).findFirst();
-        if(optionalTask.isPresent()){
-            Task task = optionalTask.get();
-            Assert.assertEquals(taskDescription, task.getDescription());
-            Assert.assertEquals(simpleDateFormat.format(task.getDeadline()), taskDeadline);
-            Assert.assertEquals(ownerUsername, task.getUser().getUsername());
-        } else {
-            Assert.fail();
-        }
+        Task task = findExistingTaskByName(taskTitle);
+        Assert.assertEquals(taskDescription, task.getDescription());
+        Assert.assertEquals(simpleDateFormat.format(task.getDeadline()), taskDeadline);
+        Assert.assertEquals(ownerUsername, task.getUser().getUsername());
     }
 
     @When("it modifies the task with name \"$oldTaskName\" to \"$newTaskName\"")
     public void modifyTask(String oldTaskName, String newTaskName){
-        Optional<Task> optionalTask = model.getUserTasks().stream().filter(t -> t.getTitle().equals(oldTaskName)).findFirst();
-        Assert.assertTrue(optionalTask.isPresent());
-        Task task = optionalTask.get();
+        Task task = findExistingTaskByName(oldTaskName);
         frame.panel("task" + task.getId()).click();
         frame.button("btnUpdate").click();
         frame.textBox("tfTaskName").deleteText().enterText(newTaskName);
@@ -90,11 +83,28 @@ public class BDDSteps extends Steps {
 
     @When("it deletes a task called \"$taskTitle\"")
     public void deleteTask(String taskName){
-        Optional<Task> optionalTask = model.getUserTasks().stream().filter(t -> t.getTitle().equals(taskName)).findFirst();
-        Assert.assertTrue(optionalTask.isPresent());
-        Task task = optionalTask.get();
+        Task task = findExistingTaskByName(taskName);
         frame.panel(String.format("task%d", task.getId())).click();
         frame.button("btnDelete").click();
+    }
+
+    private Task findExistingTaskByName(String taskName) {
+        Optional<Task> optionalTask = model.getUserTasks().stream().filter(t -> t.getTitle().equals(taskName)).findFirst();
+        Assert.assertTrue(optionalTask.isPresent());
+        return optionalTask.get();
+    }
+
+    @When("it completes a task called \"$taskTitle\"")
+    public void setCheckbox(String taskTitle){
+        Task task = findExistingTaskByName(taskTitle);
+        frame.panel(String.format("task%d", task.getId())).click();
+        frame.checkBox("cbDone").check();
+    }
+
+    @Then("the task \"$taskTitle\" should be done")
+    public void isTaskChecked(String taskTitle){
+        Task task = findExistingTaskByName(taskTitle);
+        Assert.assertTrue(task.isDone());
     }
 
     @AfterScenario

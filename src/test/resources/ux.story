@@ -26,6 +26,8 @@ Scenario: Completing task
 
 Given an authenticated user with name "pippo" and password "pluto"
 When it completes a task called "Sample task title 1"
-Then the task "Sample task title 1" should be completed
+Then the task "Sample task title 1" should be done
 
 Scenario: User registration and creation of new task
+
+
