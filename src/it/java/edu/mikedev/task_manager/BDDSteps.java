@@ -7,9 +7,7 @@ import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
 import org.jbehave.core.steps.Steps;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
@@ -32,7 +30,6 @@ public class BDDSteps extends Steps {
 
     @Given("an authenticated user with name \"$username\" and password \"$password\"")
     public void authUser(String username, String password){
-        setUpGUI();
         frame.textBox("tfUsername").click().enterText(username);
         frame.textBox("tfPassword").click().enterText(password);
 
@@ -66,7 +63,6 @@ public class BDDSteps extends Steps {
         } else {
             Assert.fail();
         }
-        closeSession();
     }
 
     @When("it modifies the task with name \"$oldTaskName\" to \"$newTaskName\"")
@@ -93,16 +89,16 @@ public class BDDSteps extends Steps {
     public void taskExistsIntoTheDB(String taskName){
         Optional<Task> optionalTask = model.getUserTasks().stream().filter(t -> t.getTitle().equals(taskName)).findFirst();
         Assert.assertTrue(optionalTask.isPresent());
-        closeSession();
     }
 
-    private void closeSession() {
+    @AfterStory
+    public void closeSession() {
         utils.getSession().close();
-
+        frame.close();
     }
 
-
-    protected void setUpGUI() {
+    @BeforeStory
+    public void setUpGUI() {
         utils = new HibernateDBUtils(HibernateDBUtils.buildHBSession());
 
         try {
