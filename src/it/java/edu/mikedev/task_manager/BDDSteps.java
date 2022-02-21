@@ -7,6 +7,7 @@ import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
+import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.jbehave.core.annotations.*;
 import org.jbehave.core.steps.Steps;
 import org.junit.Assert;
@@ -18,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
-@RunWith(GUITestRunner.class)
 public class BDDSteps extends Steps {
 
     Model model;
@@ -91,13 +91,13 @@ public class BDDSteps extends Steps {
         Assert.assertTrue(optionalTask.isPresent());
     }
 
-    @AfterStory
+    @AfterScenario
     public void closeSession() {
         utils.getSession().close();
-        frame.close();
+        frame.cleanUp();
     }
 
-    @BeforeStory
+    @BeforeScenario
     public void setUpGUI() {
         utils = new HibernateDBUtils(HibernateDBUtils.buildHBSession());
 
@@ -115,8 +115,5 @@ public class BDDSteps extends Steps {
         frame = new FrameFixture(window);
         frame.show();
     }
-
-
-
 
 }
