@@ -13,3 +13,10 @@ Given an authenticated user with name "tizio" and password "caio"
 When it modifies the task with name "Run a marathon" to "Task to modify 2"
 Then the task "Run a marathon" should not exists into the DB
 And the task "Task to modify 2" should exists into the DB
+
+
+Scenario: Authenticated user delete an existing task
+
+Given an authenticated user with name "pippo" and password "pluto"
+When it deletes a task called "Sample task title 1"
+Then the task "Sample task title 1" should not exists into the DB

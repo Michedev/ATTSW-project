@@ -52,7 +52,7 @@ public class HibernateDBUtils {
     }
 
     public void initRealTestDB() throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/root";
+        String url = "jdbc:postgresql://localhost:5432";
         Properties props = new Properties();
         props.setProperty("user", "root");
         props.setProperty("password", "root");

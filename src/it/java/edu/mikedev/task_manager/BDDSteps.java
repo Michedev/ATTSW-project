@@ -68,15 +68,12 @@ public class BDDSteps extends Steps {
     @When("it modifies the task with name \"$oldTaskName\" to \"$newTaskName\"")
     public void modifyTask(String oldTaskName, String newTaskName){
         Optional<Task> optionalTask = model.getUserTasks().stream().filter(t -> t.getTitle().equals(oldTaskName)).findFirst();
-        if(optionalTask.isPresent()){
-            Task task = optionalTask.get();
-            frame.panel("task" + task.getId()).click();
-            frame.button("btnUpdate").click();
-            frame.textBox("tfTaskName").deleteText().enterText(newTaskName);
-            frame.button("btnSave").click();
-        } else {
-            Assert.fail();
-        }
+        Assert.assertTrue(optionalTask.isPresent());
+        Task task = optionalTask.get();
+        frame.panel("task" + task.getId()).click();
+        frame.button("btnUpdate").click();
+        frame.textBox("tfTaskName").deleteText().enterText(newTaskName);
+        frame.button("btnSave").click();
     }
 
     @Then("the task \"$taskName\" should not exists into the DB")
@@ -89,6 +86,15 @@ public class BDDSteps extends Steps {
     public void taskExistsIntoTheDB(String taskName){
         Optional<Task> optionalTask = model.getUserTasks().stream().filter(t -> t.getTitle().equals(taskName)).findFirst();
         Assert.assertTrue(optionalTask.isPresent());
+    }
+
+    @When("it deletes a task called \"$taskTitle\"")
+    public void deleteTask(String taskName){
+        Optional<Task> optionalTask = model.getUserTasks().stream().filter(t -> t.getTitle().equals(taskName)).findFirst();
+        Assert.assertTrue(optionalTask.isPresent());
+        Task task = optionalTask.get();
+        frame.panel(String.format("task%d", task.getId())).click();
+        frame.button("btnDelete").click();
     }
 
     @AfterScenario
