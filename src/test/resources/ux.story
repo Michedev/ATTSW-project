@@ -30,4 +30,8 @@ Then the task "Sample task title 1" should be done
 
 Scenario: User registration and creation of new task
 
-
+Given an unauthenticated user
+When it register with username "newuser1", password "newpassword1" and email "email@newemail.com"
+And it login with username "newuser1" and password "newpassword1"
+And it makes a new task called "New task 1" with description "New description 1" and deadline date "05/09/2022"
+Then the task "New task 1" should exists into the DB
