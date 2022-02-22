@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 public class TaskDetailPageController extends TaskPageController<TaskDetailPage> {
     private final Task task;
 
-    protected TaskDetailPageController(TaskDetailPage panel, TaskManagerController controller, Task task) {
+    public TaskDetailPageController(TaskDetailPage panel, TaskManagerController controller, Task task) {
         super(panel, controller);
         this.task = task;
     }

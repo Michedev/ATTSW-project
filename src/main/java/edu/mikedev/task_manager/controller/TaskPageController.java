@@ -10,7 +10,7 @@ public abstract class TaskPageController<T extends JPanel> {
     protected Model model;
     protected TaskManagerController controller;
 
-    public TaskPageController(T panel, TaskManagerController controller){
+    protected TaskPageController(T panel, TaskManagerController controller){
 
         this.panel = panel;
         this.controller = controller;
