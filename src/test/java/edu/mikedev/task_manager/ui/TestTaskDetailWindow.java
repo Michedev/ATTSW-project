@@ -1,12 +1,11 @@
 package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
-import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
@@ -15,36 +14,34 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.swing.*;
 import java.util.List;
 
 @RunWith(GUITestRunner.class)
 public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
 
-    LoginWindow window;
+    JFrame window;
     FrameFixture frame;
-    List<Task> tasksListSorted;
-
+    Task task;
 
     @Override
     protected void onSetUp(){
         Triple<Model, User, List<Task>> scenario = UIScenarios.anyLoginUserTasksScenario();
-        tasksListSorted = scenario.third;
+        task = scenario.third.get(4);
         GuiActionRunner.execute(() ->{
-            window = new LoginWindow(scenario.first);
+            window = new JFrame();
+            window.setContentPane(new TaskDetailPage(task));
             return window;
         });
         frame = new FrameFixture(robot(), window);
         frame.show();
 
-        frame.button("btnLogin").click();
-        frame.panel("task4").click();
     }
 
     @SuppressWarnings("java:S2699")
     @Test
     @GUITest
     public void testInitialState(){
-        frame.requireTitle("Task Details");
         frame.label("lblTaskTitle").requireText("Task 5");
         String textDescription = frame.label("lblTaskDescription").text();
         Assert.assertTrue(textDescription.startsWith("<html><p style=\"width:300px\">Super Long description"));
@@ -61,58 +58,6 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
     @GUITest
     public void testBackgroundColor(){
         frame.panel("mainPanel").background().requireEqualTo(AppColors.GREEN);
-    }
-
-    @SuppressWarnings("java:S2699")
-    @Test
-    @GUITest
-    public void testGoBackButton(){
-        frame.button("btnGoBack").click();
-
-        frame.requireTitle("username1 tasks");
-        for (int i = 0; i < 5; i++) {
-            frame.panel("task" + i).requireEnabled();
-        }
-        frame.button("btnNewTask").requireEnabled();
-    }
-
-    @SuppressWarnings("java:S2699")
-    @Test
-    @GUITest
-    public void testDeleteButton(){
-        frame.button("btnDelete").click();
-
-        frame.requireTitle("username1 tasks");
-        Assert.assertThrows(ComponentLookupException.class, () -> frame.panel("task4"));
-        Assert.assertThrows(ComponentLookupException.class, () -> frame.label("lblTitleTask4"));
-    }
-
-    @SuppressWarnings("java:S2699")
-    @Test
-    @GUITest
-    public void testUpdateButton(){
-        frame.button("btnUpdate").click();
-
-        frame.requireTitle("Update task \"Task 5\"");
-
-        frame.label("lblTaskName").requireEnabled();
-        frame.label("lblTaskDescription").requireEnabled();
-        frame.label("lblTaskDeadline").requireEnabled();
-
-        frame.textBox("tfTaskName").requireText("Task 5");
-        String taskDescription = frame.textBox("tfTaskDescription").text();
-        Assert.assertTrue(taskDescription.startsWith("Super Long description"));
-        frame.textBox("tfTaskDeadline").requireText("11/02/2014"); //todo: problem here
-
-    }
-
-    @SuppressWarnings("java:S2699")
-    @Test
-    @GUITest
-    public void undoneTask(){
-        frame.checkBox("cbDone").uncheck();
-
-        frame.panel("mainPanel").background().requireEqualTo(AppColors.RED);
     }
 
 }

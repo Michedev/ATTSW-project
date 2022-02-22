@@ -23,9 +23,13 @@ public interface Model {
 
     Task getTaskById(int id);
 
-    List<Task> getTasks();
+    List<Task> getUserTasks();
 
     void logout();
 
     boolean isUserLogged();
+
+    User getLoggedUser();
+
+    User registerUser(User newUser);
 }

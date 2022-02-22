@@ -34,7 +34,6 @@ public class HibernateDBLayer implements DBLayer {
     @Override
     public void add(Task task){
         hibernateSession.persist(task);
-        commitTransaction();
     }
 
     @Override

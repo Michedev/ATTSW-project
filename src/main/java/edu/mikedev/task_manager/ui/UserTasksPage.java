@@ -1,15 +1,15 @@
 package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.model.Model;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,21 +17,21 @@ import java.util.stream.Collectors;
 public class UserTasksPage extends JPanel {
 
 
+	private final JButton btnNewTask;
 	/**
 	 * Create the panel.
 	 */
 	private transient Model model;
 	private transient User user;
+	private List<JPanel> tasksPanel;
 
-	public UserTasksPage(Model model, User user) {
-		this.model = model;
-		this.user = user;
+	public UserTasksPage(List<Task> userTasks) {
+		tasksPanel = new ArrayList<>();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		int maxCols = 3;
 		setLayout(gridBagLayout);
-		List<Task> userTasksSorted = user.getTasks().stream().sorted((a, b) -> Comparator.comparingInt(Task::getId).compare(a,b)).collect(Collectors.toList());
-		JButton btnNewTask = new JButton("+");
-		btnNewTask.addActionListener(this::goToNewTask);
+		List<Task> userTasksSorted = userTasks.stream().sorted((a, b) -> Comparator.comparingInt(Task::getId).compare(a,b)).collect(Collectors.toList());
+		btnNewTask = new JButton("+");
 		btnNewTask.setName("btnNewTask");
 		int i = 0;
 		for(Task t: userTasksSorted){
@@ -40,7 +40,7 @@ public class UserTasksPage extends JPanel {
 			c.weighty = 0.9;
 			c.gridx = i % maxCols;
 			c.gridy = i / maxCols;
-			makeTaskCard(t, c);
+			tasksPanel.add(makeTaskCard(t, c));
 			i++;
 		}
 		GridBagConstraints c = new GridBagConstraints();
@@ -53,18 +53,10 @@ public class UserTasksPage extends JPanel {
 		add(btnNewTask, c);
 	}
 
-	private void goToNewTask(ActionEvent e) {
-		JFrame windowAncestor = (JFrame) SwingUtilities.getWindowAncestor(this);
-		windowAncestor.setContentPane(new NewUpdateTaskPage(model, user));
-		windowAncestor.setTitle("New task");
-		windowAncestor.pack();
-	}
-
 	private JPanel makeTaskCard(Task t, GridBagConstraints c) {
 		String fontFamily = "Cantarell";
 
 		JPanel taskPanel = new JPanel();
-		taskPanel.addMouseListener(new TaskDetailTransition(this, model, t, user));
 		Color backgroundColor = AppColors.getColorBackground(t);
 		taskPanel.setBackground(backgroundColor);
 		taskPanel.setBorder(new LineBorder(Color.black, 2, true));
@@ -119,5 +111,12 @@ public class UserTasksPage extends JPanel {
 		return htmlWrappedDescription(description);
 	}
 
+	public List<JPanel> getTasksPanel() {
+		return tasksPanel;
+	}
+
+	public JButton getBtnNewTask() {
+		return btnNewTask;
+	}
 }
 

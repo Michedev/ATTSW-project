@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -20,9 +21,13 @@ public class ModelIT {
     private Session session;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.hibernateDBUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSession());
-        hibernateDBUtils.initRealTestDB();
+        try {
+            hibernateDBUtils.initRealTestDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         session = hibernateDBUtils.getSession();
         model = new HibernateModel(session);
@@ -93,22 +98,34 @@ public class ModelIT {
 
     @Test
     public void testAddNewTask(){
-        model.loginUser("tizio", "caio");
         Task toBeAdded = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
         toBeAdded.setId(0);
-        Assert.assertThrows(IllegalArgumentException.class, () -> model.addNewTask(toBeAdded));
 
-        toBeAdded.setId(6);
+        Assert.assertThrows(IllegalAccessError.class, () -> model.addNewTask(toBeAdded));
+        User user = model.loginUser("tizio", "caio");
         model.addNewTask(toBeAdded);
 
+        Task toBeAdded2 = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
+        toBeAdded2.setId(6);
+        model.addNewTask(toBeAdded2);
+
         List<Task> tasks = hibernateDBUtils.pullTasks();
-        Assert.assertEquals(7, tasks.size());
+        Assert.assertEquals(8, tasks.size());
 
         Task newTask = tasks.get(6);
         Assert.assertEquals(6, newTask.getId());
         Assert.assertEquals("newtask", newTask.getTitle());
         Assert.assertEquals("newdescr", newTask.getDescription());
         Assert.assertTrue(newTask.isDone());
+        Assert.assertEquals(newTask.getUser(), user);
+
+        newTask = tasks.get(7);
+        Assert.assertEquals(7, newTask.getId());
+        Assert.assertEquals("newtask", newTask.getTitle());
+        Assert.assertEquals("newdescr", newTask.getDescription());
+        Assert.assertTrue(newTask.isDone());
+        Assert.assertEquals(newTask.getUser(), user);
+
     }
 
     @Test

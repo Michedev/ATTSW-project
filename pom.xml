@@ -22,6 +22,9 @@
         <skipTests>false</skipTests>
         <skipUnitTests>${skipTests}</skipUnitTests>
         <skipIntegrationTests>${skipTests}</skipIntegrationTests>
+        <jbehave.core.version>4.8.3</jbehave.core.version>
+        <embeddables>**/*Stories.java</embeddables>
+
     </properties>
     <build>
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
@@ -82,7 +85,7 @@
                 <version>3.3.0</version>
                 <executions>
                     <execution>
-                        <id>add-integration-test-source</id>
+                        <id>add-integration-e2e-test-source</id>
                         <phase>generate-test-sources</phase>
                         <goals>
                             <goal>add-test-source</goal>
@@ -90,6 +93,7 @@
                         <configuration>
                             <sources>
                                 <source>src/it/java</source>
+                                <source>src/e2e/java</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -117,7 +121,6 @@
                 <configuration>
                     <includes>
                         <include>**/*IT.java</include>
-                        <include>*IT.java</include>
                     </includes>
                     <skipTests>${skipIntegrationTests}</skipTests>
                 </configuration>
@@ -128,6 +131,21 @@
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>failsafe-e2e-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*E2E.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/*IT.java</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -140,6 +158,40 @@
                     <target>1.8</target>
             </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.jbehave</groupId>
+                <artifactId>jbehave-maven-plugin</artifactId>
+                <version>${jbehave.core.version}</version>
+                <executions>
+                    <execution>
+                        <id>unpack-view-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack-view-resources</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>embeddable-stories</id>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <includes>
+                                <include>${embeddables}</include>
+                            </includes>
+                            <excludes />
+                            <ignoreFailureInStories>true</ignoreFailureInStories>
+                            <ignoreFailureInView>false</ignoreFailureInView>
+                            <threads>1</threads>
+                            <metaFilters>
+                                <metaFilter></metaFilter>
+                            </metaFilters>
+                        </configuration>
+                        <goals>
+                            <goal>run-stories-as-embeddables</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
     <dependencies>
@@ -197,6 +249,12 @@
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.3.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.valfirst</groupId>
+            <artifactId>jbehave-junit-runner</artifactId>
+            <version>2.3.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

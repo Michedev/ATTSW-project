@@ -1,9 +1,9 @@
 package edu.mikedev.task_manager.utils;
 
-import edu.mikedev.task_manager.model.DBLayer;
-import edu.mikedev.task_manager.model.HibernateDBLayer;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.model.DBLayer;
+import edu.mikedev.task_manager.model.HibernateDBLayer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -52,7 +52,7 @@ public class HibernateDBUtils {
     }
 
     public void initRealTestDB() throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/root";
+        String url = "jdbc:postgresql://localhost:5432/";
         Properties props = new Properties();
         props.setProperty("user", "root");
         props.setProperty("password", "root");

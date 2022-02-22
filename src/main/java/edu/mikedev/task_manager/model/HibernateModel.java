@@ -34,8 +34,13 @@ public class HibernateModel implements Model{
 
     @Override
     public User registerUser(String username, String password, String email) {
-        int newId = findNewUserId();
         User newUser = new User(username, password, email);
+        return registerUser(newUser);
+    }
+
+    @Override
+    public User registerUser(User newUser) {
+        int newId = findNewUserId();
         newUser.setId(newId);
         newUser.setTasks(new HashSet<>());
         if(userExists(newUser.getUsername())){
@@ -98,9 +103,6 @@ public class HibernateModel implements Model{
         if(!isUserLogged()){
             throw new IllegalAccessError(MSG_ERROR_USER_NOT_LOGGED);
         }
-        if(dbLayer.getTasksId().contains(newTask.getId())){
-            throw new IllegalArgumentException("Task id must not exists already in DB");
-        }
         newTask.setId(findNewTaskId());
         newTask.setUser(loggedUser);
         dbLayer.add(newTask);
@@ -134,7 +136,7 @@ public class HibernateModel implements Model{
     }
 
     @Override
-    public List<Task> getTasks() {
+    public List<Task> getUserTasks() {
         if(!isUserLogged()){
             throw new IllegalAccessError("You should call loginUser() before calling this method");
         }
@@ -159,5 +161,8 @@ public class HibernateModel implements Model{
         return dbLayer;
     }
 
-
+    @Override
+    public User getLoggedUser() {
+        return loggedUser;
+    }
 }

@@ -1,8 +1,8 @@
 package edu.mikedev.task_manager.utils;
 
-import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.model.Model;
 import org.assertj.swing.util.Triple;
 
 import java.util.*;
@@ -22,6 +22,7 @@ public class UIScenarios {
                 "password1",
                 "email1@email.com"
         );
+        when(mockedModel.getLoggedUser()).thenReturn(dummyuser);
         Set<Task> tasksSet = new HashSet<>();
         List<Task> tasksListSorted = new ArrayList<Task>();
         List<Date> taskDates = Arrays.asList(
@@ -43,8 +44,8 @@ public class UIScenarios {
         }
         tasksListSorted.get(4).setDescription(longDescription.toString());
         dummyuser.setTasks(tasksSet);
+        when(mockedModel.getUserTasks()).thenReturn(tasksListSorted);
         when(mockedModel.loginUser(anyString(), anyString())).thenReturn(dummyuser);
-
         return Triple.of(mockedModel, dummyuser, tasksListSorted);
     }
 }
