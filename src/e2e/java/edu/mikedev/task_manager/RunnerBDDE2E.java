@@ -18,7 +18,7 @@ import java.util.List;
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 
 @RunWith(JUnitReportingRunner.class)
-public class RunnerBDDIT extends JUnitStories {
+public class RunnerBDDE2E extends JUnitStories {
 
     @Override
     protected List<String> storyPaths() {

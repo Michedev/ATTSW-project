@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -20,9 +21,13 @@ public class ModelIT {
     private Session session;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.hibernateDBUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSession());
-        hibernateDBUtils.initRealTestDB();
+        try {
+            hibernateDBUtils.initRealTestDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         session = hibernateDBUtils.getSession();
         model = new HibernateModel(session);
@@ -96,19 +101,29 @@ public class ModelIT {
         model.loginUser("tizio", "caio");
         Task toBeAdded = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
         toBeAdded.setId(0);
-        Assert.assertThrows(IllegalArgumentException.class, () -> model.addNewTask(toBeAdded));
-
-        toBeAdded.setId(6);
         model.addNewTask(toBeAdded);
 
+        Assert.assertThrows(IllegalStateException.class, () -> model.addNewTask(toBeAdded));
+
+        Task toBeAdded2 = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
+        toBeAdded2.setId(6);
+        model.addNewTask(toBeAdded2); // this test fail because id is set internally to a not used one
+
         List<Task> tasks = hibernateDBUtils.pullTasks();
-        Assert.assertEquals(7, tasks.size());
+        Assert.assertEquals(8, tasks.size());
 
         Task newTask = tasks.get(6);
         Assert.assertEquals(6, newTask.getId());
         Assert.assertEquals("newtask", newTask.getTitle());
         Assert.assertEquals("newdescr", newTask.getDescription());
         Assert.assertTrue(newTask.isDone());
+
+        newTask = tasks.get(7);
+        Assert.assertEquals(7, newTask.getId());
+        Assert.assertEquals("newtask", newTask.getTitle());
+        Assert.assertEquals("newdescr", newTask.getDescription());
+        Assert.assertTrue(newTask.isDone());
+
     }
 
     @Test

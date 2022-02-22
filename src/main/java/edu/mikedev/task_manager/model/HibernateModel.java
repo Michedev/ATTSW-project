@@ -104,9 +104,6 @@ public class HibernateModel implements Model{
             throw new IllegalAccessError(MSG_ERROR_USER_NOT_LOGGED);
         }
         newTask.setId(findNewTaskId());
-        if(dbLayer.getTasksId().contains(newTask.getId())){
-            throw new IllegalArgumentException("Task id must not exists already in DB");
-        }
         newTask.setUser(loggedUser);
         dbLayer.add(newTask);
     }
