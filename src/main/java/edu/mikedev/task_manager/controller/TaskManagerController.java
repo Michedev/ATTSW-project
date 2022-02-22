@@ -10,7 +10,6 @@ public class TaskManagerController {
     private JFrame window;
     private final Model model;
     private JPanel currentPanel;
-    private TaskPageController pageController;
 
     public TaskManagerController(Model model){
         this.model = model;
@@ -41,6 +40,10 @@ public class TaskManagerController {
         return window;
     }
 
+    public JPanel getCurrentPanel() {
+        return currentPanel;
+    }
+
     private void setContentPane(JPanel panel){
         window.setContentPane(panel);
         window.pack();
@@ -55,7 +58,6 @@ public class TaskManagerController {
     public <T extends JPanel> void setContentPane(TaskPageController<T> pageController, String title){
         setContentPane(pageController.panel, title);
         pageController.setGUIBindings();
-        this.pageController = pageController;
     }
 
 

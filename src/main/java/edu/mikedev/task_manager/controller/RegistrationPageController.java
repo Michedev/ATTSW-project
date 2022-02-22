@@ -6,8 +6,6 @@ import edu.mikedev.task_manager.ui.RegistrationPage;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class RegistrationPageController extends TaskPageController<RegistrationPage> {
 

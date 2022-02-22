@@ -3,22 +3,18 @@ package edu.mikedev.task_manager.controller;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.model.Model;
-import edu.mikedev.task_manager.ui.LoginPage;
-import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.util.Triple;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 
 import javax.swing.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.anyString;

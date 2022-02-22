@@ -3,7 +3,6 @@ package edu.mikedev.task_manager.controller;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.model.Model;
-import edu.mikedev.task_manager.ui.LoginPage;
 import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.DialogMatcher;
@@ -20,10 +19,8 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 
 import javax.swing.*;
-
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(GUITestRunner.class)

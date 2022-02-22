@@ -3,7 +3,6 @@ package edu.mikedev.task_manager.controller;
 import edu.mikedev.task_manager.model.Model;
 
 import javax.swing.*;
-import java.awt.*;
 
 public abstract class TaskPageController<T extends JPanel> {
 

@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 public class TaskDetailPageController extends TaskPageController<TaskDetailPage> {
     private final Task task;
 
-    public TaskDetailPageController(TaskDetailPage panel, TaskManagerController controller, Task task) {
+    protected TaskDetailPageController(TaskDetailPage panel, TaskManagerController controller, Task task) {
         super(panel, controller);
         this.task = task;
     }
@@ -28,7 +28,6 @@ public class TaskDetailPageController extends TaskPageController<TaskDetailPage>
 
     private void toggleDone(ActionEvent e) {
         boolean newValue = panel.getCbDone().isSelected();
-        Task task = panel.getTask();
         task.setDone(newValue);
         Color backgroundColor = AppColors.getColorBackground(task);
         panel.setBackground(backgroundColor);
