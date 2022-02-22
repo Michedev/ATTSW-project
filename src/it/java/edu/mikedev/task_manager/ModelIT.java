@@ -103,8 +103,6 @@ public class ModelIT {
         toBeAdded.setId(0);
         model.addNewTask(toBeAdded);
 
-        Assert.assertThrows(IllegalStateException.class, () -> model.addNewTask(toBeAdded));
-
         Task toBeAdded2 = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
         toBeAdded2.setId(6);
         model.addNewTask(toBeAdded2); // this test fail because id is set internally to a not used one
