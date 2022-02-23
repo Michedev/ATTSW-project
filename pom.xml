@@ -302,10 +302,22 @@
                         <version>1.7.3</version>
                         <configuration>
                             <targetClasses>
-                                <param>edu.mikedev.*</param>
+                                <param>edu.mikedev.task_manager*</param>
                             </targetClasses>
+                            <excludedClasses>
+                                <param>edu.mikedev.task_manager.*IT*</param>
+                                <param>edu.mikedev.task_manager.*E2E*</param>
+                                <param>edu.mikedev.task_manager.BDDSteps*</param>
+                                <param>edu.mikedev.task_manager.ui.*</param>
+                                <param>edu.mikedev.task_manager.controller.*</param>
+                            </excludedClasses>
+                            <excludedTestClasses>
+                                <param>edu.mikedev.task_manager.*IT*</param>
+                                <param>edu.mikedev.task_manager.*E2E*</param>
+                                <param>edu.mikedev.task_manager.BDDSteps*</param>
+                            </excludedTestClasses>
                             <targetTests>
-                                <param>edu.mikedev.*</param>
+                                <param>edu.mikedev.task_manager.model.Test*</param>
                             </targetTests>
                         </configuration>
                         <executions>

@@ -12,10 +12,7 @@ import org.junit.Test;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TestHibernateModel {
@@ -65,6 +62,7 @@ public class TestHibernateModel {
 
         User newUser1 = model.registerUser("t489u89t48t", "re345r435t3", "c@email.com");
         Assert.assertEquals(2, newUser1.getId());
+        Assert.assertEquals(0, newUser1.getTasks().size());
 
         Assert.assertThrows(IllegalArgumentException.class, () -> model.registerUser("t489u89t48t", "b", "c"));
     }
@@ -97,8 +95,9 @@ public class TestHibernateModel {
         task1.setTitle("Updated task 1");
         model.updateTask(task1);
 
-        Task updatedTask = model.getDBLayer().getTaskByIdWithUserId(task1.getId(), user.getId());
-
+        Optional<Task> first = model.getUserTasks().stream().filter(t -> t.getId() == task1.getId()).findFirst();
+        Assert.assertTrue(first.isPresent());
+        Task updatedTask = first.get();
         Assert.assertNotEquals(oldTitleValue, updatedTask.getTitle());
         Assert.assertEquals(task1.getId(), updatedTask.getId());
         Assert.assertEquals(task1.getDescription(), updatedTask.getDescription());
@@ -115,7 +114,6 @@ public class TestHibernateModel {
             e.printStackTrace();
         }
         Task newTask = new Task("new task1", "new description 1", date, true);
-        newTask.setId(3);
         User user = users.get(1);
         newTask.setUser(user);
         Assert.assertThrows(IllegalAccessError.class, () -> model.addNewTask(newTask));
@@ -125,12 +123,19 @@ public class TestHibernateModel {
 
         List<Task> tasks = model.getUserTasks();
         Task actual = tasks.get(tasks.size()-1);
+        User userTask = actual.getUser();
+        Assert.assertNotNull(userTask);
 
         Assert.assertEquals(newTask.getTitle(), actual.getTitle());
         Assert.assertEquals(newTask.getDescription(), actual.getDescription());
         Assert.assertEquals(newTask.getDeadline(), actual.getDeadline());
         Assert.assertEquals(newTask.getId(), actual.getId());
 
+        User loggedUser = model.getLoggedUser();
+        Assert.assertEquals(loggedUser.getId(), userTask.getId());
+        Assert.assertEquals(loggedUser.getUsername(), userTask.getUsername());
+        Assert.assertEquals(loggedUser.getPassword(), userTask.getPassword());
+        Assert.assertEquals(loggedUser.getEmail(), userTask.getEmail());
     }
 
     @Test
@@ -159,7 +164,7 @@ public class TestHibernateModel {
 
         model.loginUser(user.getUsername(), user.getPassword());
 
-        Task task = model.getTaskById(0);
+        Task task = model.getTaskById(3);
         Assert.assertEquals("title4", task.getTitle());
         Assert.assertEquals("description4", task.getDescription());
     }
@@ -184,9 +189,11 @@ public class TestHibernateModel {
         Assert.assertThrows(IllegalAccessError.class, () -> model.logout());
 
         User user = users.get(0);
-        model.loginUser(user.getUsername(), user.getPassword());
+        User loggedUser = model.loginUser(user.getUsername(), user.getPassword());
         Assert.assertTrue(model.isUserLogged());
+        Assert.assertEquals(loggedUser, model.getLoggedUser());
         model.logout();
+        Assert.assertNull(model.getLoggedUser());
         Assert.assertFalse(model.isUserLogged());
         Assert.assertThrows(IllegalAccessError.class, () -> model.logout());
     }

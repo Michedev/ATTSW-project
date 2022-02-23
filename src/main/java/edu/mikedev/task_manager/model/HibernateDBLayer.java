@@ -93,9 +93,6 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public void update(Task task) {
-        hibernateSession.evict(task);
-        hibernateSession.update(task);
-        commitTransaction();
     }
 
     @Override
