@@ -147,9 +147,6 @@ public class ModelIT {
         Assert.assertEquals("Updated title", updatedTask.getTitle());
         Assert.assertEquals(toBeUpdated.getDescription(), updatedTask.getDescription());
         Assert.assertEquals(toBeUpdated.getDeadline(), updatedTask.getDeadline());
-
-        toBeUpdated.setId(401024);
-        Assert.assertThrows(IllegalArgumentException.class, () -> model.updateTask(toBeUpdated));
     }
 
     @Test

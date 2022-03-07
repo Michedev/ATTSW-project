@@ -60,18 +60,27 @@
                     <useColor>true</useColor>
                     <images>
                         <image>
-                            <alias>app</alias>
-                            <external>
-                                <type>compose</type>
-                                <basedir>${project.basedir}</basedir>
-                                <composeFile>docker-compose.yml</composeFile>
-                                <ignoreBuild>true</ignoreBuild>
-                            </external>
+                            <name>postgres-test</name>
+                            <alias>postgres-test</alias>
+                            <name>task-manager</name>
                             <build>
-
+                                <dockerFile>${project.basedir}/Postgresql_Dockerfile</dockerFile>
                             </build>
                             <run>
-                                <namingStrategy>alias</namingStrategy>
+                                <env>
+                                    <POSTGRES_USER>root</POSTGRES_USER>
+                                    <POSTGRES_PASSWORD>root</POSTGRES_PASSWORD>
+                                </env>
+                                <ports>
+                                    <port>5432:5432</port>
+                                </ports>
+                                <wait>
+                                    <tcp>
+                                        <ports>
+                                            <port>5432</port>
+                                        </ports>
+                                    </tcp>
+                                </wait>
                             </run>
                         </image>
                     </images>

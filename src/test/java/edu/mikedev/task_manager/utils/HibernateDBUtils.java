@@ -23,7 +23,7 @@ public class HibernateDBUtils {
     private Session session;
 
     public static Session buildHBSession(){
-        Path testResourceDirectory = Paths.get("src", "main", "resources");
+        Path testResourceDirectory = Paths.get("src", "test", "resources");
         File hibernateConfigFile = new File(testResourceDirectory.resolve("hibernate.cfg.xml").toAbsolutePath().toString());
 
         Configuration cfg = new Configuration();
