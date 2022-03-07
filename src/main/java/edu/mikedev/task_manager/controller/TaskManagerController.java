@@ -1,9 +1,14 @@
 package edu.mikedev.task_manager.controller;
 
+import edu.mikedev.task_manager.model.HibernateDBLayer;
+import edu.mikedev.task_manager.model.HibernateModel;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.ui.LoginPage;
 
 import javax.swing.*;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class TaskManagerController {
 
@@ -27,6 +32,14 @@ public class TaskManagerController {
 
         window.setTitle("Login page");
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                ((HibernateDBLayer) ((HibernateModel) model).getDBLayer()).commitTransaction();
+                ((HibernateDBLayer) ((HibernateModel) model).getDBLayer()).getSession().close();
+            }
+        });
 
         LoginPageController pageController = new LoginPageController(loginPage, this);
         setContentPane(pageController, "Login page");
