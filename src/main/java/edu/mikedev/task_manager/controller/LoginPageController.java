@@ -35,6 +35,7 @@ public class LoginPageController extends TaskPageController<LoginPage> {
             panel.getLblErrorMessage().setText("Username and/or password are wrong");
             panel.getLblErrorMessage().setEnabled(true);
             panel.getLblErrorMessage().setVisible(true);
+            controller.getWindow().pack();
         }
 
     }
