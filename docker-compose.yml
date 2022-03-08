@@ -9,6 +9,10 @@ services:
       dockerfile: ./Dockerfile
     networks:
       - my-network
+    environment:
+      DISPLAY: $DISPLAY
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
     depends_on:
       - postgres-task-manager
   postgres-task-manager:
