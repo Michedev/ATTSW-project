@@ -17,10 +17,6 @@ public class HibernateDBLayer implements DBLayer {
         this.transaction = hibernateSession.beginTransaction();
     }
 
-    public void commitTransaction(){
-        transaction.commit();
-    }
-
     @Override
     public User getUserById(int id){
         return hibernateSession.createQuery(String.format("SELECT a from User a where a.id = %d", id), User.class).getResultList().get(0);
@@ -54,14 +50,14 @@ public class HibernateDBLayer implements DBLayer {
     @Override
     public void delete(User user){
         hibernateSession.delete(user);
-        commitTransaction();
+        transaction.commit();
     }
 
     @Override
     public void deleteTask(User taskOwner, Task task){
         taskOwner.getTasks().remove(task);
         hibernateSession.delete(task);
-        commitTransaction();
+        transaction.commit();
     }
 
     @Override
