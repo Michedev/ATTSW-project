@@ -110,6 +110,12 @@ public class HibernateDBLayer implements DBLayer {
         return hibernateSession.createQuery("SELECT id from Task", Integer.class).getResultList();
     }
 
+    @Override
+    public void closeConnection() {
+        transaction.commit();
+        hibernateSession.close();
+    }
+
     public Session getSession() {
         return hibernateSession;
     }

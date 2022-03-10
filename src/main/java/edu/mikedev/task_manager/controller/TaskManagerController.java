@@ -36,8 +36,9 @@ public class TaskManagerController {
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                ((HibernateDBLayer) ((HibernateModel) model).getDBLayer()).commitTransaction();
-                ((HibernateDBLayer) ((HibernateModel) model).getDBLayer()).getSession().close();
+                if(model instanceof HibernateModel){
+                    ((HibernateModel) model).getDBLayer().closeConnection();
+                }
             }
         });
 
