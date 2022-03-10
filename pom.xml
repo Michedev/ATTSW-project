@@ -328,6 +328,7 @@
                                 <param>edu.mikedev.task_manager.BDDSteps*</param>
                                 <param>edu.mikedev.task_manager.ui.*</param>
                                 <param>edu.mikedev.task_manager.controller.*</param>
+                                <param>edu.mikedev.task_manager.App</param>
                             </excludedClasses>
                             <excludedTestClasses>
                                 <param>edu.mikedev.task_manager.*IT*</param>
