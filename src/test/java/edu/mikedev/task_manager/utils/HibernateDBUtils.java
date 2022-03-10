@@ -23,7 +23,7 @@ public class HibernateDBUtils {
     private Session session;
 
     public static Session buildHBSession(){
-        Path testResourceDirectory = Paths.get("src", "main", "resources");
+        Path testResourceDirectory = Paths.get("src", "test", "resources");
         File hibernateConfigFile = new File(testResourceDirectory.resolve("hibernate.cfg.xml").toAbsolutePath().toString());
 
         Configuration cfg = new Configuration();
@@ -90,18 +90,18 @@ public class HibernateDBUtils {
         Set<Task> taskSet1 = new HashSet<>();
         try {
             task1 = new Task("title1", "description1", formatter.parse("13/05/2015"), false);
-            task1.setId(5);
+            task1.setId(0);
             task2 = new Task("title2", "description2", formatter.parse("23/05/2016"), false);
-            task2.setId(9);
+            task2.setId(1);
             task3 = new Task("title3", "description3", formatter.parse("21/10/2020"), true);
-            task3.setId(12);
+            task3.setId(2);
 
             task4 = new Task("title4", "description4", formatter.parse("01/02/2022"), false);
-            task4.setId(0);
+            task4.setId(3);
             task5 = new Task("title5", "description5", formatter.parse("22/05/2015"), true);
-            task5.setId(1);
+            task5.setId(4);
             task6 = new Task("title6", "description6", formatter.parse("15/12/2018"), false);
-            task6.setId(2);
+            task6.setId(5);
 
         } catch (ParseException e) {
 

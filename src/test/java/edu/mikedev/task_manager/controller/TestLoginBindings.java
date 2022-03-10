@@ -2,7 +2,8 @@ package edu.mikedev.task_manager.controller;
 
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.model.Model;
+import edu.mikedev.task_manager.model.DBLayer;
+import edu.mikedev.task_manager.model.HibernateModel;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 
 import javax.swing.*;
+import java.awt.event.WindowListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,15 +26,18 @@ import static org.mockito.Mockito.*;
 public class TestLoginBindings extends AssertJSwingJUnitTestCase{
 
 
-    private Model model;
+    private HibernateModel model;
 
     JFrame window;
     FrameFixture frame;
     TaskManagerController controller;
+    private DBLayer dbLayer;
 
     @Override
     protected void onSetUp(){
-        model = mock(Model.class);
+        model = mock(HibernateModel.class);
+        dbLayer = mock(DBLayer.class);
+        when(model.getDBLayer()).thenReturn(dbLayer);
         when(model.areCredentialCorrect(ArgumentMatchers.matches("myusername"),
                 ArgumentMatchers.matches("mypassword"))).thenReturn(true);
         User dummyUser = new User("myusername", "mypassword", "email@email.com");
@@ -98,4 +103,15 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
         frame.label("lblEmail").requireEnabled();
         frame.button("btnConfirmRegister").requireEnabled();
     }
+
+    @SuppressWarnings("java:S2699")
+    @Test
+    @GUITest
+    public void closingWindowEvents() {
+        for (WindowListener windowListener : controller.getWindow().getWindowListeners()) {
+            windowListener.windowClosing(null);
+        }
+        verify(dbLayer, times(1)).closeConnection();
+    }
+
 }

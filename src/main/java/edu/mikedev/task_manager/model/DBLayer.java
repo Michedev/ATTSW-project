@@ -37,4 +37,6 @@ public interface DBLayer {
     Task getTaskByIdWithUserId(int id, int userId);
 
     List<Integer> getTasksId();
+
+    void closeConnection();
 }

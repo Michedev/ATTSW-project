@@ -18,7 +18,7 @@
         <sonar.organization>mikedev-github</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.java.source>1.8</sonar.java.source>
-        <sonar.coverage.exclusions>src/main/java/edu/mikedev/task_manager/User.java,src/main/java/edu/mikedev/task_manager/Task.java</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>src/main/java/edu/mikedev/task_manager/User.java,src/main/java/edu/mikedev/task_manager/Task.java,src/main/java/edu/mikedev/task_manager/App.java</sonar.coverage.exclusions>
         <skipTests>false</skipTests>
         <skipUnitTests>${skipTests}</skipUnitTests>
         <skipIntegrationTests>${skipTests}</skipIntegrationTests>
@@ -30,6 +30,28 @@
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <mainClass>edu.mikedev.task_manager.App</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.38.1</version>
@@ -38,18 +60,27 @@
                     <useColor>true</useColor>
                     <images>
                         <image>
-                            <alias>app</alias>
-                            <external>
-                                <type>compose</type>
-                                <basedir>${project.basedir}</basedir>
-                                <composeFile>docker-compose.yml</composeFile>
-                                <ignoreBuild>true</ignoreBuild>
-                            </external>
+                            <name>postgres-test</name>
+                            <alias>postgres-test</alias>
+                            <name>task-manager</name>
                             <build>
-
+                                <dockerFile>${project.basedir}/Postgresql_Dockerfile</dockerFile>
                             </build>
                             <run>
-                                <namingStrategy>alias</namingStrategy>
+                                <env>
+                                    <POSTGRES_USER>root</POSTGRES_USER>
+                                    <POSTGRES_PASSWORD>root</POSTGRES_PASSWORD>
+                                </env>
+                                <ports>
+                                    <port>5432:5432</port>
+                                </ports>
+                                <wait>
+                                    <tcp>
+                                        <ports>
+                                            <port>5432</port>
+                                        </ports>
+                                    </tcp>
+                                </wait>
                             </run>
                         </image>
                     </images>
@@ -225,12 +256,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>net.jqwik</groupId>
-            <artifactId>jqwik</artifactId>
-            <version>1.6.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.6.2.Final</version>
@@ -302,10 +327,22 @@
                         <version>1.7.3</version>
                         <configuration>
                             <targetClasses>
-                                <param>edu.mikedev.*</param>
+                                <param>edu.mikedev.task_manager*</param>
                             </targetClasses>
+                            <excludedClasses>
+                                <param>edu.mikedev.task_manager.*IT*</param>
+                                <param>edu.mikedev.task_manager.*E2E*</param>
+                                <param>edu.mikedev.task_manager.BDDSteps*</param>
+                                <param>edu.mikedev.task_manager.ui.*</param>
+                                <param>edu.mikedev.task_manager.controller.*</param>
+                            </excludedClasses>
+                            <excludedTestClasses>
+                                <param>edu.mikedev.task_manager.*IT*</param>
+                                <param>edu.mikedev.task_manager.*E2E*</param>
+                                <param>edu.mikedev.task_manager.BDDSteps*</param>
+                            </excludedTestClasses>
                             <targetTests>
-                                <param>edu.mikedev.*</param>
+                                <param>edu.mikedev.task_manager.model.Test*</param>
                             </targetTests>
                         </configuration>
                         <executions>

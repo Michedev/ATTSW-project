@@ -17,7 +17,7 @@ public class HibernateDBLayer implements DBLayer {
         this.transaction = hibernateSession.beginTransaction();
     }
 
-    private void commitTransaction(){
+    public void commitTransaction(){
         transaction.commit();
     }
 
@@ -93,9 +93,6 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public void update(Task task) {
-        hibernateSession.evict(task);
-        hibernateSession.update(task);
-        commitTransaction();
     }
 
     @Override
@@ -113,4 +110,13 @@ public class HibernateDBLayer implements DBLayer {
         return hibernateSession.createQuery("SELECT id from Task", Integer.class).getResultList();
     }
 
+    @Override
+    public void closeConnection() {
+        transaction.commit();
+        hibernateSession.close();
+    }
+
+    public Session getSession() {
+        return hibernateSession;
+    }
 }

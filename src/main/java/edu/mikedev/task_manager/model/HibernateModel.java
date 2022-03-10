@@ -62,14 +62,13 @@ public class HibernateModel implements Model{
 
     private int findNewId(List<Integer> existingIds) {
         Optional<Integer> optionalMax = existingIds.stream().max(Integer::compareTo);
-
         int endRange = optionalMax.map(integer -> integer + 2).orElseGet(() -> 0);
         for(int i: IntStream.range(0, endRange).toArray()){
             if(!existingIds.contains(i)){
                 return i;
             }
         }
-        return -1;
+        throw new ArrayIndexOutOfBoundsException();
     }
 
     @Override
@@ -95,7 +94,6 @@ public class HibernateModel implements Model{
         if(!existsTaskIdLoggedUser(task.getId())){
             throw new IllegalArgumentException("Task id must exists already in DB");
         }
-        dbLayer.update(task);
     }
 
     @Override

@@ -2,15 +2,17 @@ version: '2'
 
 services:
   app:
-    image: openjdk:8u312-oracle
+    image: ubuntu:20.04
     container_name: app
     build:
       context: .
       dockerfile: ./Dockerfile
-    ports:
-      - "39484:39484"
     networks:
       - my-network
+    environment:
+      DISPLAY: $DISPLAY
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
     depends_on:
       - postgres-task-manager
   postgres-task-manager:
@@ -20,7 +22,7 @@ services:
       context: .
       dockerfile: ./Postgresql_Dockerfile
     ports:
-      - "5432:5432"
+      - 5432:5432
     networks:
       - my-network
     environment:

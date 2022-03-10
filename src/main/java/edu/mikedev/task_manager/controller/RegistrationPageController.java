@@ -53,6 +53,7 @@ public class RegistrationPageController extends TaskPageController<RegistrationP
             }
         }
         if(!correct){
+            controller.getWindow().pack();
             return null;
         }
         return new User(panel.getTfUsername().getText(), new String(password), panel.getTfEmail().getText());

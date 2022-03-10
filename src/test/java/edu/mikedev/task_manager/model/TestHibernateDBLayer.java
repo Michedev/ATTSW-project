@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -48,7 +49,7 @@ public class TestHibernateDBLayer {
 
     @Test
     public void testGetTaskById() {
-        Task task = hibernateDBLayer.getTaskById(0);
+        Task task = hibernateDBLayer.getTaskById(3);
         Assert.assertEquals("title4", task.getTitle());
         Assert.assertThrows(IndexOutOfBoundsException.class, () -> hibernateDBLayer.getTaskById(100));
 
@@ -63,6 +64,31 @@ public class TestHibernateDBLayer {
             Assert.assertTrue(tasks.stream().anyMatch((t) -> t.getDescription().equals("description" + i)));
         }
     }
+
+    @Test
+    public void testGetTasksId(){
+        List<Integer> expected = Arrays.asList(0, 1, 2, 3, 4, 5);
+        Assert.assertArrayEquals(expected.toArray(), hibernateDBLayer.getTasksId().toArray());
+    }
+
+
+    @Test
+    public void testUpdateTask(){
+        List<Task> tasks = hibernateDBLayer.getTasks();
+        Task toBeUpdated = tasks.get(3);
+        String oldTitle = toBeUpdated.getTitle();
+        toBeUpdated.setTitle("updated title1");
+
+        hibernateDBLayer.update(toBeUpdated);
+        Task updatedTask = hibernateDBLayer.getTaskById(toBeUpdated.getId());
+
+        Assert.assertNotEquals(oldTitle, updatedTask.getTitle());
+        Assert.assertEquals(toBeUpdated.getId(), updatedTask.getId());
+        Assert.assertEquals(toBeUpdated.getDescription(), updatedTask.getDescription());
+        Assert.assertEquals(toBeUpdated.getDeadline(), updatedTask.getDeadline());
+        Assert.assertEquals(toBeUpdated.isDone(), updatedTask.isDone());
+    }
+
 
     @Test
     public void testDeleteUser(){

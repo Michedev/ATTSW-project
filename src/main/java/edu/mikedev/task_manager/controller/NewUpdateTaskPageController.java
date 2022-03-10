@@ -37,6 +37,8 @@ public class NewUpdateTaskPageController extends TaskPageController<NewUpdateTas
             UserTasksPage userTasksPage = new UserTasksPage(sortedUserTasks);
             UserTasksPageController pageController = new UserTasksPageController(userTasksPage, controller);
             controller.setContentPane(pageController, model.getLoggedUser().getUsername() + " tasks");
+        } else {
+            controller.getWindow().pack();
         }
     }
 
