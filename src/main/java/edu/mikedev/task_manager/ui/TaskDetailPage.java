@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 
 public class TaskDetailPage extends JPanel {
 
+	private static final long serialVersionUID = -995281578385483415L;
+
 	private final JButton btnGoBack;
 	private final JLabel lblTaskTitle;
 	private final JLabel lblTaskDescription;

@@ -1,8 +1,6 @@
 package edu.mikedev.task_manager.ui;
 
 import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.model.Model;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,13 +14,9 @@ import java.util.stream.Collectors;
 
 public class UserTasksPage extends JPanel {
 
-
+	private static final long serialVersionUID = -4905197020820980836L;
+	
 	private final JButton btnNewTask;
-	/**
-	 * Create the panel.
-	 */
-	private transient Model model;
-	private transient User user;
 	private List<JPanel> tasksPanel;
 
 	public UserTasksPage(List<Task> userTasks) {

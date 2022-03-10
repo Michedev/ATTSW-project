@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class NewUpdateTaskPage extends JPanel {
+	private static final long serialVersionUID = 7607002546456900258L;
+
 	private JTextField tfTaskName;
 	private JTextField tfTaskDescription;
 	private JTextField tfTaskDeadline;

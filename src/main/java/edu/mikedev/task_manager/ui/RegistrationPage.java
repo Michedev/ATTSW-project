@@ -6,7 +6,9 @@ import javax.swing.*;
 
 public class RegistrationPage extends JPanel {
 
-    private JLabel lblErrorMessagePassword;
+ 	private static final long serialVersionUID = -1490287536998843323L;
+ 	
+	private JLabel lblErrorMessagePassword;
     private JLabel lblErrorMessageEmail;
     private JButton btnRegister;
     private JButton btnCancel;

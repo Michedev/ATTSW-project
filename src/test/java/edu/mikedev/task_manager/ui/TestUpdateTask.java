@@ -5,6 +5,7 @@ import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.utils.UIScenarios;
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -47,7 +48,13 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
         frame.textBox("tfTaskName").requireText(task.getTitle());
         frame.textBox("tfTaskDescription").requireText(task.getDescription());
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+        frame.textBox("tfTaskName").requireText(task.getTitle());
+        frame.textBox("tfTaskDescription").requireText(task.getDescription());
         frame.textBox("tfTaskDeadline").requireText(dateFormatter.format(task.getDeadline()));
         frame.button("btnSave").requireText("Update");
+        frame.label(JLabelMatcher.withName("lblErrorMessageName")).requireNotVisible();
+        frame.label(JLabelMatcher.withName("lblErrorMessageDescription")).requireNotVisible();
+        frame.label(JLabelMatcher.withName("lblErrorMessageDeadline")).requireNotVisible();
+
     }
 }

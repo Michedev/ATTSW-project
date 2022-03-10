@@ -6,6 +6,8 @@ import java.awt.*;
 
 public class LoginPage extends JPanel {
 
+	static final long serialVersionUID = -8741172132480079794L;
+	
 	private final JLabel lblErrorMessage;
 	private final JLabel lblPassword;
 

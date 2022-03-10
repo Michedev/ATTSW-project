@@ -22,6 +22,9 @@ import java.util.*;
 public class HibernateDBUtils {
     private Session session;
 
+    private final String userField = "user";
+    private final String passwordField = "password";
+
     public static Session buildHBSession(){
         Path testResourceDirectory = Paths.get("src", "test", "resources");
         File hibernateConfigFile = new File(testResourceDirectory.resolve("hibernate.cfg.xml").toAbsolutePath().toString());
@@ -54,11 +57,12 @@ public class HibernateDBUtils {
     public void initRealTestDB() throws SQLException {
         String url = "jdbc:postgresql://localhost:5432/";
         Properties props = new Properties();
-        props.setProperty("user", "root");
-        props.setProperty("password", "root");
+        props.setProperty(userField, "root");
+        props.setProperty(passwordField, "root");
 
         Connection conn = DriverManager.getConnection(url, props);
         Statement statement = conn.createStatement();
+
         statement.execute("DELETE FROM tasks;");
         statement.execute("DELETE FROM users;");
         statement.execute("COPY Users FROM '/db/fake-data/sample_user.csv' DELIMITER ',' CSV HEADER;");
@@ -69,9 +73,9 @@ public class HibernateDBUtils {
         String url = "jdbc:hsqldb:mem:inmemorydb";
         Properties props = new Properties();
         props.setProperty("user", "sa");
-        props.setProperty("password", "");
+        props.setProperty(passwordField, "");
 
-        Connection conn = DriverManager.getConnection(url, props);
+        DriverManager.getConnection(url, props);
     }
 
     public void addFakeUsers(){
@@ -80,14 +84,19 @@ public class HibernateDBUtils {
 
     public List<User> addFakeUsers(DBLayer dbLayer){
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Set<Task> taskSet = new HashSet<Task>();
+        Set<Task> taskSet1 = new HashSet<>();
         Task task1 = null;
         Task task2 = null;
         Task task3 = null;
         Task task4 = null;
         Task task5 = null;
         Task task6 = null;
-        Set<Task> taskSet1 = new HashSet<>();
+        String username1 = "username1";
+        String password1 = "password1";
+        String username2 = "username";
+        String password2 = "password";
+        String email = "email@email.com";
+        Set<Task> taskSet2 = new HashSet<>();
         try {
             task1 = new Task("title1", "description1", formatter.parse("13/05/2015"), false);
             task1.setId(0);
@@ -104,31 +113,31 @@ public class HibernateDBUtils {
             task6.setId(5);
 
         } catch (ParseException e) {
-
+        	// Parse catch that should never happen
         }
 
-        taskSet.add(task1);
-        taskSet.add(task2);
-        taskSet.add(task3);
+        taskSet1.add(task1);
+        taskSet1.add(task2);
+        taskSet1.add(task3);
 
-        User user1 = new User("username1", "password1", "email@email.com");
+        User user1 = new User(username1, password1, email);
         user1.setId(50);
-        user1.setTasks(taskSet);
-        for(Task t: taskSet){
+        user1.setTasks(taskSet1);
+        for(Task t: taskSet1){
             t.setUser(user1);
         }
 
         dbLayer.add(user1);
 
 
-        taskSet1.add(task4);
-        taskSet1.add(task5);
-        taskSet1.add(task6);
+        taskSet2.add(task4);
+        taskSet2.add(task5);
+        taskSet2.add(task6);
 
-        User user2 = new User("username", "password", "email@email.com");
+        User user2 = new User(username2, password2, email);
         user2.setId(1);
-        user2.setTasks(taskSet1);
-        for(Task t: taskSet1){
+        user2.setTasks(taskSet2);
+        for(Task t: taskSet2){
             t.setUser(user2);
         }
 
