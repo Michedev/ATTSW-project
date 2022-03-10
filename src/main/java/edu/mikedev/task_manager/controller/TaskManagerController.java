@@ -1,12 +1,10 @@
 package edu.mikedev.task_manager.controller;
 
-import edu.mikedev.task_manager.model.HibernateDBLayer;
 import edu.mikedev.task_manager.model.HibernateModel;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.ui.LoginPage;
 
 import javax.swing.*;
-import java.awt.event.ContainerAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
