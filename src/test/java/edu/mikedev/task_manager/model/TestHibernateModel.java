@@ -115,7 +115,6 @@ public class TestHibernateModel {
         }
         Task newTask = new Task("new task1", "new description 1", date, true);
         User user = users.get(1);
-        newTask.setUser(user);
         Assert.assertThrows(IllegalAccessError.class, () -> model.addNewTask(newTask));
 
         model.loginUser(user.getUsername(), user.getPassword());
@@ -130,6 +129,8 @@ public class TestHibernateModel {
         Assert.assertEquals(newTask.getDescription(), actual.getDescription());
         Assert.assertEquals(newTask.getDeadline(), actual.getDeadline());
         Assert.assertEquals(newTask.getId(), actual.getId());
+        Assert.assertEquals(user, newTask.getUser());
+
 
         User loggedUser = model.getLoggedUser();
         Assert.assertEquals(loggedUser.getId(), userTask.getId());
