@@ -89,6 +89,7 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public void update(Task task) {
+        // done implicitly by hibernate
     }
 
     @Override
