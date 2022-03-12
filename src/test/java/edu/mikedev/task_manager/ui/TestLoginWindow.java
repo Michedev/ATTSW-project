@@ -37,6 +37,7 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 		frame.textBox("tfUsername").requireEditable();
 		frame.textBox("tfPassword").requireEditable();
 		frame.label(JLabelMatcher.withName("lblErrorMessage")).requireNotVisible();
+		frame.button("btnLogin").requireEnabled();
 	}
 
 

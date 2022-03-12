@@ -16,6 +16,12 @@ public class RegistrationPageController extends TaskPageController<RegistrationP
     @Override
     public void setGUIBindings() {
         panel.getBtnRegister().addActionListener(this::registerEvents);
+        panel.getBtnCancel().addActionListener(this::goBackLoginPage);
+    }
+
+    private void goBackLoginPage(ActionEvent e) {
+        LoginPageController pageController = new LoginPageController(new LoginPage(), controller);
+        controller.setContentPane(pageController, "Login page");
     }
 
     private User parseUserIfCorrect() {
