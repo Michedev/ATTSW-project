@@ -8,12 +8,14 @@ import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.DialogMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
+import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JLabelFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.assertj.swing.util.Triple;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -105,8 +107,21 @@ public class TestRegistrationBindings extends AssertJSwingJUnitTestCase {
         frame.dialog(DialogMatcher.withTitle("Registration completed")).requireVisible();
     }
 
+    @SuppressWarnings("java:S2699")
+    @Test
+    @GUITest
+    public void testCancelButton() {
+        frame.button("btnCancel").click();
 
-    @After
+        Assert.assertThrows(ComponentLookupException.class, () -> frame.button("btnCancel"));
+        Assert.assertThrows(ComponentLookupException.class, () -> frame.button("btnConfirmRegister"));
+        frame.requireTitle("Login page");
+        frame.button("btnLogin").requireEnabled();
+
+    }
+
+
+        @After
     public void after() {
         frame.cleanUp();
     }
