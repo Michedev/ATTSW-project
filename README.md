@@ -1,4 +1,12 @@
 # ATTSW-project
+![Build](https://img.shields.io/github/workflow/status/Michedev/ATTSW-project/Maven%20test%20and%20package)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Michedev_ATTSW-project&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Michedev_ATTSW-project)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Michedev_ATTSW-project&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Michedev_ATTSW-project)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Michedev_ATTSW-project&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Michedev_ATTSW-project)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Michedev_ATTSW-project&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=Michedev_ATTSW-project)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Michedev_ATTSW-project&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Michedev_ATTSW-project)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Michedev_ATTSW-project&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Michedev_ATTSW-project)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Michedev_ATTSW-project&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Michedev_ATTSW-project)
 
 ## Introduction
 
