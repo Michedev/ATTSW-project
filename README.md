@@ -24,7 +24,7 @@ is not completed before that date. Further, the app features a login system.
 
 ## How to run
 
-Before the software execution, in order to allow to display the GUI through docker container prompt in any shell the following command
+Before the software execution we must allow to display the GUI through docker container. To accomplish, prompt in any shell the following command
 ```bash
 xhost +local:root
 ```
