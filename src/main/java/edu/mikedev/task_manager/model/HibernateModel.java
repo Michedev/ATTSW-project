@@ -88,12 +88,7 @@ public class HibernateModel implements Model{
 
     @Override
     public void updateTask(Task task) {
-        if(!isUserLogged()){
-            throw new IllegalAccessError(MSG_ERROR_USER_NOT_LOGGED);
-        }
-        if(!existsTaskIdLoggedUser(task.getId())){
-            throw new IllegalArgumentException("Task id must exists already in DB");
-        }
+        // done implicitly by hibernate
     }
 
     @Override

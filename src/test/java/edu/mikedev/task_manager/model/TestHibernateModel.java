@@ -88,12 +88,10 @@ public class TestHibernateModel {
         User user = users.get(0);
         Task task1 = user.getTasks().iterator().next();
         String oldTitleValue = task1.getTitle();
-        Assert.assertThrows(IllegalAccessError.class, () -> model.updateTask(task1));
 
         model.loginUser(user.getUsername(), user.getPassword());
 
         task1.setTitle("Updated task 1");
-        model.updateTask(task1);
 
         Optional<Task> first = model.getUserTasks().stream().filter(t -> t.getId() == task1.getId()).findFirst();
         Assert.assertTrue(first.isPresent());
@@ -168,6 +166,9 @@ public class TestHibernateModel {
         Task task = model.getTaskById(3);
         Assert.assertEquals("title4", task.getTitle());
         Assert.assertEquals("description4", task.getDescription());
+
+        Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(443420));
+
     }
 
 
