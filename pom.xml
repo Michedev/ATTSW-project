@@ -287,7 +287,10 @@
                         <version>0.8.7</version>
                         <configuration>
                             <excludes>
-                                <exclude>**/Main.*</exclude>
+                                <exclude>**/App.*</exclude>
+                                <exclude>**/Task.*</exclude>
+                                <exclude>**/User.*</exclude>
+
                             </excludes>
                         </configuration>
                         <executions>
@@ -300,7 +303,7 @@
                             </execution>
                             <execution>
                                 <id>jacoco-site</id>
-                                <phase>post-integration-test</phase>
+                                <phase>test</phase>
                                 <goals>
                                     <goal>report</goal>
                                 </goals>
