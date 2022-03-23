@@ -7,6 +7,7 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -38,6 +39,52 @@ public class TestUserTasksWindow extends AssertJSwingJUnitTestCase {
 
         }
         frame.button("btnNewTask").requireEnabled();
+        Assert.assertEquals(AppColors.RED, frame.panel("task0").target().getBackground());
+        Assert.assertEquals(AppColors.ORANGE, frame.panel("task1").target().getBackground());
+        Assert.assertEquals(AppColors.RED, frame.panel("task2").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task3").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task4").target().getBackground());
+
+    }
+
+    @SuppressWarnings("java:S2699")
+    @Test
+    @GUITest
+    public void testLightenColorOnMouseOverTask(){
+        frame.moveTo(frame.panel("task0").target().getMousePosition());
+        Assert.assertEquals(AppColors.RED.brighter(), frame.panel("task0").target().getBackground());
+        Assert.assertEquals(AppColors.ORANGE, frame.panel("task1").target().getBackground());
+        Assert.assertEquals(AppColors.RED, frame.panel("task2").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task3").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task4").target().getBackground());
+
+        frame.moveTo(frame.panel("task1").target().getMousePosition());
+        Assert.assertEquals(AppColors.RED, frame.panel("task0").target().getBackground());
+        Assert.assertEquals(AppColors.ORANGE.brighter(), frame.panel("task1").target().getBackground());
+        Assert.assertEquals(AppColors.RED, frame.panel("task2").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task3").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task4").target().getBackground());
+
+        frame.moveTo(frame.panel("task2").target().getMousePosition());
+        Assert.assertEquals(AppColors.RED, frame.panel("task0").target().getBackground());
+        Assert.assertEquals(AppColors.ORANGE, frame.panel("task1").target().getBackground());
+        Assert.assertEquals(AppColors.RED.brighter(), frame.panel("task2").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task3").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task4").target().getBackground());
+
+        frame.moveTo(frame.panel("task3").target().getMousePosition());
+        Assert.assertEquals(AppColors.RED, frame.panel("task0").target().getBackground());
+        Assert.assertEquals(AppColors.ORANGE, frame.panel("task1").target().getBackground());
+        Assert.assertEquals(AppColors.RED, frame.panel("task2").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN.brighter(), frame.panel("task3").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task4").target().getBackground());
+
+        frame.moveTo(frame.panel("task4").target().getMousePosition());
+        Assert.assertEquals(AppColors.RED, frame.panel("task0").target().getBackground());
+        Assert.assertEquals(AppColors.ORANGE, frame.panel("task1").target().getBackground());
+        Assert.assertEquals(AppColors.RED, frame.panel("task2").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN, frame.panel("task3").target().getBackground());
+        Assert.assertEquals(AppColors.GREEN.brighter(), frame.panel("task4").target().getBackground());
     }
 
     @After
