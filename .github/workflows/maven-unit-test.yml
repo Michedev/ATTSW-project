@@ -33,4 +33,4 @@ jobs:
     - name: pull vnc script
       run: wget https://raw.githubusercontent.com/croesch/beefiles/master/src/execute-on-vnc.sh && chmod +x execute-on-vnc.sh
     - name: Build with Maven using Java ${{matrix.java_version}}
-      run: execute-on-vnc.sh mvn -B package --file pom.xml
+      run: ./execute-on-vnc.sh mvn -B package --file pom.xml
