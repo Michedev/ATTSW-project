@@ -104,20 +104,12 @@ public class LoginPage extends JPanel {
 		return lblErrorMessage;
 	}
 
-	public JLabel getLblPassword() {
-		return lblPassword;
-	}
-
 	public JButton getBtnLogin() {
 		return btnLogin;
 	}
 
 	public JButton getBtnRegister() {
 		return btnRegister;
-	}
-
-	public JLabel getLblUsername() {
-		return lblUsername;
 	}
 
 	public JTextField getTfUsername() {
