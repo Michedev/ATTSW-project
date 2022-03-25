@@ -30,7 +30,9 @@ jobs:
         restore-keys: ${{ runner.os }}-m2-
     - name: install tightserver
       run: sudo apt update && sudo apt install -y tightvncserver
-    - name: pull vnc script
-      run: wget https://raw.githubusercontent.com/croesch/beefiles/master/src/execute-on-vnc.sh && chmod +x execute-on-vnc.sh
+    - name: start vnc server
+      run: sudo vncserver ":42" -localhost -geometry 1600x1200 -depth 16 && export DISPLAY=:42
     - name: Build with Maven using Java ${{matrix.java_version}}
       run: ./execute-on-vnc.sh mvn -B package --file pom.xml
+    - name: stop vnc server
+      run: sudo vncserver -kill ":42"
