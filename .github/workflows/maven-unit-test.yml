@@ -22,11 +22,15 @@ jobs:
         java-version: ${{matrix.java_version}}
         distribution: 'adopt'
         cache: maven
+    - name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml') }}
+        restore-keys: ${{ runner.os }}-m2-
     - name: install tightserver
       run: sudo apt update && sudo apt install -y tightvncserver
     - name: set tight vnc server password
       run: export vncpassword="mypsswrd"; umask 0077; mkdir -p "${HOME}/.vnc"; chmod go-rwx "${HOME}/.vnc"; vncpasswd -f <<<"${vncpassword}" >"${HOME}/.vnc/passwd";
-    - name: start vnc server
-      run: wget https://raw.githubusercontent.com/croesch/beefiles/master/src/execute-on-vnc.sh && chmod +x execute-on-vnc.sh
     - name: Build with Maven using Java ${{matrix.java_version}}
-      run:  ./execute-on-vnc.sh mvn -B package --file pom.xml
+      run:  chmod +x execute-on-vnc.sh && ./execute-on-vnc.sh mvn -B package --file pom.xml
