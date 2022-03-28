@@ -35,6 +35,6 @@ jobs:
     - name: start vnc server
       run: sudo vncserver ":42" -localhost -geometry 1600x1200 -depth 16 && export DISPLAY=:42
     - name: Build with Maven using Java ${{matrix.java_version}}
-      run  mvn -B package --file pom.xml
+      run:  mvn -B package --file pom.xml
     - name: stop vnc server
       run: sudo vncserver -kill ":42"
