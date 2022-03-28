@@ -4,6 +4,7 @@ import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class TestHibernateModel {
 
     Session session;
+    SessionFactory sessionFactory;
     HibernateModel model;
     List<User> users;
 
@@ -26,6 +28,7 @@ public class TestHibernateModel {
     public void setUp() throws SQLException {
         HibernateDBUtils hibernateDBUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSessionInMemory());
         session = hibernateDBUtils.getSession();
+        sessionFactory = hibernateDBUtils.getSessionFactory();
         model = new HibernateModel(session);
         hibernateDBUtils.initInMemoryTestDB();
         users = hibernateDBUtils.addFakeUsers(model.getDBLayer());
@@ -33,7 +36,17 @@ public class TestHibernateModel {
 
     @After
     public void closeSession(){
+
         session.close();
+        sessionFactory.close();
+    }
+
+    @Test
+    public void testInitialDBConditions(){
+        List<User> users = model.getDBLayer().getUsers();
+        List<Task> tasks = model.getDBLayer().getTasks();
+        Assert.assertEquals(2, users.size());
+        Assert.assertEquals(6, tasks.size());
     }
 
     @Test
@@ -49,7 +62,7 @@ public class TestHibernateModel {
         User duplicateUser = new User("username1", "password1", "email1");
         duplicateUser.setId(1000);
         duplicateUser.setTasks(new HashSet<>());
-        session.persist(duplicateUser);
+        session.save(duplicateUser);
 
         Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("username1", "password1"));
     }

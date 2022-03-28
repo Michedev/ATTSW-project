@@ -29,12 +29,12 @@ public class HibernateDBLayer implements DBLayer {
     
     @Override
     public void add(Task task){
-        hibernateSession.persist(task);
+        hibernateSession.save(task);
     }
 
     @Override
     public void add(User user){
-        hibernateSession.persist(user);
+        hibernateSession.save(user);
     }
 
     @Override
@@ -50,7 +50,6 @@ public class HibernateDBLayer implements DBLayer {
     @Override
     public void delete(User user){
         hibernateSession.delete(user);
-        transaction.commit();
     }
 
     @Override

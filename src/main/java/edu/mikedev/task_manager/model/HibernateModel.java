@@ -40,35 +40,12 @@ public class HibernateModel implements Model{
 
     @Override
     public User registerUser(User newUser) {
-        int newId = findNewUserId();
-        newUser.setId(newId);
         newUser.setTasks(new HashSet<>());
         if(userExists(newUser.getUsername())){
             throw new IllegalArgumentException("User id " + newUser.getId() + " already exists");
         }
         dbLayer.add(newUser);
         return newUser;
-    }
-
-    private int findNewUserId() {
-        List<Integer> userIds = dbLayer.getUserIds();
-        return findNewId(userIds);
-    }
-
-    private int findNewTaskId(){
-        List<Integer> taskIds = dbLayer.getTasksId();
-        return findNewId(taskIds);
-    }
-
-    private int findNewId(List<Integer> existingIds) {
-        Optional<Integer> optionalMax = existingIds.stream().max(Integer::compareTo);
-        int endRange = optionalMax.map(integer -> integer + 2).orElseGet(() -> 0);
-        for(int i: IntStream.range(0, endRange).toArray()){
-            if(!existingIds.contains(i)){
-                return i;
-            }
-        }
-        throw new ArrayIndexOutOfBoundsException();
     }
 
     @Override
@@ -96,7 +73,6 @@ public class HibernateModel implements Model{
         if(!isUserLogged()){
             throw new IllegalAccessError(MSG_ERROR_USER_NOT_LOGGED);
         }
-        newTask.setId(findNewTaskId());
         newTask.setUser(loggedUser);
         dbLayer.add(newTask);
     }
