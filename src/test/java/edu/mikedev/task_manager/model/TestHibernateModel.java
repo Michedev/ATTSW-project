@@ -36,7 +36,8 @@ public class TestHibernateModel {
 
     @After
     public void closeSession(){
-
+        List<User> users = model.getDBLayer().getUsers();
+        List<Task> tasks = model.getDBLayer().getTasks();
         session.close();
         sessionFactory.close();
     }
@@ -71,10 +72,10 @@ public class TestHibernateModel {
     @Test
     public void testRegisterUser(){
         User newUser = model.registerUser("tt4tu84", "b", "c");
-        Assert.assertEquals(0, newUser.getId());
+        Assert.assertEquals(3, newUser.getId());
 
         User newUser1 = model.registerUser("t489u89t48t", "re345r435t3", "c@email.com");
-        Assert.assertEquals(2, newUser1.getId());
+        Assert.assertEquals(4, newUser1.getId());
         Assert.assertEquals(0, newUser1.getTasks().size());
 
         Assert.assertThrows(IllegalArgumentException.class, () -> model.registerUser("t489u89t48t", "b", "c"));
