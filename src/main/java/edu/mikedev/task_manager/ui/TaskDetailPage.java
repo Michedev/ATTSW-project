@@ -116,18 +116,6 @@ public class TaskDetailPage extends JPanel {
 		return btnGoBack;
 	}
 
-	public JLabel getLblTaskTitle() {
-		return lblTaskTitle;
-	}
-
-	public JLabel getLblTaskDescription() {
-		return lblTaskDescription;
-	}
-
-	public JLabel getLblDone() {
-		return lblDone;
-	}
-
 	public JButton getBtnUpdate() {
 		return btnUpdate;
 	}

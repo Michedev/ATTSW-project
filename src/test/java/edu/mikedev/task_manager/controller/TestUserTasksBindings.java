@@ -80,6 +80,7 @@ public class TestUserTasksBindings extends AssertJSwingJUnitTestCase {
     @Test
     @GUITest
     public void testCorrectColorCards(){
+        frame.robot().moveMouse(frame.button("btnNewTask").target());
         List<Color> expectedColors = Arrays.asList(AppColors.RED, AppColors.ORANGE, AppColors.RED, AppColors.GREEN, AppColors.GREEN);
         for(int i = 0; i < 5; i++){
             JPanel taskPanel = frame.panel("task"+i).target();

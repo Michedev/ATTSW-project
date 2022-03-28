@@ -27,7 +27,7 @@ public class UIScenarios {
         List<Task> tasksListSorted = new ArrayList<Task>();
         List<Date> taskDates = Arrays.asList(
                 new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
-                new GregorianCalendar(2025, Calendar.FEBRUARY, 11).getTime(),
+                new GregorianCalendar(3025, Calendar.FEBRUARY, 11).getTime(),
                 new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(),
                 new GregorianCalendar(2026, Calendar.FEBRUARY, 11).getTime(),
                 new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime()

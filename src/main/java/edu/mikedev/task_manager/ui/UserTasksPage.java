@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -52,6 +54,18 @@ public class UserTasksPage extends JPanel {
 
 		JPanel taskPanel = new JPanel();
 		Color backgroundColor = AppColors.getColorBackground(t);
+		Color backgroundColorWhenMouseOver = backgroundColor.brighter();
+		taskPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				taskPanel.setBackground(backgroundColorWhenMouseOver);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				taskPanel.setBackground(backgroundColor);
+			}
+		});
 		taskPanel.setBackground(backgroundColor);
 		taskPanel.setBorder(new LineBorder(Color.black, 2, true));
 		taskPanel.setName("task" + t.getId());

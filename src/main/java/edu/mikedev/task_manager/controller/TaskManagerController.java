@@ -22,21 +22,13 @@ public class TaskManagerController {
     private void initView() {
         LoginPage loginPage = new LoginPage();
         window = new JFrame();
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException|InstantiationException|IllegalAccessException|UnsupportedLookAndFeelException e) {
-            // Leave default theme
-        }
-
         window.setTitle("Login page");
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if(model instanceof HibernateModel){
-                    ((HibernateModel) model).getDBLayer().closeConnection();
-                }
+                ((HibernateModel) model).getDBLayer().closeConnection();
             }
         });
 
