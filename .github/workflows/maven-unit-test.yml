@@ -22,5 +22,13 @@ jobs:
         java-version: ${{matrix.java_version}}
         distribution: 'adopt'
         cache: maven
+    - name: install tightserver
+      run: sudo apt update && sudo apt install -y tightvncserver
+    - name: set tight vnc server password
+      run: export vncpassword="mypsswrd"; umask 0077; mkdir -p "${HOME}/.vnc"; chmod go-rwx "${HOME}/.vnc"; vncpasswd -f <<<"${vncpassword}" >"${HOME}/.vnc/passwd";
+    - name: start vnc server
+      run: vncserver ":42" -localhost -geometry 1024x768 -depth 16; export DISPLAY=:42
     - name: Build with Maven using Java ${{matrix.java_version}}
-      run:  xvfb-run --server-args=":99 -screen 0 1024x768x24" mvn -B package --file pom.xml
+      run:  mvn -B package --file pom.xml
+    - name: stop vnc server
+      run: vncserver -kill ":42"
