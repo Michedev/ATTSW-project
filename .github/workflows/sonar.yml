@@ -32,8 +32,12 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: install tightserver
+        run: sudo apt update && sudo apt install -y tightvncserver
+      - name: set tight vnc server password
+        run: export vncpassword="mypsswrd"; umask 0077; mkdir -p "${HOME}/.vnc"; chmod go-rwx "${HOME}/.vnc"; vncpasswd -f <<<"${vncpassword}" >"${HOME}/.vnc/passwd";
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: xvfb-run mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Michedev_ATTSW-project -Pjacoco-coverage
+        run: chmod +x execute-on-vnc.sh && ./execute-on-vnc.sh mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Michedev_ATTSW-project -Pjacoco-coverage
