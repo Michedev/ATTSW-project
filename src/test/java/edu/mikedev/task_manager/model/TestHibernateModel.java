@@ -60,6 +60,10 @@ public class TestHibernateModel {
 
         Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("aaa", "bbb"));
 
+    }
+
+    @Test
+    public void testLoginUserDoubleUsername(){
         User duplicateUser = new User("username1", "password1", "email1");
         duplicateUser.setId(1000);
         duplicateUser.setTasks(new HashSet<>());
@@ -172,15 +176,19 @@ public class TestHibernateModel {
 
     @Test
     public void testGetTaskById() {
-        Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(0));
+        Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(1));
         User user = users.get(1);
 
         model.loginUser(user.getUsername(), user.getPassword());
 
-        Task task = model.getTaskById(3);
+        Task task = model.getTaskById(4);
+        System.out.println("ajifojiofjie");
+        System.out.println(model.getDBLayer().getTasksId());
+        System.out.println(model.getDBLayer().getTasks().stream().map(Task::getTitle).collect(Collectors.toList()));
         Assert.assertEquals("title4", task.getTitle());
         Assert.assertEquals("description4", task.getDescription());
 
+        Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(1));
         Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(443420));
 
     }

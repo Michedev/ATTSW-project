@@ -101,7 +101,6 @@ public class HibernateDBUtils {
             task1 = new Task("title1", "description1", formatter.parse("13/05/2015"), false);
             task2 = new Task("title2", "description2", formatter.parse("23/05/2016"), false);
             task3 = new Task("title3", "description3", formatter.parse("21/10/2020"), true);
-
             task4 = new Task("title4", "description4", formatter.parse("01/02/2022"), false);
             task5 = new Task("title5", "description5", formatter.parse("22/05/2015"), true);
             task6 = new Task("title6", "description6", formatter.parse("15/12/2018"), false);
@@ -112,28 +111,34 @@ public class HibernateDBUtils {
         taskSet1.add(task1);
         taskSet1.add(task2);
         taskSet1.add(task3);
-
-        User user1 = new User(username1, password1, email);
-        user1.setTasks(taskSet1);
-        for(Task t: taskSet1){
-            t.setUser(user1);
-        }
-
-        dbLayer.add(user1);
-
-
         taskSet2.add(task4);
         taskSet2.add(task5);
         taskSet2.add(task6);
 
+        User user1 = new User(username1, password1, email);
+        user1.setTasks(new HashSet<>());
+        for(Task t: taskSet1){
+            t.setUser(user1);
+        }
+        dbLayer.add(user1);
+
         User user2 = new User(username2, password2, email);
-        user2.setId(1);
-        user2.setTasks(taskSet2);
+        user2.setTasks(new HashSet<>());
         for(Task t: taskSet2){
             t.setUser(user2);
         }
-
         dbLayer.add(user2);
+
+        dbLayer.add(task1);
+        dbLayer.add(task2);
+        dbLayer.add(task3);
+        dbLayer.add(task4);
+        dbLayer.add(task5);
+        dbLayer.add(task6);
+
+        user1.setTasks(taskSet1);
+        user2.setTasks(taskSet2);
+
         return Arrays.asList(user1, user2);
     }
 
