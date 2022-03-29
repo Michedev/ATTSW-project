@@ -51,7 +51,7 @@ public class ModelIT {
         Assert.assertEquals(5, usersPostRegister.size());
         User newUser = usersPostRegister.get(4);
 
-        Assert.assertEquals(4, newUser.getId());
+        Assert.assertEquals(5, newUser.getId());
         Assert.assertEquals("newusername", newUser.getUsername());
         Assert.assertEquals("password", newUser.getPassword());
         Assert.assertEquals("email@email.com", newUser.getEmail());
@@ -69,7 +69,7 @@ public class ModelIT {
     public void testGetUser(){
         User pulledUser = model.loginUser("johndoe","randompassword");
 
-        Assert.assertEquals(2, pulledUser.getId());
+        Assert.assertEquals(3, pulledUser.getId());
         Assert.assertEquals("johndoe", pulledUser.getUsername());
         Assert.assertEquals("randompassword", pulledUser.getPassword());
         Assert.assertEquals("johndoe@gmail.com", pulledUser.getEmail());
@@ -99,33 +99,35 @@ public class ModelIT {
     @Test
     public void testAddNewTask(){
         Task toBeAdded = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
-        toBeAdded.setId(0);
 
         Assert.assertThrows(IllegalAccessError.class, () -> model.addNewTask(toBeAdded));
         User user = model.loginUser("tizio", "caio");
         model.addNewTask(toBeAdded);
 
-        Task toBeAdded2 = new Task("newtask", "newdescr", new GregorianCalendar(2019, Calendar.FEBRUARY, 11).getTime(), true);
-        toBeAdded2.setId(6);
+        Task toBeAdded2 = new Task("newtask2", "newdescr2", new GregorianCalendar(2020, Calendar.MARCH, 28).getTime(), true);
         model.addNewTask(toBeAdded2);
 
         List<Task> tasks = hibernateDBUtils.pullTasks();
         Assert.assertEquals(8, tasks.size());
 
         Task newTask = tasks.get(6);
-        Assert.assertEquals(6, newTask.getId());
-        Assert.assertEquals("newtask", newTask.getTitle());
-        Assert.assertEquals("newdescr", newTask.getDescription());
-        Assert.assertTrue(newTask.isDone());
-        Assert.assertEquals(newTask.getUser(), user);
-
-        newTask = tasks.get(7);
         Assert.assertEquals(7, newTask.getId());
         Assert.assertEquals("newtask", newTask.getTitle());
         Assert.assertEquals("newdescr", newTask.getDescription());
         Assert.assertTrue(newTask.isDone());
         Assert.assertEquals(newTask.getUser(), user);
 
+        newTask = tasks.get(7);
+        Assert.assertEquals(8, newTask.getId());
+        Assert.assertEquals("newtask2", newTask.getTitle());
+        Assert.assertEquals("newdescr2", newTask.getDescription());
+        Assert.assertTrue(newTask.isDone());
+        Assert.assertEquals(newTask.getUser(), user);
+
+        List<String> dbTaskTitles = hibernateDBUtils.getDBTaskTitles();
+        Assert.assertEquals(8, dbTaskTitles.size());
+        Assert.assertEquals("newtask", dbTaskTitles.get(6));
+        Assert.assertEquals("newtask2", dbTaskTitles.get(7));
     }
 
     @Test
@@ -142,7 +144,7 @@ public class ModelIT {
         List<Task> tasksAfterUpdate = hibernateDBUtils.pullTasks();
         Task updatedTask = tasksAfterUpdate.get(tasksAfterUpdate.size()-1);
 
-        Assert.assertEquals(1, updatedTask.getId());
+        Assert.assertEquals(2, updatedTask.getId());
         Assert.assertNotEquals(oldTitle, updatedTask.getTitle());
         Assert.assertEquals("Updated title", updatedTask.getTitle());
         Assert.assertEquals(toBeUpdated.getDescription(), updatedTask.getDescription());
@@ -164,7 +166,7 @@ public class ModelIT {
 
         Task deletedTaskIndex = tasks.get(3);
 
-        Assert.assertEquals(3, deletedTaskIndex.getId());
+        Assert.assertEquals(4, deletedTaskIndex.getId());
         Assert.assertEquals("Sample task title 2", deletedTaskIndex.getTitle());
 
         Task anotherUserTask = tasks.get(0);
@@ -178,7 +180,7 @@ public class ModelIT {
         User user = model.loginUser("tizio", "caio");
 
         Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(5));
-        Task task = model.getTaskById(0);
+        Task task = model.getTaskById(1);
 
         Assert.assertEquals("Eat food", task.getTitle());
         Assert.assertEquals("Eat food for 15 days", task.getDescription());
