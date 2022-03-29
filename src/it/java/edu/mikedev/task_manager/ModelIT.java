@@ -43,8 +43,11 @@ public class ModelIT {
 
         List<User> usersPreRegister = hibernateDBUtils.pullUsers();
 
+        String username = "newusername";
+        String password = "password";
+        String email = "email@email.com";
 
-        model.registerUser("newusername", "password", "email@email.com");
+        model.registerUser(username, password, email);
 
         List<User> usersPostRegister = hibernateDBUtils.pullUsers();
         Assert.assertEquals(4, usersPreRegister.size());
@@ -52,9 +55,13 @@ public class ModelIT {
         User newUser = usersPostRegister.get(4);
 
         Assert.assertEquals(5, newUser.getId());
-        Assert.assertEquals("newusername", newUser.getUsername());
-        Assert.assertEquals("password", newUser.getPassword());
-        Assert.assertEquals("email@email.com", newUser.getEmail());
+        Assert.assertEquals(username, newUser.getUsername());
+        Assert.assertEquals(password, newUser.getPassword());
+        Assert.assertEquals(email, newUser.getEmail());
+
+        List<String> dbUsernames = hibernateDBUtils.getDBUsernames();
+        Assert.assertEquals(5, dbUsernames.size());
+        Assert.assertEquals(username, dbUsernames.get(dbUsernames.size()-1));
     }
 
     @Test
@@ -137,7 +144,8 @@ public class ModelIT {
         List<Task> tasks = hibernateDBUtils.pullTasks();
         Task toBeUpdated = tasks.get(1);
         String oldTitle = toBeUpdated.getTitle();
-        toBeUpdated.setTitle("Updated title");
+        String newTitle = "Updated title";
+        toBeUpdated.setTitle(newTitle);
 
         model.updateTask(toBeUpdated);
 
@@ -146,9 +154,13 @@ public class ModelIT {
 
         Assert.assertEquals(2, updatedTask.getId());
         Assert.assertNotEquals(oldTitle, updatedTask.getTitle());
-        Assert.assertEquals("Updated title", updatedTask.getTitle());
+        Assert.assertEquals(newTitle, updatedTask.getTitle());
         Assert.assertEquals(toBeUpdated.getDescription(), updatedTask.getDescription());
         Assert.assertEquals(toBeUpdated.getDeadline(), updatedTask.getDeadline());
+
+        String updatedTaskTitle = hibernateDBUtils.getDBTaskTitles().get(tasksAfterUpdate.size() - 1);
+        Assert.assertNotEquals(oldTitle, updatedTaskTitle);
+        Assert.assertEquals(newTitle, updatedTaskTitle);
     }
 
     @Test
@@ -157,6 +169,9 @@ public class ModelIT {
 
         List<Task> tasks = hibernateDBUtils.pullTasks();
         Task toBeDeleted = tasks.get(2);
+
+        List<String> dbTaskTitlesPreDelete = hibernateDBUtils.getDBTaskTitles();
+
 
         model.deleteTask(toBeDeleted);
 
@@ -172,6 +187,11 @@ public class ModelIT {
         Task anotherUserTask = tasks.get(0);
 
         Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(anotherUserTask));
+
+        List<String> dbTaskTitlesPostDelete = hibernateDBUtils.getDBTaskTitles();
+        Assert.assertEquals(6, dbTaskTitlesPreDelete.size());
+        Assert.assertEquals(5, dbTaskTitlesPostDelete.size());
+        Assert.assertFalse(dbTaskTitlesPostDelete.contains(toBeDeleted.getTitle()));
     }
 
     @Test
