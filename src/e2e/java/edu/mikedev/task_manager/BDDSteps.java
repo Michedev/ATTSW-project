@@ -1,6 +1,7 @@
 package edu.mikedev.task_manager;
 
 import edu.mikedev.task_manager.controller.TaskManagerController;
+import edu.mikedev.task_manager.model.DBLayer;
 import edu.mikedev.task_manager.model.HibernateModel;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class BDDSteps extends Steps {
 
     Model model;
+    DBLayer dbLayer;
     JFrame window;
     TaskManagerController controller;
     FrameFixture frame;
@@ -132,7 +134,7 @@ public class BDDSteps extends Steps {
 
     @AfterScenario
     public void closeSession() {
-        utils.getSession().close();
+        dbLayer.closeConnection();
         frame.cleanUp();
     }
 
@@ -145,7 +147,9 @@ public class BDDSteps extends Steps {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        model = new HibernateModel(utils.getSession());
+        HibernateModel hbModel = new HibernateModel(utils.getSessionFactory());
+        dbLayer = hbModel.getDBLayer();
+        model = hbModel;
         GuiActionRunner.execute(() ->{
             controller = new TaskManagerController(model);
             return controller.getWindow();

@@ -18,7 +18,6 @@ import java.util.*;
 
 public class HibernateDBUtils {
     private SessionFactory sessionFactory;
-    private Session session;
 
     private final String userField = "user";
     private final String passwordField = "password";
@@ -42,12 +41,10 @@ public class HibernateDBUtils {
 
     public HibernateDBUtils(){
         this.sessionFactory = buildHBSession();
-        session = sessionFactory.openSession();
     }
 
     public HibernateDBUtils(SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
-        this.session = sessionFactory.openSession();
 
     }
 
@@ -59,6 +56,8 @@ public class HibernateDBUtils {
         statement.execute("DELETE FROM users;");
         statement.execute("COPY Users FROM '/db/fake-data/sample_user.csv' DELIMITER ',' CSV HEADER;");
         statement.execute("COPY Tasks FROM '/db/fake-data/sample_task.csv' DELIMITER ',' CSV HEADER;");
+
+        conn.close();
     }
 
     public Connection initPostgresConnection() throws SQLException {
@@ -79,11 +78,9 @@ public class HibernateDBUtils {
         DriverManager.getConnection(url, props);
     }
 
-    public void addFakeUsers(){
-        addFakeUsers(new HibernateDBLayer(session));
-    }
-
     public List<User> addFakeUsers(DBLayer dbLayer){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Set<Task> taskSet1 = new HashSet<>();
         Task task1 = null;
@@ -139,8 +136,11 @@ public class HibernateDBUtils {
 
         user1.setTasks(taskSet1);
         user2.setTasks(taskSet2);
-
+        session.getTransaction().commit();
+        session.close();
         return Arrays.asList(user1, user2);
+
+
     }
 
     public List<String> getDBTaskTitles(){
@@ -166,36 +166,11 @@ public class HibernateDBUtils {
                 String value = valuesDBIterator.getString(fieldName);
                 resultList.add(value);
             }
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return resultList;
-    }
-
-
-
-    public List<User> pullUsers() {
-        return session.createQuery("SELECT a FROM User a", User.class).getResultList();
-    }
-
-    public List<Task> pullTasks() {
-        return session.createQuery("SELECT a FROM Task a", Task.class).getResultList();
-    }
-
-    public List<String> pullTaskTitles(){
-        return session.createQuery("SELECT title from Task", String.class).getResultList();
-    }
-    
-    public User getUserByID(int id){
-        return session.createQuery(String.format("SELECT a from User a where id = %d", id), User.class).getResultList().get(0);
-    }
-
-    public Task getTaskByID(int id){
-        return session.createQuery(String.format("SELECT a from Task a where id = %d", id), Task.class).getResultList().get(0);
-    }
-
-    public Session getSession() {
-        return session;
     }
 
     public SessionFactory getSessionFactory() {

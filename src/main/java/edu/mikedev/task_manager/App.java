@@ -13,9 +13,7 @@ public class App {
         Configuration cfg = new Configuration();
         SessionFactory factory = cfg.configure("hibernate.cfg.xml").buildSessionFactory();
 
-        Session session = factory.openSession();
-
-        Model model = new HibernateModel(session);
+        Model model = new HibernateModel(factory);
         TaskManagerController controller = new TaskManagerController(model);
 
         controller.getWindow().pack();

@@ -3,6 +3,7 @@ package edu.mikedev.task_manager.model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +17,8 @@ public class HibernateModel implements Model{
     private User loggedUser;
     private DBLayer dbLayer;
 
-    public HibernateModel(Session hibernateSession){
-        dbLayer = new HibernateDBLayer(hibernateSession);
+    public HibernateModel(SessionFactory sessionFactory){
+        dbLayer = new HibernateDBLayer(sessionFactory);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class HibernateModel implements Model{
 
     @Override
     public void updateTask(Task task) {
-        // done implicitly by hibernate
+        dbLayer.update(task);
     }
 
     @Override
@@ -85,7 +86,8 @@ public class HibernateModel implements Model{
         if(!existsTaskIdLoggedUser(task.getId())){
             throw new IllegalAccessError("You can access only to user tasks");
         }
-        dbLayer.deleteTask(loggedUser, task);
+        dbLayer.delete(task);
+        loggedUser.getTasks().remove(task);
     }
 
 

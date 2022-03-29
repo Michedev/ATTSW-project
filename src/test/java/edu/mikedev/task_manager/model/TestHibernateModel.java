@@ -3,8 +3,6 @@ package edu.mikedev.task_manager.model;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,28 +16,24 @@ import java.util.stream.Collectors;
 
 public class TestHibernateModel {
 
-    Session session;
-    SessionFactory sessionFactory;
     HibernateModel model;
+    DBLayer dbLayer;
     List<User> users;
+    private HibernateDBUtils hibernateDBUtils;
 
 
     @Before
     public void setUp() throws SQLException {
-        HibernateDBUtils hibernateDBUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSessionInMemory());
-        session = hibernateDBUtils.getSession();
-        sessionFactory = hibernateDBUtils.getSessionFactory();
-        model = new HibernateModel(session);
+        hibernateDBUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSessionInMemory());
+        model = new HibernateModel(hibernateDBUtils.getSessionFactory());
         hibernateDBUtils.initInMemoryTestDB();
         users = hibernateDBUtils.addFakeUsers(model.getDBLayer());
+        dbLayer = model.getDBLayer();
     }
 
     @After
     public void closeSession(){
-        List<User> users = model.getDBLayer().getUsers();
-        List<Task> tasks = model.getDBLayer().getTasks();
-        session.close();
-        sessionFactory.close();
+        hibernateDBUtils.getSessionFactory().close();
     }
 
     @Test
@@ -67,7 +61,7 @@ public class TestHibernateModel {
         User duplicateUser = new User("username1", "password1", "email1");
         duplicateUser.setId(1000);
         duplicateUser.setTasks(new HashSet<>());
-        session.save(duplicateUser);
+        dbLayer.add(duplicateUser);
 
         Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("username1", "password1"));
     }
@@ -91,7 +85,6 @@ public class TestHibernateModel {
         Assert.assertFalse(model.userExists("fakeuser"));
         Assert.assertTrue(model.userExists("username1"));
     }
-
 
     @Test
     public void testAreCredentialCorrect() {

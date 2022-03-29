@@ -1,5 +1,6 @@
 package edu.mikedev.task_manager;
 
+import edu.mikedev.task_manager.model.DBLayer;
 import edu.mikedev.task_manager.model.HibernateModel;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
@@ -13,12 +14,13 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModelIT {
 
     private HibernateDBUtils hibernateDBUtils;
-    private Model model;
-    private Session session;
+    private HibernateModel model;
+    private DBLayer dbLayer;
 
     @Before
     public void setUp() {
@@ -29,19 +31,19 @@ public class ModelIT {
             e.printStackTrace();
         }
 
-        session = hibernateDBUtils.getSession();
-        model = new HibernateModel(session);
+        model = new HibernateModel(hibernateDBUtils.getSessionFactory());
+        dbLayer = model.getDBLayer();
     }
 
     @After
     public void closeSession(){
-        session.close();
+        model.getDBLayer().closeConnection();
     }
 
     @Test
     public void testRegisterUser(){
 
-        List<User> usersPreRegister = hibernateDBUtils.pullUsers();
+        List<User> usersPreRegister = dbLayer.getUsers();
 
         String username = "newusername";
         String password = "password";
@@ -49,7 +51,7 @@ public class ModelIT {
 
         model.registerUser(username, password, email);
 
-        List<User> usersPostRegister = hibernateDBUtils.pullUsers();
+        List<User> usersPostRegister = dbLayer.getUsers();
         Assert.assertEquals(4, usersPreRegister.size());
         Assert.assertEquals(5, usersPostRegister.size());
         User newUser = usersPostRegister.get(4);
@@ -95,7 +97,7 @@ public class ModelIT {
 
     @Test
     public void testGetTasks(){
-        List<Task> tasks = hibernateDBUtils.pullTasks();
+        List<Task> tasks = dbLayer.getTasks();
         Assert.assertEquals(6, tasks.size());
         Assert.assertEquals("Eat food", tasks.get(0).getTitle());
         Assert.assertEquals("Sample task title 1", tasks.get(2).getTitle());
@@ -114,7 +116,7 @@ public class ModelIT {
         Task toBeAdded2 = new Task("newtask2", "newdescr2", new GregorianCalendar(2020, Calendar.MARCH, 28).getTime(), true);
         model.addNewTask(toBeAdded2);
 
-        List<Task> tasks = hibernateDBUtils.pullTasks();
+        List<Task> tasks = dbLayer.getTasks();
         Assert.assertEquals(8, tasks.size());
 
         Task newTask = tasks.get(6);
@@ -122,14 +124,14 @@ public class ModelIT {
         Assert.assertEquals("newtask", newTask.getTitle());
         Assert.assertEquals("newdescr", newTask.getDescription());
         Assert.assertTrue(newTask.isDone());
-        Assert.assertEquals(newTask.getUser(), user);
+        Assert.assertEquals(newTask.getUser().getId(), user.getId());
 
         newTask = tasks.get(7);
         Assert.assertEquals(8, newTask.getId());
         Assert.assertEquals("newtask2", newTask.getTitle());
         Assert.assertEquals("newdescr2", newTask.getDescription());
         Assert.assertTrue(newTask.isDone());
-        Assert.assertEquals(newTask.getUser(), user);
+        Assert.assertEquals(newTask.getUser().getId(), user.getId());
 
         List<String> dbTaskTitles = hibernateDBUtils.getDBTaskTitles();
         Assert.assertEquals(8, dbTaskTitles.size());
@@ -141,7 +143,7 @@ public class ModelIT {
     public void testUpdateTask(){
         model.loginUser("tizio", "caio");
 
-        List<Task> tasks = hibernateDBUtils.pullTasks();
+        List<Task> tasks = dbLayer.getTasks();
         Task toBeUpdated = tasks.get(1);
         String oldTitle = toBeUpdated.getTitle();
         String newTitle = "Updated title";
@@ -149,8 +151,10 @@ public class ModelIT {
 
         model.updateTask(toBeUpdated);
 
-        List<Task> tasksAfterUpdate = hibernateDBUtils.pullTasks();
-        Task updatedTask = tasksAfterUpdate.get(tasksAfterUpdate.size()-1);
+        List<Task> tasksAfterUpdate = dbLayer.getTasks();
+        System.out.println("aaaaaaa");
+        System.out.println(tasksAfterUpdate.stream().map(Task::getTitle).collect(Collectors.toList()));
+        Task updatedTask = tasksAfterUpdate.stream().filter(t -> t.getId() == 2).findFirst().get();
 
         Assert.assertEquals(2, updatedTask.getId());
         Assert.assertNotEquals(oldTitle, updatedTask.getTitle());
@@ -158,24 +162,23 @@ public class ModelIT {
         Assert.assertEquals(toBeUpdated.getDescription(), updatedTask.getDescription());
         Assert.assertEquals(toBeUpdated.getDeadline(), updatedTask.getDeadline());
 
-        String updatedTaskTitle = hibernateDBUtils.getDBTaskTitles().get(tasksAfterUpdate.size() - 1);
-        Assert.assertNotEquals(oldTitle, updatedTaskTitle);
-        Assert.assertEquals(newTitle, updatedTaskTitle);
+        List<String> dbTaskTitles = hibernateDBUtils.getDBTaskTitles();
+        Assert.assertFalse(dbTaskTitles.contains(oldTitle));
+        Assert.assertTrue(dbTaskTitles.contains(newTitle));
     }
 
     @Test
     public void testDeleteTask(){
         User pulledUser = model.loginUser("pippo","pluto");
 
-        List<Task> tasks = hibernateDBUtils.pullTasks();
+        List<Task> tasks = dbLayer.getTasks();
         Task toBeDeleted = tasks.get(2);
 
         List<String> dbTaskTitlesPreDelete = hibernateDBUtils.getDBTaskTitles();
 
-
         model.deleteTask(toBeDeleted);
 
-        List<Task> tasksAfterDelete = hibernateDBUtils.pullTasks();
+        List<Task> tasksAfterDelete = dbLayer.getTasks();
 
         Assert.assertEquals(5, tasksAfterDelete.size());
 
@@ -189,6 +192,9 @@ public class ModelIT {
         Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(anotherUserTask));
 
         List<String> dbTaskTitlesPostDelete = hibernateDBUtils.getDBTaskTitles();
+        System.out.println("AAAAAAAAAAJIFeoifoEJOIOJI");
+        System.out.println(dbTaskTitlesPostDelete);
+        Assert.assertTrue(dbTaskTitlesPreDelete.contains(toBeDeleted.getTitle()));
         Assert.assertEquals(6, dbTaskTitlesPreDelete.size());
         Assert.assertEquals(5, dbTaskTitlesPostDelete.size());
         Assert.assertFalse(dbTaskTitlesPostDelete.contains(toBeDeleted.getTitle()));

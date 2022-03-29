@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 public class TestHibernateDBLayer {
 
     private HibernateDBLayer hibernateDBLayer;
-    private Session session;
     private List<User> users;
 
     @Before
@@ -30,14 +29,13 @@ public class TestHibernateDBLayer {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        session = dbUtils.getSession();
-        hibernateDBLayer = new HibernateDBLayer(session);
+        hibernateDBLayer = new HibernateDBLayer(dbUtils.getSessionFactory());
         users = dbUtils.addFakeUsers(hibernateDBLayer);
     }
 
     @After
     public void closeSession(){
-        session.close();
+        hibernateDBLayer.getSession().close();
     }
 
     @Test

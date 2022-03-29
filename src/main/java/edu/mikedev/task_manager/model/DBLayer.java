@@ -20,7 +20,7 @@ public interface DBLayer {
 
     void delete(User user);
 
-    void deleteTask(User taskOwner, Task task);
+    void delete(Task task);
 
     List<String> getUsernames();
 
