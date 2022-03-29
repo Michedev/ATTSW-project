@@ -22,6 +22,7 @@
         <skipTests>false</skipTests>
         <skipUnitTests>${skipTests}</skipUnitTests>
         <skipIntegrationTests>${skipTests}</skipIntegrationTests>
+        <skipE2ETests>${skipTests}</skipE2ETests>
         <jbehave.core.version>4.8.3</jbehave.core.version>
         <embeddables>**/*Stories.java</embeddables>
 
@@ -153,7 +154,6 @@
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>
-                    <skipTests>${skipIntegrationTests}</skipTests>
                 </configuration>
                 <executions>
                     <execution>
@@ -162,6 +162,9 @@
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
+                        <configuration>
+                            <skipTests>${skipIntegrationTests}</skipTests>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>failsafe-e2e-test</id>
@@ -170,6 +173,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
+                            <skipTests>${skipE2ETests}</skipTests>
                             <includes>
                                 <include>**/*E2E.java</include>
                             </includes>
