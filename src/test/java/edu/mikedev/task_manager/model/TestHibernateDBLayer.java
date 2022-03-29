@@ -35,19 +35,19 @@ public class TestHibernateDBLayer {
 
     @After
     public void closeSession(){
-        hibernateDBLayer.getSession().close();
+        hibernateDBLayer.closeConnection();
     }
 
     @Test
     public void testGetUserById() {
-        User user = hibernateDBLayer.getUserById(50);
+        User user = hibernateDBLayer.getUserById(1);
         Assert.assertEquals("username1", user.getUsername());
         Assert.assertThrows(IndexOutOfBoundsException.class, () -> hibernateDBLayer.getUserById(0));
     }
 
     @Test
     public void testGetTaskById() {
-        Task task = hibernateDBLayer.getTaskById(3);
+        Task task = hibernateDBLayer.getTaskById(4);
         Assert.assertEquals("title4", task.getTitle());
         Assert.assertThrows(IndexOutOfBoundsException.class, () -> hibernateDBLayer.getTaskById(100));
 
@@ -65,7 +65,7 @@ public class TestHibernateDBLayer {
 
     @Test
     public void testGetTasksId(){
-        List<Integer> expected = Arrays.asList(0, 1, 2, 3, 4, 5);
+        List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5, 6);
         Assert.assertArrayEquals(expected.toArray(), hibernateDBLayer.getTasksId().toArray());
     }
 
