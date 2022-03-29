@@ -182,9 +182,6 @@ public class TestHibernateModel {
         model.loginUser(user.getUsername(), user.getPassword());
 
         Task task = model.getTaskById(4);
-        System.out.println("ajifojiofjie");
-        System.out.println(model.getDBLayer().getTasksId());
-        System.out.println(model.getDBLayer().getTasks().stream().map(Task::getTitle).collect(Collectors.toList()));
         Assert.assertEquals("title4", task.getTitle());
         Assert.assertEquals("description4", task.getDescription());
 
