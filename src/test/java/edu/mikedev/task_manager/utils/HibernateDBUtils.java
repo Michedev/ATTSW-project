@@ -11,10 +11,7 @@ import org.hibernate.cfg.Configuration;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -55,18 +52,22 @@ public class HibernateDBUtils {
     }
 
     public void initRealTestDB() throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/";
-        Properties props = new Properties();
-        props.setProperty(userField, "root");
-        props.setProperty(passwordField, "root");
-
-        Connection conn = DriverManager.getConnection(url, props);
+        Connection conn = initPostgresConnection();
         Statement statement = conn.createStatement();
 
         statement.execute("DELETE FROM tasks;");
         statement.execute("DELETE FROM users;");
         statement.execute("COPY Users FROM '/db/fake-data/sample_user.csv' DELIMITER ',' CSV HEADER;");
         statement.execute("COPY Tasks FROM '/db/fake-data/sample_task.csv' DELIMITER ',' CSV HEADER;");
+    }
+
+    public Connection initPostgresConnection() throws SQLException {
+        String url = "jdbc:postgresql://localhost:5432/";
+        Properties props = new Properties();
+        props.setProperty(userField, "root");
+        props.setProperty(passwordField, "root");
+
+        return DriverManager.getConnection(url, props);
     }
 
     public void initInMemoryTestDB() throws SQLException {
@@ -141,6 +142,37 @@ public class HibernateDBUtils {
 
         return Arrays.asList(user1, user2);
     }
+
+    public List<String> getDBTaskTitles(){
+        return pullListStringFromDB("Tasks", "title");
+    }
+
+    public List<String> getDBUsernames(){
+        return pullListStringFromDB("Users", "username");
+    }
+
+    private List<String> pullListStringFromDB(String tableName, String fieldName) {
+        List<String> resultList = new ArrayList<>();
+        Connection connection = null;
+        try {
+            connection = initPostgresConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ResultSet valuesDBIterator = null;
+        try {
+            valuesDBIterator = connection.createStatement().executeQuery("Select * from " + tableName);
+            while(valuesDBIterator.next()){
+                String value = valuesDBIterator.getString(fieldName);
+                resultList.add(value);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultList;
+    }
+
+
 
     public List<User> pullUsers() {
         return session.createQuery("SELECT a FROM User a", User.class).getResultList();
