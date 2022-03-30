@@ -1,6 +1,7 @@
 package edu.mikedev.task_manager;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Task {
 	
@@ -55,4 +56,13 @@ public class Task {
 	public User getUser() {
 		return user;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Task task = (Task) o;
+		return id == task.id && done == task.done && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(deadline, task.deadline) && Objects.equals(user, task.user);
+	}
+
 }
