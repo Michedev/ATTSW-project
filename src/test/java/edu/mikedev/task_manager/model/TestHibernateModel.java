@@ -33,7 +33,7 @@ public class TestHibernateModel {
 
     @After
     public void closeSession(){
-        hibernateDBUtils.getSessionFactory().close();
+        dbLayer.closeConnection();
     }
 
     @Test
@@ -104,6 +104,8 @@ public class TestHibernateModel {
 
         task1.setTitle("Updated task 1");
 
+        model.updateTask(task1);
+
         Optional<Task> first = model.getUserTasks().stream().filter(t -> t.getId() == task1.getId()).findFirst();
         Assert.assertTrue(first.isPresent());
         Task updatedTask = first.get();
@@ -138,7 +140,7 @@ public class TestHibernateModel {
         Assert.assertEquals(newTask.getDescription(), actual.getDescription());
         Assert.assertEquals(newTask.getDeadline(), actual.getDeadline());
         Assert.assertEquals(newTask.getId(), actual.getId());
-        Assert.assertEquals(user, newTask.getUser());
+        Assert.assertEquals(user.getId(), newTask.getUser().getId());
 
 
         User loggedUser = model.getLoggedUser();
