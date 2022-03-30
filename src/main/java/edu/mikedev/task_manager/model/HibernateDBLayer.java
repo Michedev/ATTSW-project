@@ -58,13 +58,16 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public void delete(User user){
-        hibernateSession.remove(user);
+        for(Task t: user.getTasks()){
+            hibernateSession.createQuery("delete from Task where id = " + t.getId()).executeUpdate();
+        }
+        hibernateSession.createQuery("delete from User where id = " + user.getId()).executeUpdate();
         commitTransaction();
     }
 
     @Override
     public void delete(Task task){
-        hibernateSession.remove(task);
+        hibernateSession.createQuery("delete from Task where id = " + task.getId()).executeUpdate();
         commitTransaction();
     }
 
