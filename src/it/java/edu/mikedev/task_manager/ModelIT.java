@@ -192,8 +192,7 @@ public class ModelIT {
         Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(anotherUserTask));
 
         List<String> dbTaskTitlesPostDelete = hibernateDBUtils.getDBTaskTitles();
-        System.out.println("AAAAAAAAAAJIFeoifoEJOIOJI");
-        System.out.println(dbTaskTitlesPostDelete);
+
         Assert.assertTrue(dbTaskTitlesPreDelete.contains(toBeDeleted.getTitle()));
         Assert.assertEquals(6, dbTaskTitlesPreDelete.size());
         Assert.assertEquals(5, dbTaskTitlesPostDelete.size());
