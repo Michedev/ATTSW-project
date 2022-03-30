@@ -3,7 +3,6 @@ package edu.mikedev.task_manager.utils;
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
 import edu.mikedev.task_manager.model.DBLayer;
-import edu.mikedev.task_manager.model.HibernateDBLayer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -60,14 +59,40 @@ public class HibernateDBUtils {
         conn.close();
     }
 
-    public Connection initPostgresConnection() throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/";
+    public Connection initPostgresConnection() {
+        try {
+            return initDBConnection(
+                    "jdbc:postgresql://localhost:5432/",
+                    "root",
+                    "root"
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Connection initInMemoryConnection(){
+        try {
+            return initDBConnection(
+                    "jdbc:hsqldb:mem:inmemorydb",
+                    "sa",
+                    ""
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Connection initDBConnection(String url, String username, String password) throws SQLException {
         Properties props = new Properties();
-        props.setProperty(userField, "root");
-        props.setProperty(passwordField, "root");
+        props.setProperty(userField, username);
+        props.setProperty(passwordField, password);
 
         return DriverManager.getConnection(url, props);
     }
+
 
     public void initInMemoryTestDB() throws SQLException {
         String url = "jdbc:hsqldb:mem:inmemorydb";
@@ -77,7 +102,7 @@ public class HibernateDBUtils {
 
         DriverManager.getConnection(url, props);
     }
-
+    //todo: refactor db methods with DBConnectionHandler instances
     public List<User> addFakeUsers(DBLayer dbLayer){
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -154,11 +179,7 @@ public class HibernateDBUtils {
     private List<String> pullListStringFromDB(String tableName, String fieldName) {
         List<String> resultList = new ArrayList<>();
         Connection connection = null;
-        try {
-            connection = initPostgresConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        connection = initInMemoryConnection();
         ResultSet valuesDBIterator = null;
         try {
             valuesDBIterator = connection.createStatement().executeQuery("Select * from " + tableName);

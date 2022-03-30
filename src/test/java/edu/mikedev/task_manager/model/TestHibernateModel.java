@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -165,8 +166,13 @@ public class TestHibernateModel {
         model.deleteTask(taskToDelete);
 
         List<Task> userTasksAfterDelete = model.getUserTasks();
+        Assert.assertEquals(2, userTasksAfterDelete.size());
         Assert.assertFalse(userTasksAfterDelete.stream().anyMatch((x) -> x.getId() == taskToDelete.getId()));
         Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(wrongTaskToDelete));
+
+        List<String> dbTaskTitles = hibernateDBUtils.getDBTaskTitles();
+        Assert.assertEquals(5, dbTaskTitles.size());
+        Assert.assertFalse(userTasksAfterDelete.stream().anyMatch((x) -> Objects.equals(x.getTitle(), taskToDelete.getTitle())));
     }
 
     @Test
