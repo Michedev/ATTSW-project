@@ -58,12 +58,14 @@ public class BDDSteps extends Steps {
         Assert.assertEquals(ownerUsername, model.getLoggedUser().getUsername());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         List<Task> userTasks = model.getUserTasks();
-        System.out.print("user tasks: ");
-        System.out.println(userTasks);
+
         Task task = findExistingTaskByName(taskTitle);
         Assert.assertEquals(taskDescription, task.getDescription());
         Assert.assertEquals(simpleDateFormat.format(task.getDeadline()), taskDeadline);
         Assert.assertEquals(ownerUsername, task.getUser().getUsername());
+
+        Task taskDB = utils.getTaskById(task.getId());
+        Assert.assertEquals(model.getLoggedUser().getId(), taskDB.getUser().getId());
     }
 
     @When("it modifies the task with name \"$oldTaskName\" to \"$newTaskName\"")
@@ -85,6 +87,9 @@ public class BDDSteps extends Steps {
     public void taskExistsIntoTheDB(String taskName){
         Optional<Task> optionalTask = model.getUserTasks().stream().filter(t -> t.getTitle().equals(taskName)).findFirst();
         Assert.assertTrue(optionalTask.isPresent());
+
+        Task dbTask = utils.getTaskById(optionalTask.get().getId());
+        Assert.assertNotNull(dbTask);
     }
 
     @When("it deletes a task called \"$taskTitle\"")
@@ -130,6 +135,9 @@ public class BDDSteps extends Steps {
     public void isTaskChecked(String taskTitle){
         Task task = findExistingTaskByName(taskTitle);
         Assert.assertTrue(task.isDone());
+
+        Task dbTask = utils.getTaskById(task.getId());
+        Assert.assertTrue(dbTask.isDone());
     }
 
     @AfterScenario
@@ -140,10 +148,10 @@ public class BDDSteps extends Steps {
 
     @BeforeScenario
     public void setUpGUI() {
-        utils = new HibernateDBUtils(HibernateDBUtils.buildHBSession());
+        utils = new HibernateDBUtils();
 
         try {
-            utils.initRealTestDB();
+            utils.initDBTables();
         } catch (SQLException e) {
             e.printStackTrace();
         }
