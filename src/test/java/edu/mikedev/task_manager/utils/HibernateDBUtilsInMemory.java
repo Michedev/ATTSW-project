@@ -2,24 +2,37 @@ package edu.mikedev.task_manager.utils;
 
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class InMemoryDBConnectionHandler implements DBConnectionHandler{
+public class HibernateDBUtilsInMemory extends HibernateDBUtilsAbs{
+
     @Override
-    public void initDB() {
+    public SessionFactory buildSessionFactory() {
+        Path testResourceDirectory = Paths.get("src", "test", "resources");
+        File hibernateConfigFile = new File(testResourceDirectory.resolve("hibernate.inmemory.cfg.xml").toAbsolutePath().toString());
+
+        Configuration cfg = new Configuration();
+        return cfg.configure(hibernateConfigFile).buildSessionFactory();
+    }
+
+    @Override
+    public void initDBTables() {
         Connection connection = null;
         Statement statement = null;
         try {
-            connection = initConnection(
+            connection = initDBConnection(
                     "jdbc:hsqldb:mem:inmemorydb",
                     "sa",
                     ""
@@ -54,6 +67,13 @@ public class InMemoryDBConnectionHandler implements DBConnectionHandler{
             // Parse catch that should never happen
         }
 
+        task1.setId(1);
+        task2.setId(2);
+        task3.setId(3);
+        task4.setId(4);
+        task5.setId(5);
+        task6.setId(6);
+
         taskSet1.add(task1);
         taskSet1.add(task2);
         taskSet1.add(task3);
@@ -66,6 +86,7 @@ public class InMemoryDBConnectionHandler implements DBConnectionHandler{
         for(Task t: taskSet1){
             t.setUser(user1);
         }
+        user1.setId(1);
         insertUser(statement, user1);
 
         User user2 = new User(username2, password2, email);
@@ -73,6 +94,7 @@ public class InMemoryDBConnectionHandler implements DBConnectionHandler{
         for(Task t: taskSet2){
             t.setUser(user2);
         }
+        user2.setId(2);
 
         insertUser(statement, user2);
 
@@ -83,24 +105,45 @@ public class InMemoryDBConnectionHandler implements DBConnectionHandler{
         insertTask(statement, task5);
         insertTask(statement, task6);
 
-        closeConnection(connection);
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void insertUser(Statement statement, User u){
         try {
-            statement.execute("INSERT INTO users (username, password, email) " +
-                    String.format("VALUES (%s, %s, %s)", u.getUsername(), u.getPassword(), u.getEmail()));
+            statement.execute("INSERT INTO users (id, username, password, email) " +
+                    String.format("VALUES (%d, '%s', '%s', '%s')", u.getId(), u.getUsername(), u.getPassword(), u.getEmail()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     private void insertTask(Statement statement, Task t){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
-            statement.execute("INSERT INTO tasks (title, description, deadline, done, ID_USER) " +
-                    String.format("VALUES (%s, %s, %tF, %b, %d); ", t.getTitle(), t.getDescription(), t.getDeadline(), t.isDone(), t.getUser().getId()));
+            statement.execute("INSERT INTO tasks (id, title, description, deadline, done, ID_USER) " +
+                    String.format("VALUES (%d, '%s', '%s', '%s', %b, '%d'); ", t.getId(), t.getTitle(), t.getDescription(), formatter.format(t.getDeadline()), t.isDone(), t.getUser().getId()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    @Override
+    public Connection initDBConnection() throws SQLException {
+        try {
+            return initDBConnection(
+                    "jdbc:hsqldb:mem:inmemorydb",
+                    "sa",
+                    ""
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
