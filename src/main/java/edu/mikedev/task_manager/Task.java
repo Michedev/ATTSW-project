@@ -65,4 +65,15 @@ public class Task {
 		return id == task.id && done == task.done && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(deadline, task.deadline) && Objects.equals(user, task.user);
 	}
 
+	@Override
+	public String toString() {
+		return "Task{" +
+				"id=" + id +
+				", title='" + title + '\'' +
+				", description='" + description + '\'' +
+				", deadline=" + deadline +
+				", done=" + done +
+				", id_user=" + user.getId() +
+				'}';
+	}
 }

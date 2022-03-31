@@ -2,13 +2,13 @@ package edu.mikedev.task_manager.model;
 
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.utils.HibernateDBUtils;
+import edu.mikedev.task_manager.utils.HibernateDBUtilsAbs;
+import edu.mikedev.task_manager.utils.HibernateDBUtilsInMemory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,23 +18,19 @@ import java.util.stream.Collectors;
 public class TestHibernateModel {
 
     HibernateModel model;
-    DBLayer dbLayer;
-    List<User> users;
-    private HibernateDBUtils hibernateDBUtils;
+    private HibernateDBUtilsInMemory hibernateDBUtils;
 
 
     @Before
     public void setUp() throws SQLException {
-        hibernateDBUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSessionInMemory());
+        hibernateDBUtils = new HibernateDBUtilsInMemory();
         model = new HibernateModel(hibernateDBUtils.getSessionFactory());
-        hibernateDBUtils.initInMemoryTestDB();
-        users = hibernateDBUtils.addFakeUsers(model.getDBLayer());
-        dbLayer = model.getDBLayer();
+        hibernateDBUtils.initDBTables();
     }
 
     @After
     public void closeSession(){
-        dbLayer.closeConnection();
+        model.getDBLayer().closeConnection();
     }
 
     @Test
@@ -62,7 +58,7 @@ public class TestHibernateModel {
         User duplicateUser = new User("username1", "password1", "email1");
         duplicateUser.setId(1000);
         duplicateUser.setTasks(new HashSet<>());
-        dbLayer.add(duplicateUser);
+        hibernateDBUtils.insert(duplicateUser);
 
         Assert.assertThrows(IllegalArgumentException.class, () -> model.loginUser("username1", "password1"));
     }
@@ -97,27 +93,43 @@ public class TestHibernateModel {
 
     @Test
     public void testUpdateTask() {
-        User user = users.get(0);
-        Task task1 = user.getTasks().iterator().next();
-        String oldTitleValue = task1.getTitle();
 
-        model.loginUser(user.getUsername(), user.getPassword());
+        List<String> dbTaskTitlesPreUpdate = hibernateDBUtils.getDBTaskTitles();
 
-        task1.setTitle("Updated task 1");
+        model.loginUser("username1", "password1");
 
-        model.updateTask(task1);
+        Task taskToBeUpdated = model.getTaskById(1);
 
-        Optional<Task> first = model.getUserTasks().stream().filter(t -> t.getId() == task1.getId()).findFirst();
+        String oldTaskTitle = taskToBeUpdated.getTitle();
+        String newTaskTitle = "Updated task 1";
+
+        taskToBeUpdated.setTitle(newTaskTitle);
+
+        model.updateTask(taskToBeUpdated);
+
+        Optional<Task> first = model.getUserTasks().stream().filter(t -> t.getId() == taskToBeUpdated.getId()).findFirst();
         Assert.assertTrue(first.isPresent());
         Task updatedTask = first.get();
-        Assert.assertNotEquals(oldTitleValue, updatedTask.getTitle());
-        Assert.assertEquals(task1.getId(), updatedTask.getId());
-        Assert.assertEquals(task1.getDescription(), updatedTask.getDescription());
-        Assert.assertEquals(task1.getDeadline(), updatedTask.getDeadline());
+
+        Assert.assertNotEquals(oldTaskTitle, updatedTask.getTitle());
+        Assert.assertEquals(taskToBeUpdated.getId(), updatedTask.getId());
+        Assert.assertEquals(taskToBeUpdated.getDescription(), updatedTask.getDescription());
+        Assert.assertEquals(taskToBeUpdated.getDeadline(), updatedTask.getDeadline());
+
+        List<String> dbTaskTitlesPostUpdate = hibernateDBUtils.getDBTaskTitles();
+
+        Assert.assertTrue(dbTaskTitlesPreUpdate.contains(oldTaskTitle));
+        Assert.assertFalse(dbTaskTitlesPreUpdate.contains(newTaskTitle));
+
+        Assert.assertFalse(dbTaskTitlesPostUpdate.contains(oldTaskTitle));
+        Assert.assertTrue(dbTaskTitlesPostUpdate.contains(newTaskTitle));
     }
 
     @Test
     public void testAddNewTask() {
+        List<String> dbTaskTitlesPreAdd = hibernateDBUtils.getDBTaskTitles();
+
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = null;
         try {
@@ -126,21 +138,21 @@ public class TestHibernateModel {
             e.printStackTrace();
         }
         Task newTask = new Task("new task1", "new description 1", date, true);
-        User user = users.get(1);
         Assert.assertThrows(IllegalAccessError.class, () -> model.addNewTask(newTask));
 
-        model.loginUser(user.getUsername(), user.getPassword());
+        User user = model.loginUser("username", "password");
         model.addNewTask(newTask);
 
         List<Task> tasks = model.getUserTasks();
-        Task actual = tasks.get(tasks.size()-1);
-        User userTask = actual.getUser();
-        Assert.assertNotNull(userTask);
+        Assert.assertEquals(4, tasks.size());
+        Task newTaskFromHB = tasks.get(tasks.size()-1);
+        User userTask = newTaskFromHB.getUser();
 
-        Assert.assertEquals(newTask.getTitle(), actual.getTitle());
-        Assert.assertEquals(newTask.getDescription(), actual.getDescription());
-        Assert.assertEquals(newTask.getDeadline(), actual.getDeadline());
-        Assert.assertEquals(newTask.getId(), actual.getId());
+        Assert.assertNotNull(userTask);
+        Assert.assertEquals(newTask.getTitle(), newTaskFromHB.getTitle());
+        Assert.assertEquals(newTask.getDescription(), newTaskFromHB.getDescription());
+        Assert.assertEquals(newTask.getDeadline(), newTaskFromHB.getDeadline());
+        Assert.assertEquals(newTask.getId(), newTaskFromHB.getId());
         Assert.assertEquals(user.getId(), newTask.getUser().getId());
 
 
@@ -149,26 +161,30 @@ public class TestHibernateModel {
         Assert.assertEquals(loggedUser.getUsername(), userTask.getUsername());
         Assert.assertEquals(loggedUser.getPassword(), userTask.getPassword());
         Assert.assertEquals(loggedUser.getEmail(), userTask.getEmail());
+
+        List<String> dbTaskTitlesPostAdd = hibernateDBUtils.getDBTaskTitles();
+
+        Assert.assertEquals(6, dbTaskTitlesPreAdd.size());
+        Assert.assertFalse(dbTaskTitlesPreAdd.contains(newTask.getTitle()));
+        Assert.assertEquals(7, dbTaskTitlesPostAdd.size());
+        Assert.assertTrue(dbTaskTitlesPostAdd.contains(newTask.getTitle()));
     }
 
     @Test
     public void testDeleteTask() {
-        User user = users.get(0);
-        Task taskToDelete = user.getTasks().iterator().next();
-
-        User wrongUser = users.get(1);
-        Task wrongTaskToDelete = wrongUser.getTasks().iterator().next();
+        Task taskToDelete = hibernateDBUtils.getTaskById(2);
+        Task otherUserTask = hibernateDBUtils.getTaskById(5);
 
         Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(taskToDelete));
 
-        model.loginUser(user.getUsername(), user.getPassword());
+        model.loginUser("username1", "password1");
 
         model.deleteTask(taskToDelete);
 
         List<Task> userTasksAfterDelete = model.getUserTasks();
         Assert.assertEquals(2, userTasksAfterDelete.size());
         Assert.assertFalse(userTasksAfterDelete.stream().anyMatch((x) -> x.getId() == taskToDelete.getId()));
-        Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(wrongTaskToDelete));
+        Assert.assertThrows(IllegalAccessError.class, () -> model.deleteTask(otherUserTask));
 
         List<String> dbTaskTitles = hibernateDBUtils.getDBTaskTitles();
         Assert.assertEquals(5, dbTaskTitles.size());
@@ -178,9 +194,8 @@ public class TestHibernateModel {
     @Test
     public void testGetTaskById() {
         Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(1));
-        User user = users.get(1);
 
-        model.loginUser(user.getUsername(), user.getPassword());
+        model.loginUser("username", "password");
 
         Task task = model.getTaskById(4);
         Assert.assertEquals("title4", task.getTitle());
@@ -188,7 +203,6 @@ public class TestHibernateModel {
 
         Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(1));
         Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(443420));
-
     }
 
 
@@ -196,22 +210,29 @@ public class TestHibernateModel {
     public void testGetTasks() {
         Assert.assertThrows(IllegalAccessError.class, () -> model.getUserTasks());
 
-        User user = users.get(0);
-        List<Task> expectedTasks = user.getTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());
+        List<Task> expectedTasks = hibernateDBUtils.getUsersTask(1).stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());
 
-        model.loginUser(user.getUsername(), user.getPassword());
+        System.out.println("ijfejiofeoijfjioe");
+        System.out.println(expectedTasks.stream().map(Task::getId).collect(Collectors.toList()));
 
-        List<Task> actualTasks = model.getUserTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());;
+        model.loginUser("username1", "password1");
+
+        List<Task> actualTasks = model.getUserTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());
+
+        System.out.println("i3u8ur3u8r8383j");
+        System.out.println(actualTasks.stream().map(Task::getId).collect(Collectors.toList()));
 
         Assert.assertArrayEquals(expectedTasks.toArray(), actualTasks.toArray());
+
+        List<String> dbTaskTitlesUser1 = hibernateDBUtils.getDBTaskTitlesOfUser(1);
+        Assert.assertArrayEquals(expectedTasks.stream().map(Task::getTitle).collect(Collectors.toList()).toArray(), dbTaskTitlesUser1.toArray());
     }
 
     @Test
     public void testLogout() {
         Assert.assertThrows(IllegalAccessError.class, () -> model.logout());
 
-        User user = users.get(0);
-        User loggedUser = model.loginUser(user.getUsername(), user.getPassword());
+        User loggedUser = model.loginUser("username1", "password1");
         Assert.assertTrue(model.isUserLogged());
         Assert.assertEquals(loggedUser, model.getLoggedUser());
         model.logout();
