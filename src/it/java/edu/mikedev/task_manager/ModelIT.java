@@ -2,9 +2,8 @@ package edu.mikedev.task_manager;
 
 import edu.mikedev.task_manager.model.DBLayer;
 import edu.mikedev.task_manager.model.HibernateModel;
-import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
-import org.hibernate.Session;
+import edu.mikedev.task_manager.utils.HibernateDBUtilsAbs;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,15 +17,15 @@ import java.util.stream.Collectors;
 
 public class ModelIT {
 
-    private HibernateDBUtils hibernateDBUtils;
+    private HibernateDBUtilsAbs hibernateDBUtils;
     private HibernateModel model;
     private DBLayer dbLayer;
 
     @Before
     public void setUp() {
-        this.hibernateDBUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSession());
+        this.hibernateDBUtils = new HibernateDBUtils();
         try {
-            hibernateDBUtils.initRealTestDB();
+            hibernateDBUtils.initDBTables();
         } catch (SQLException e) {
             e.printStackTrace();
         }
