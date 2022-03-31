@@ -2,15 +2,14 @@ package edu.mikedev.task_manager.model;
 
 import edu.mikedev.task_manager.Task;
 import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.utils.HibernateDBUtils;
-import org.hibernate.Session;
+import edu.mikedev.task_manager.utils.HibernateDBUtilsInMemory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -19,18 +18,13 @@ import java.util.stream.Stream;
 public class TestHibernateDBLayer {
 
     private HibernateDBLayer hibernateDBLayer;
-    private List<User> users;
+    private HibernateDBUtilsInMemory dbUtils;
 
     @Before
     public void setUp(){
-        HibernateDBUtils dbUtils = new HibernateDBUtils(HibernateDBUtils.buildHBSessionInMemory());
-        try {
-            dbUtils.initInMemoryTestDB();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dbUtils = new HibernateDBUtilsInMemory();
+        dbUtils.initDBTables();
         hibernateDBLayer = new HibernateDBLayer(dbUtils.getSessionFactory());
-        users = dbUtils.addFakeUsers(hibernateDBLayer);
     }
 
     @After
@@ -93,7 +87,9 @@ public class TestHibernateDBLayer {
         List<User> usersPreDelete = hibernateDBLayer.getUsers();
         Assert.assertEquals(2, usersPreDelete.size());
 
-        hibernateDBLayer.delete(users.get(0));
+        User user = hibernateDBLayer.getUserById(1);
+
+        hibernateDBLayer.delete(user);
 
         List<User> usersAfterDelete = hibernateDBLayer.getUsers();
 
@@ -104,9 +100,8 @@ public class TestHibernateDBLayer {
     @Test
     public void testGetUsers(){
         List<User> usersDB = hibernateDBLayer.getUsers();
-        for(User user: usersDB){
-            Assert.assertTrue(users.contains(user));
-        }
+        Assert.assertArrayEquals(dbUtils.users.stream().sorted(Comparator.comparingInt(User::getId)).collect(Collectors.toList()).toArray(),
+                                 usersDB.stream().sorted(Comparator.comparingInt(User::getId)).collect(Collectors.toList()).toArray());
     }
 
     @Test
