@@ -45,6 +45,10 @@ public abstract class HibernateDBUtilsAbs {
         return pullListStringFromDB("select * from Users", "username");
     }
 
+    public List<String> getDBTaskTitlesOfUser(int userID){
+        return pullListStringFromDB(String.format("select * from Tasks where id_user = %d", userID), "title");
+    }
+
     private List<String> pullListStringFromDB(String query, String fieldName) {
         List<String> resultList = new ArrayList<>();
         Connection connection = null;
