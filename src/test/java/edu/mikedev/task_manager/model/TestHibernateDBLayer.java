@@ -8,8 +8,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,6 +33,26 @@ public class TestHibernateDBLayer {
     @After
     public void closeSession(){
         hibernateDBLayer.closeConnection();
+    }
+
+    @Test
+    public void testSession(){
+        Assert.assertNotNull(hibernateDBLayer.getSession());
+        Assert.assertTrue(hibernateDBLayer.getSession().isConnected());
+    }
+
+    @Test
+    public void testClosedConnection(){
+        hibernateDBLayer.closeConnection();
+
+        Assert.assertThrows(Exception.class, () -> hibernateDBLayer.getUsernames());
+    }
+
+    @Test
+    public void testGetUserIds(){
+        List<Integer> expected = Arrays.asList(1, 2);
+        Assert.assertArrayEquals(expected.toArray(), hibernateDBLayer.getUserIds().toArray());
+
     }
 
     @Test
@@ -68,8 +91,10 @@ public class TestHibernateDBLayer {
     public void testUpdateTask(){
         List<Task> tasks = hibernateDBLayer.getTasks();
         Task toBeUpdated = tasks.get(3);
+        hibernateDBLayer.getSession().evict(toBeUpdated);
         String oldTitle = toBeUpdated.getTitle();
-        toBeUpdated.setTitle("updated title1");
+        String newTitle = "updated title1";
+        toBeUpdated.setTitle(newTitle);
 
         hibernateDBLayer.update(toBeUpdated);
         Task updatedTask = hibernateDBLayer.getTaskById(toBeUpdated.getId());
@@ -79,6 +104,11 @@ public class TestHibernateDBLayer {
         Assert.assertEquals(toBeUpdated.getDescription(), updatedTask.getDescription());
         Assert.assertEquals(toBeUpdated.getDeadline(), updatedTask.getDeadline());
         Assert.assertEquals(toBeUpdated.isDone(), updatedTask.isDone());
+
+        List<String> dbTaskTitles = dbUtils.getDBTaskTitles();
+        Assert.assertEquals(6, dbTaskTitles.size());
+        Assert.assertFalse(dbTaskTitles.contains(oldTitle));
+        Assert.assertTrue(dbTaskTitles.contains(newTitle));
     }
 
 
@@ -95,6 +125,10 @@ public class TestHibernateDBLayer {
 
         Assert.assertEquals(2, usersPreDelete.size());
         Assert.assertEquals(1, usersAfterDelete.size());
+
+        List<String> dbUsernames = dbUtils.getDBUsernames();
+        Assert.assertEquals(1, dbUsernames.size());
+        Assert.assertFalse(dbUsernames.contains(user.getUsername()));
     }
 
     @Test
@@ -112,6 +146,43 @@ public class TestHibernateDBLayer {
         for (int i = 0; i < expected.size(); i++) {
             Assert.assertEquals(expected.get(i), actual.get(i));
         }
+    }
 
+    @Test
+    public void testAddNewTask(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse("13/04/3022");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Task newTask = new Task("New task 1", "New Descr 1", date, false);
+        newTask.setUser(hibernateDBLayer.getUserById(1));
+        hibernateDBLayer.add(newTask);
+
+        List<Task> tasksPostAdd = hibernateDBLayer.getTasks();
+
+        Assert.assertEquals(7, tasksPostAdd.size());
+
+        List<String> dbTaskTitlesPostAdd = dbUtils.getDBTaskTitles();
+        Assert.assertEquals(7, tasksPostAdd.size());
+        Assert.assertTrue(dbTaskTitlesPostAdd.contains(newTask.getTitle()));
+    }
+
+    @Test
+    public void testAddNewUser(){
+        User user = new User("new username", "newpassword", "newemail@email.com");
+
+        hibernateDBLayer.add(user);
+
+        List<User> usersPostAdd = hibernateDBLayer.getUsers();
+
+        Assert.assertEquals(3, usersPostAdd.size());
+
+        List<String> dbUsernamesPostAdd = dbUtils.getDBUsernames();
+
+        Assert.assertEquals(3, dbUsernamesPostAdd.size());
+        Assert.assertTrue(dbUsernamesPostAdd.contains(user.getUsername()));
     }
 }
