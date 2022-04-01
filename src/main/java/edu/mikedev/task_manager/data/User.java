@@ -59,7 +59,7 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, username, password, email, tasks);
+		return Objects.hash(id, username, password, email);
 	}
 
 	@Override
