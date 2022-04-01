@@ -336,6 +336,8 @@
                                 <param>edu.mikedev.task_manager.ui.*</param>
                                 <param>edu.mikedev.task_manager.controller.*</param>
                                 <param>edu.mikedev.task_manager.App</param>
+                                <param>edu.mikedev.task_manager.User</param>
+                                <param>edu.mikedev.task_manager.Task</param>
                             </excludedClasses>
                             <excludedTestClasses>
                                 <param>edu.mikedev.task_manager.*IT*</param>
