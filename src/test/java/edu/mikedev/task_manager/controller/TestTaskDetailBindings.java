@@ -1,7 +1,7 @@
 package edu.mikedev.task_manager.controller;
 
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.data.Task;
+import edu.mikedev.task_manager.data.User;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.ui.AppColors;
 import edu.mikedev.task_manager.utils.UIScenarios;

@@ -1,6 +1,6 @@
 package edu.mikedev.task_manager.controller;
 
-import edu.mikedev.task_manager.Task;
+import edu.mikedev.task_manager.data.Task;
 import edu.mikedev.task_manager.ui.AppColors;
 import edu.mikedev.task_manager.ui.NewUpdateTaskPage;
 import edu.mikedev.task_manager.ui.TaskDetailPage;

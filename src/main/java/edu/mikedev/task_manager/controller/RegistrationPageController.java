@@ -1,6 +1,6 @@
 package edu.mikedev.task_manager.controller;
 
-import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.data.User;
 import edu.mikedev.task_manager.ui.LoginPage;
 import edu.mikedev.task_manager.ui.RegistrationPage;
 

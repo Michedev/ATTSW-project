@@ -1,4 +1,4 @@
-package edu.mikedev.task_manager;
+package edu.mikedev.task_manager.data;
 
 import java.util.Date;
 import java.util.Objects;
