@@ -13,7 +13,8 @@ public class Task {
 	private User user;
 
 	public Task(){}
-       
+
+
 	public Task(String title, String description, Date deadline, boolean done) {
 		this.title = title;
 		this.description = description;
@@ -63,6 +64,11 @@ public class Task {
 		if (o == null || getClass() != o.getClass()) return false;
 		Task task = (Task) o;
 		return id == task.id && done == task.done && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(deadline, task.deadline) && Objects.equals(user, task.user);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, title, description, deadline, done, user);
 	}
 
 	@Override

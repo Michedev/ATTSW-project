@@ -3,7 +3,6 @@ package edu.mikedev.task_manager;
 import edu.mikedev.task_manager.controller.TaskManagerController;
 import edu.mikedev.task_manager.model.HibernateModel;
 import edu.mikedev.task_manager.model.Model;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
