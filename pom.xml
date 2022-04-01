@@ -25,7 +25,6 @@
         <skipE2ETests>${skipTests}</skipE2ETests>
         <jbehave.core.version>4.8.3</jbehave.core.version>
         <embeddables>**/*Stories.java</embeddables>
-
     </properties>
     <build>
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
