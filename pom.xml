@@ -18,7 +18,7 @@
         <sonar.organization>mikedev-github</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.java.source>1.8</sonar.java.source>
-        <sonar.coverage.exclusions>src/main/java/edu/mikedev/task_manager/User.java,src/main/java/edu/mikedev/task_manager/Task.java,src/main/java/edu/mikedev/task_manager/App.java</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>src/main/java/edu/mikedev/task_manager/data/*.java,src/main/java/edu/mikedev/task_manager/App.java</sonar.coverage.exclusions>
         <skipTests>false</skipTests>
         <skipUnitTests>${skipTests}</skipUnitTests>
         <skipIntegrationTests>${skipTests}</skipIntegrationTests>
