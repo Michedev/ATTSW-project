@@ -1,7 +1,7 @@
 package edu.mikedev.task_manager.utils;
 
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.data.Task;
+import edu.mikedev.task_manager.data.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 

@@ -1,8 +1,7 @@
 package edu.mikedev.task_manager.model;
 
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.utils.HibernateDBUtilsAbs;
+import edu.mikedev.task_manager.data.Task;
+import edu.mikedev.task_manager.data.User;
 import edu.mikedev.task_manager.utils.HibernateDBUtilsInMemory;
 import org.junit.After;
 import org.junit.Assert;

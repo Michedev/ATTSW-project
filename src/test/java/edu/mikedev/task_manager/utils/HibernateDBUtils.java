@@ -1,9 +1,5 @@
 package edu.mikedev.task_manager.utils;
 
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
-import edu.mikedev.task_manager.model.DBLayer;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -11,9 +7,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 public class HibernateDBUtils extends HibernateDBUtilsAbs {
 

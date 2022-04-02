@@ -1,7 +1,7 @@
-<hibernate-mapping>
+<hibernate-mapping package="edu.mikedev.task_manager.data">
     <!-- class name is the fully qualified name of the POJO class -->
     <!-- table is the name of the database table which represents the Student -->
-    <class name="edu.mikedev.task_manager.User" table="users">
+    <class name="User" table="users">
         <!-- Attribute id is mapped to the column student_id -->
         <id name="id" type="integer">
             <column name="id" />
@@ -23,7 +23,7 @@
 
           <set name="tasks" table="tasks" inverse="true" cascade="all">
             <key column="id_user" not-null="true" />
-            <one-to-many class="edu.mikedev.task_manager.Task"/>
+            <one-to-many class="Task"/>
           </set>
 
     </class>

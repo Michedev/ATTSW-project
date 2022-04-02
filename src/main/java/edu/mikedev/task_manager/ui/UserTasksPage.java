@@ -1,6 +1,6 @@
 package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.Task;
+import edu.mikedev.task_manager.data.Task;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

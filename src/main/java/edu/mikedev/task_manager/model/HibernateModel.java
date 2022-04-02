@@ -1,14 +1,11 @@
 package edu.mikedev.task_manager.model;
 
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
-import org.hibernate.Session;
+import edu.mikedev.task_manager.data.Task;
+import edu.mikedev.task_manager.data.User;
 import org.hibernate.SessionFactory;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 
 public class HibernateModel implements Model{
