@@ -151,8 +151,6 @@ public class ModelIT {
         model.updateTask(toBeUpdated);
 
         List<Task> tasksAfterUpdate = dbLayer.getTasks();
-        System.out.println("aaaaaaa");
-        System.out.println(tasksAfterUpdate.stream().map(Task::getTitle).collect(Collectors.toList()));
         Task updatedTask = tasksAfterUpdate.stream().filter(t -> t.getId() == 2).findFirst().get();
 
         Assert.assertEquals(2, updatedTask.getId());

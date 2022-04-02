@@ -212,15 +212,9 @@ public class TestHibernateModel {
 
         List<Task> expectedTasks = hibernateDBUtils.getUsersTask(1).stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());
 
-        System.out.println("ijfejiofeoijfjioe");
-        System.out.println(expectedTasks.stream().map(Task::getId).collect(Collectors.toList()));
-
         model.loginUser("username1", "password1");
 
         List<Task> actualTasks = model.getUserTasks().stream().sorted(Comparator.comparingInt(Task::getId)).collect(Collectors.toList());
-
-        System.out.println("i3u8ur3u8r8383j");
-        System.out.println(actualTasks.stream().map(Task::getId).collect(Collectors.toList()));
 
         Assert.assertArrayEquals(expectedTasks.toArray(), actualTasks.toArray());
 
