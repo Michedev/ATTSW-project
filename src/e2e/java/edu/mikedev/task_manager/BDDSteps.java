@@ -1,6 +1,8 @@
 package edu.mikedev.task_manager;
 
 import edu.mikedev.task_manager.controller.TaskManagerController;
+import edu.mikedev.task_manager.data.Task;
+import edu.mikedev.task_manager.model.DBLayer;
 import edu.mikedev.task_manager.model.HibernateModel;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class BDDSteps extends Steps {
 
     Model model;
+    DBLayer dbLayer;
     JFrame window;
     TaskManagerController controller;
     FrameFixture frame;
@@ -56,12 +59,14 @@ public class BDDSteps extends Steps {
         Assert.assertEquals(ownerUsername, model.getLoggedUser().getUsername());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         List<Task> userTasks = model.getUserTasks();
-        System.out.print("user tasks: ");
-        System.out.println(userTasks);
+
         Task task = findExistingTaskByName(taskTitle);
         Assert.assertEquals(taskDescription, task.getDescription());
         Assert.assertEquals(simpleDateFormat.format(task.getDeadline()), taskDeadline);
         Assert.assertEquals(ownerUsername, task.getUser().getUsername());
+
+        Task taskDB = utils.getTaskById(task.getId());
+        Assert.assertEquals(model.getLoggedUser().getId(), taskDB.getUser().getId());
     }
 
     @When("it modifies the task with name \"$oldTaskName\" to \"$newTaskName\"")
@@ -83,6 +88,9 @@ public class BDDSteps extends Steps {
     public void taskExistsIntoTheDB(String taskName){
         Optional<Task> optionalTask = model.getUserTasks().stream().filter(t -> t.getTitle().equals(taskName)).findFirst();
         Assert.assertTrue(optionalTask.isPresent());
+
+        Task dbTask = utils.getTaskById(optionalTask.get().getId());
+        Assert.assertNotNull(dbTask);
     }
 
     @When("it deletes a task called \"$taskTitle\"")
@@ -128,24 +136,29 @@ public class BDDSteps extends Steps {
     public void isTaskChecked(String taskTitle){
         Task task = findExistingTaskByName(taskTitle);
         Assert.assertTrue(task.isDone());
+
+        Task dbTask = utils.getTaskById(task.getId());
+        Assert.assertTrue(dbTask.isDone());
     }
 
     @AfterScenario
     public void closeSession() {
-        utils.getSession().close();
+        dbLayer.closeConnection();
         frame.cleanUp();
     }
 
     @BeforeScenario
     public void setUpGUI() {
-        utils = new HibernateDBUtils(HibernateDBUtils.buildHBSession());
+        utils = new HibernateDBUtils();
 
         try {
-            utils.initRealTestDB();
+            utils.initDBTables();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        model = new HibernateModel(utils.getSession());
+        HibernateModel hbModel = new HibernateModel(utils.getSessionFactory());
+        dbLayer = hbModel.getDBLayer();
+        model = hbModel;
         GuiActionRunner.execute(() ->{
             controller = new TaskManagerController(model);
             return controller.getWindow();

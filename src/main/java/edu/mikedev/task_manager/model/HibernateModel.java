@@ -1,13 +1,11 @@
 package edu.mikedev.task_manager.model;
 
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
-import org.hibernate.Session;
+import edu.mikedev.task_manager.data.Task;
+import edu.mikedev.task_manager.data.User;
+import org.hibernate.SessionFactory;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 
 public class HibernateModel implements Model{
@@ -16,8 +14,8 @@ public class HibernateModel implements Model{
     private User loggedUser;
     private DBLayer dbLayer;
 
-    public HibernateModel(Session hibernateSession){
-        dbLayer = new HibernateDBLayer(hibernateSession);
+    public HibernateModel(SessionFactory sessionFactory){
+        dbLayer = new HibernateDBLayer(sessionFactory);
     }
 
     @Override
@@ -40,35 +38,12 @@ public class HibernateModel implements Model{
 
     @Override
     public User registerUser(User newUser) {
-        int newId = findNewUserId();
-        newUser.setId(newId);
         newUser.setTasks(new HashSet<>());
         if(userExists(newUser.getUsername())){
             throw new IllegalArgumentException("User id " + newUser.getId() + " already exists");
         }
         dbLayer.add(newUser);
         return newUser;
-    }
-
-    private int findNewUserId() {
-        List<Integer> userIds = dbLayer.getUserIds();
-        return findNewId(userIds);
-    }
-
-    private int findNewTaskId(){
-        List<Integer> taskIds = dbLayer.getTasksId();
-        return findNewId(taskIds);
-    }
-
-    private int findNewId(List<Integer> existingIds) {
-        Optional<Integer> optionalMax = existingIds.stream().max(Integer::compareTo);
-        int endRange = optionalMax.map(integer -> integer + 2).orElseGet(() -> 0);
-        for(int i: IntStream.range(0, endRange).toArray()){
-            if(!existingIds.contains(i)){
-                return i;
-            }
-        }
-        throw new ArrayIndexOutOfBoundsException();
     }
 
     @Override
@@ -88,7 +63,7 @@ public class HibernateModel implements Model{
 
     @Override
     public void updateTask(Task task) {
-        // done implicitly by hibernate
+        dbLayer.update(task);
     }
 
     @Override
@@ -96,7 +71,6 @@ public class HibernateModel implements Model{
         if(!isUserLogged()){
             throw new IllegalAccessError(MSG_ERROR_USER_NOT_LOGGED);
         }
-        newTask.setId(findNewTaskId());
         newTask.setUser(loggedUser);
         dbLayer.add(newTask);
     }
@@ -109,7 +83,8 @@ public class HibernateModel implements Model{
         if(!existsTaskIdLoggedUser(task.getId())){
             throw new IllegalAccessError("You can access only to user tasks");
         }
-        dbLayer.deleteTask(loggedUser, task);
+        dbLayer.delete(task);
+        loggedUser.getTasks().remove(task);
     }
 
 

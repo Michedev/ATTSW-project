@@ -1,20 +1,27 @@
 package edu.mikedev.task_manager.model;
 
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.data.Task;
+import edu.mikedev.task_manager.data.User;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 
 public class HibernateDBLayer implements DBLayer {
 
+    private final SessionFactory hibernateSessionFactory;
     private Session hibernateSession;
-    private Transaction transaction;
 
-    public HibernateDBLayer(Session hibernateSession){
-        this.hibernateSession = hibernateSession;
-        this.transaction = hibernateSession.beginTransaction();
+    public HibernateDBLayer(SessionFactory sessionFactory){
+        this.hibernateSessionFactory = sessionFactory;
+        this.hibernateSession = hibernateSessionFactory.openSession();
+        hibernateSession.beginTransaction();
+    }
+
+    public void commitTransaction(){
+        hibernateSession.getTransaction().commit();
+        hibernateSession = hibernateSessionFactory.openSession();
+        hibernateSession.beginTransaction();
     }
 
     @Override
@@ -29,12 +36,14 @@ public class HibernateDBLayer implements DBLayer {
     
     @Override
     public void add(Task task){
-        hibernateSession.persist(task);
+        hibernateSession.save(task);
+        commitTransaction();
     }
 
     @Override
     public void add(User user){
-        hibernateSession.persist(user);
+        hibernateSession.save(user);
+        commitTransaction();
     }
 
     @Override
@@ -49,15 +58,17 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public void delete(User user){
-        hibernateSession.delete(user);
-        transaction.commit();
+        for(Task t: user.getTasks()){
+            hibernateSession.createQuery("delete from Task where id = " + t.getId()).executeUpdate();
+        }
+        hibernateSession.createQuery("delete from User where id = " + user.getId()).executeUpdate();
+        commitTransaction();
     }
 
     @Override
-    public void deleteTask(User taskOwner, Task task){
-        taskOwner.getTasks().remove(task);
-        hibernateSession.delete(task);
-        transaction.commit();
+    public void delete(Task task){
+        hibernateSession.createQuery("delete from Task where id = " + task.getId()).executeUpdate();
+        commitTransaction();
     }
 
     @Override
@@ -89,7 +100,8 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public void update(Task task) {
-        // done implicitly by hibernate
+        hibernateSession.update(task);
+        commitTransaction();
     }
 
     @Override
@@ -109,7 +121,6 @@ public class HibernateDBLayer implements DBLayer {
 
     @Override
     public void closeConnection() {
-        transaction.commit();
         hibernateSession.close();
     }
 

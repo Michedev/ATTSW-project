@@ -1,5 +1,6 @@
-package edu.mikedev.task_manager;
+package edu.mikedev.task_manager.data;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class User {
@@ -47,8 +48,27 @@ public class User {
 	public void setTasks(Set<Task> tasks) {
 		this.tasks = tasks;
 	}
-	
-	
-	
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return id == user.id && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, username, password, email);
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", email='" + email + '\'' +
+				'}';
+	}
 }

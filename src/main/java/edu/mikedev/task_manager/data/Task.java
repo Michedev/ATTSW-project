@@ -1,6 +1,7 @@
-package edu.mikedev.task_manager;
+package edu.mikedev.task_manager.data;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Task {
 	
@@ -12,7 +13,8 @@ public class Task {
 	private User user;
 
 	public Task(){}
-       
+
+
 	public Task(String title, String description, Date deadline, boolean done) {
 		this.title = title;
 		this.description = description;
@@ -54,5 +56,30 @@ public class Task {
 	}
 	public User getUser() {
 		return user;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Task task = (Task) o;
+		return id == task.id && done == task.done && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(deadline, task.deadline) && Objects.equals(user, task.user);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, title, description, deadline, done);
+	}
+
+	@Override
+	public String toString() {
+		return "Task{" +
+				"id=" + id +
+				", title='" + title + '\'' +
+				", description='" + description + '\'' +
+				", deadline=" + deadline +
+				", done=" + done +
+				", id_user=" + user.getId() +
+				'}';
 	}
 }

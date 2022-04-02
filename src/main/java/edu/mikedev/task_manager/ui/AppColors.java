@@ -1,6 +1,6 @@
 package edu.mikedev.task_manager.ui;
 
-import edu.mikedev.task_manager.Task;
+import edu.mikedev.task_manager.data.Task;
 
 import java.awt.*;
 import java.time.Instant;

@@ -1,7 +1,7 @@
 package edu.mikedev.task_manager.model;
 
-import edu.mikedev.task_manager.Task;
-import edu.mikedev.task_manager.User;
+import edu.mikedev.task_manager.data.Task;
+import edu.mikedev.task_manager.data.User;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface DBLayer {
 
     void delete(User user);
 
-    void deleteTask(User taskOwner, Task task);
+    void delete(Task task);
 
     List<String> getUsernames();
 
