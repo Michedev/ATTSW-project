@@ -12,7 +12,6 @@ public class TaskManagerController {
 
     private JFrame window;
     private final Model model;
-    private JPanel currentPanel;
 
     public TaskManagerController(Model model){
         this.model = model;
@@ -44,14 +43,9 @@ public class TaskManagerController {
         return window;
     }
 
-    public JPanel getCurrentPanel() {
-        return currentPanel;
-    }
-
     private void setContentPane(JPanel panel){
         window.setContentPane(panel);
         window.pack();
-        this.currentPanel = panel;
     }
 
     private void setContentPane(JPanel panel, String title){
