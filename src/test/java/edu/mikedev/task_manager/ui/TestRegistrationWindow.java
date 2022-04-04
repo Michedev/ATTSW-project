@@ -39,7 +39,7 @@ public class TestRegistrationWindow extends AssertJSwingJUnitTestCase {
 
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testInitState(){

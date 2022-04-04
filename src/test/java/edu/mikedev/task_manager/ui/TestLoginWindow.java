@@ -30,7 +30,7 @@ public class TestLoginWindow extends AssertJSwingJUnitTestCase {
 	}
 
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
 	@GUITest
 	public void testInitialState(){

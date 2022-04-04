@@ -38,7 +38,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
 
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testInitialState(){
@@ -53,7 +53,7 @@ public class TestTaskDetailWindow extends AssertJSwingJUnitTestCase {
 
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testBackgroundColor(){

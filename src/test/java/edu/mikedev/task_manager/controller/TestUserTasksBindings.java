@@ -48,7 +48,7 @@ public class TestUserTasksBindings extends AssertJSwingJUnitTestCase {
         frame.button("btnLogin").click();
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testInitialState(){
@@ -60,7 +60,7 @@ public class TestUserTasksBindings extends AssertJSwingJUnitTestCase {
         frame.button("btnNewTask").requireEnabled();
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testCorrectOrderTasks(){
@@ -76,7 +76,7 @@ public class TestUserTasksBindings extends AssertJSwingJUnitTestCase {
         }
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testCorrectColorCards(){
@@ -88,7 +88,7 @@ public class TestUserTasksBindings extends AssertJSwingJUnitTestCase {
         }
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testCorrectFormattingLongDescritption(){
@@ -97,7 +97,7 @@ public class TestUserTasksBindings extends AssertJSwingJUnitTestCase {
         Assert.assertEquals(50 + 3, longDescription.replaceAll("<html><p style=\"width:75px\">", "").replaceAll("</p></html>", "").length());
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testNewTaskTransition(){

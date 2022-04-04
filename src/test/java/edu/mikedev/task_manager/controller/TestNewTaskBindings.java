@@ -47,7 +47,7 @@ public class TestNewTaskBindings extends AssertJSwingJUnitTestCase{
         frame.button("btnNewTask").click();
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testAddNewTask(){
@@ -62,7 +62,7 @@ public class TestNewTaskBindings extends AssertJSwingJUnitTestCase{
         verify(model, times(1)).addNewTask(any());
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testParseNewTaskWithDateError(){
@@ -80,7 +80,7 @@ public class TestNewTaskBindings extends AssertJSwingJUnitTestCase{
 
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testMissingTaskName(){
@@ -98,7 +98,7 @@ public class TestNewTaskBindings extends AssertJSwingJUnitTestCase{
     }
 
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testAnythingMissing(){

@@ -41,7 +41,7 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
         when(model.areCredentialCorrect(ArgumentMatchers.matches("myusername"),
                 ArgumentMatchers.matches("mypassword"))).thenReturn(true);
         User dummyUser = new User("myusername", "mypassword", "email@email.com");
-        Set<Task> taskSet = new HashSet<Task>();
+        Set<Task> taskSet = new HashSet<>();
         dummyUser.setTasks(taskSet);
         when(model.loginUser(anyString(), anyString())).thenReturn(dummyUser);
         GuiActionRunner.execute(() ->{
@@ -54,7 +54,7 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
     }
 
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testClickLoginAndThenErrorMessage(){
@@ -67,17 +67,17 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
         verify(model, times(0)).loginUser(anyString(), anyString());
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
-    public void testCorrectLogin() throws InterruptedException {
+    public void testCorrectLogin() {
         frame.textBox("tfUsername").click().enterText("myusername");
         frame.textBox("tfPassword").click().enterText("mypassword");
         frame.button("btnLogin").click();
         frame.requireTitle("myusername tasks");
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testWrongPromptedLogin(){
@@ -91,7 +91,7 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
         frame.label("lblErrorMessage").requireEnabled();
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void goToRegisterPage(){
@@ -104,7 +104,7 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
         frame.button("btnConfirmRegister").requireEnabled();
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void closingWindowEvents() {

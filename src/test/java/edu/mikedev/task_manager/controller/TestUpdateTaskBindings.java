@@ -49,7 +49,7 @@ public class TestUpdateTaskBindings extends AssertJSwingJUnitTestCase{
         frame.button("btnUpdate").click();
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testSuccessfulUpdate(){
@@ -67,7 +67,7 @@ public class TestUpdateTaskBindings extends AssertJSwingJUnitTestCase{
 
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testWrongDateFormat(){

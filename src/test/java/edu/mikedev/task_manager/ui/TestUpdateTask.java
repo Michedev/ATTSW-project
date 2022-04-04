@@ -38,7 +38,7 @@ public class TestUpdateTask extends AssertJSwingJUnitTestCase{
         frame.show();
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testInitialState(){

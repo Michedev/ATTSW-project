@@ -48,7 +48,7 @@ public class TestTaskDetailBindings extends AssertJSwingJUnitTestCase {
         frame.panel("task4").click();
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testGoBackButton(){
@@ -61,7 +61,7 @@ public class TestTaskDetailBindings extends AssertJSwingJUnitTestCase {
         frame.button("btnNewTask").requireEnabled();
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testDeleteButton(){
@@ -72,7 +72,7 @@ public class TestTaskDetailBindings extends AssertJSwingJUnitTestCase {
         verify(model, times(1)).deleteTask(tasksListSorted.get(4));
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void testUpdateButton(){
@@ -91,7 +91,7 @@ public class TestTaskDetailBindings extends AssertJSwingJUnitTestCase {
 
     }
 
-    @SuppressWarnings("java:S2699")
+    
     @Test
     @GUITest
     public void undoneTask(){
