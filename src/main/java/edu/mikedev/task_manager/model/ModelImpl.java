@@ -8,14 +8,14 @@ import java.util.HashSet;
 import java.util.List;
 
 
-public class HibernateModel implements Model{
+public class ModelImpl implements Model{
 
     private static final String MSG_ERROR_USER_NOT_LOGGED = "You should login before calling this method";
     private User loggedUser;
     private DBLayer dbLayer;
 
-    public HibernateModel(SessionFactory sessionFactory){
-        dbLayer = new HibernateDBLayer(sessionFactory);
+    public ModelImpl(DBLayer dbLayer){
+        this.dbLayer = dbLayer;
     }
 
     @Override

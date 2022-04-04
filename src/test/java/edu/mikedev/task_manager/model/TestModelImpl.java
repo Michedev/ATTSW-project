@@ -14,16 +14,16 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TestHibernateModel {
+public class TestModelImpl {
 
-    HibernateModel model;
+    ModelImpl model;
     private HibernateDBUtilsInMemory hibernateDBUtils;
 
 
     @Before
     public void setUp() throws SQLException {
         hibernateDBUtils = new HibernateDBUtilsInMemory();
-        model = new HibernateModel(hibernateDBUtils.getSessionFactory());
+        model = new ModelImpl(new HibernateDBLayer(hibernateDBUtils.getSessionFactory()));
         hibernateDBUtils.initDBTables();
     }
 

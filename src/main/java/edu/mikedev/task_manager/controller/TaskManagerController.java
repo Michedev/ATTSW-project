@@ -1,6 +1,6 @@
 package edu.mikedev.task_manager.controller;
 
-import edu.mikedev.task_manager.model.HibernateModel;
+import edu.mikedev.task_manager.model.ModelImpl;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.ui.LoginPage;
 
@@ -27,7 +27,7 @@ public class TaskManagerController {
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                ((HibernateModel) model).getDBLayer().closeConnection();
+                ((ModelImpl) model).getDBLayer().closeConnection();
             }
         });
 

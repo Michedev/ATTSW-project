@@ -3,7 +3,8 @@ package edu.mikedev.task_manager;
 import edu.mikedev.task_manager.data.Task;
 import edu.mikedev.task_manager.data.User;
 import edu.mikedev.task_manager.model.DBLayer;
-import edu.mikedev.task_manager.model.HibernateModel;
+import edu.mikedev.task_manager.model.HibernateDBLayer;
+import edu.mikedev.task_manager.model.ModelImpl;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import edu.mikedev.task_manager.utils.HibernateDBUtilsAbs;
 import org.junit.After;
@@ -15,12 +16,11 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ModelIT {
 
     private HibernateDBUtilsAbs hibernateDBUtils;
-    private HibernateModel model;
+    private ModelImpl model;
     private DBLayer dbLayer;
 
     @Before
@@ -32,7 +32,7 @@ public class ModelIT {
             e.printStackTrace();
         }
 
-        model = new HibernateModel(hibernateDBUtils.getSessionFactory());
+        model = new ModelImpl(new HibernateDBLayer(hibernateDBUtils.getSessionFactory()));
         dbLayer = model.getDBLayer();
     }
 

@@ -3,7 +3,7 @@ package edu.mikedev.task_manager.controller;
 import edu.mikedev.task_manager.data.Task;
 import edu.mikedev.task_manager.data.User;
 import edu.mikedev.task_manager.model.DBLayer;
-import edu.mikedev.task_manager.model.HibernateModel;
+import edu.mikedev.task_manager.model.ModelImpl;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 public class TestLoginBindings extends AssertJSwingJUnitTestCase{
 
 
-    private HibernateModel model;
+    private ModelImpl model;
 
     JFrame window;
     FrameFixture frame;
@@ -35,7 +35,7 @@ public class TestLoginBindings extends AssertJSwingJUnitTestCase{
 
     @Override
     protected void onSetUp(){
-        model = mock(HibernateModel.class);
+        model = mock(ModelImpl.class);
         dbLayer = mock(DBLayer.class);
         when(model.getDBLayer()).thenReturn(dbLayer);
         when(model.areCredentialCorrect(ArgumentMatchers.matches("myusername"),

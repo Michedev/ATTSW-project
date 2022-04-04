@@ -3,7 +3,8 @@ package edu.mikedev.task_manager;
 import edu.mikedev.task_manager.controller.TaskManagerController;
 import edu.mikedev.task_manager.data.Task;
 import edu.mikedev.task_manager.model.DBLayer;
-import edu.mikedev.task_manager.model.HibernateModel;
+import edu.mikedev.task_manager.model.HibernateDBLayer;
+import edu.mikedev.task_manager.model.ModelImpl;
 import edu.mikedev.task_manager.model.Model;
 import edu.mikedev.task_manager.utils.HibernateDBUtils;
 import org.assertj.swing.core.matcher.DialogMatcher;
@@ -156,7 +157,7 @@ public class BDDSteps extends Steps {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        HibernateModel hbModel = new HibernateModel(utils.getSessionFactory());
+        ModelImpl hbModel = new ModelImpl(new HibernateDBLayer(utils.getSessionFactory()));
         dbLayer = hbModel.getDBLayer();
         model = hbModel;
         GuiActionRunner.execute(() ->{
