@@ -2,7 +2,6 @@ package edu.mikedev.task_manager.model;
 
 import edu.mikedev.task_manager.data.Task;
 import edu.mikedev.task_manager.data.User;
-import org.hibernate.SessionFactory;
 
 import java.util.HashSet;
 import java.util.List;
