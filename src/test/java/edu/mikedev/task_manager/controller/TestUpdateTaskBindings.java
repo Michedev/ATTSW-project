@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.swing.*;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -54,7 +53,6 @@ public class TestUpdateTaskBindings extends AssertJSwingJUnitTestCase{
     @Test
     @GUITest
     public void testSuccessfulUpdate(){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String newTitle = "Task Updated 1";
         String newDescription = "Updated Description task 1";
         String newDeadline = "11/02/2019";
@@ -73,7 +71,6 @@ public class TestUpdateTaskBindings extends AssertJSwingJUnitTestCase{
     @Test
     @GUITest
     public void testWrongDateFormat(){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String newTitle = "Task Updated 1";
         String newDescription = "Updated Description task 1";
         JLabelFixture lblErrorMessageDeadline = frame.label(JLabelMatcher.withName("lblErrorMessageDeadline"));
