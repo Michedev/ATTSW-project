@@ -1,4 +1,4 @@
-version: '3.6'
+version: '2.1'
 
 services:
   app-task-manager:
@@ -14,7 +14,8 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
     depends_on:
-      - postgres-task-manager
+      postgres-task-manager:
+        condition: service_healthy
   postgres-task-manager:
     image: postgres:14.1-alpine
     container_name: postgres-task-manager
@@ -28,10 +29,9 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-    volumes:
-      - database:/var/lib/postgresql/data
+      POSTGRES_DB: root
     healthcheck:
-      test: "pg_isready --username=root && psql --username=root --list"
+      test: ["CMD-SHELL", "pg_isready --username=root -p 5432 -d root"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -39,6 +39,3 @@ services:
 networks:
   my-network:
     driver: bridge
-
-volumes:
-  database:

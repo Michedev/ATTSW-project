@@ -24,6 +24,11 @@ is not completed before that date. Further, the app features a login system.
 
 ## How to run
 
+### Requirements
+
+To run this software, it is required a system installation of maven along with docker and docker-compose with 
+version at least 2.1
+
 Before the software execution we must allow to display the GUI through docker container. To accomplish, prompt in any shell the following command
 ```bash
 xhost +local:root
