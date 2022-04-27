@@ -17,7 +17,6 @@ import org.junit.Assert;
 import javax.swing.*;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Optional;
 
 public class BDDSteps extends Steps {
@@ -59,7 +58,6 @@ public class BDDSteps extends Steps {
     public void assertTaskPresence(String taskTitle, String taskDescription, String taskDeadline, String ownerUsername){
         Assert.assertEquals(ownerUsername, model.getLoggedUser().getUsername());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        List<Task> userTasks = model.getUserTasks();
 
         Task task = findExistingTaskByName(taskTitle);
         Assert.assertEquals(taskDescription, task.getDescription());

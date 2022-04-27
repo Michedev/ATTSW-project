@@ -168,7 +168,7 @@ public class ModelIT {
 
     @Test
     public void testDeleteTask(){
-        User pulledUser = model.loginUser("pippo","pluto");
+        model.loginUser("pippo","pluto");
 
         List<Task> tasks = dbLayer.getTasks();
         Task toBeDeleted = tasks.get(2);
@@ -201,7 +201,7 @@ public class ModelIT {
     @Test
     public void testGetTaskById(){
         Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(0));
-        User user = model.loginUser("tizio", "caio");
+        model.loginUser("tizio", "caio");
 
         Assert.assertThrows(IllegalAccessError.class, () -> model.getTaskById(5));
         Task task = model.getTaskById(1);
